@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BINUS UNIVERSITY - Early Warning & Evaluasi LO PJJ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    .donut-ring {
+      border-radius: 50%;
+      background: conic-gradient(#16a34a 0% 32%, #2563eb 32% 58%, #eab308 58% 78%, #ea580c 78% 90%, #dc2626 90% 100%);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .donut-hole {
+      width: 60%;
+      height: 60%;
+      border-radius: 50%;
+      background: white;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-[#f4f6f9] text-slate-800 antialiased min-h-screen flex flex-col font-sans overflow-x-hidden">
+
+  <!-- MAIN APPLICATION SHELL -->
+  <div class="flex flex-1 min-h-screen relative">
+
+    <!-- MOBILE SIDEBAR BACKDROP OVERLAY -->
+    <div id="sidebarBackdrop" onclick="closeMobileSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-2xs z-40 hidden lg:hidden transition-opacity"></div>
+
+    <!-- LEFT SIDEBAR (BINUS BLUE - SLIDE DRAWER ON MOBILE, DOCKED ON DESKTOP) -->
+    <aside id="appSidebar" class="fixed inset-y-0 left-0 z-50 w-64 lg:w-60 bg-[#0059d6] text-white flex flex-col justify-between shrink-0 select-none transition-transform duration-200 -translate-x-full lg:translate-x-0 lg:static">
+      <div>
+        <div class="px-5 py-4 sm:px-6 sm:py-5 border-b border-blue-400/30 flex items-center justify-between">
+          <h1 class="text-base sm:text-lg font-extrabold tracking-wide">BINUS UNIVERSITY</h1>
+          <button onclick="closeMobileSidebar()" class="lg:hidden p-1 rounded-lg text-blue-100 hover:text-white hover:bg-blue-700/50">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="p-4">
+          <div class="text-[11px] font-bold text-blue-200 uppercase tracking-wider mb-2.5 px-2">DATA</div>
+          <nav id="sidebarNav" class="space-y-1.5 text-xs font-medium">
+            <!-- Rendered dynamically based on active role -->
+          </nav>
+
+          <!-- Pintasan Layar Khusus Mobile di dalam Sidebar -->
+          <div class="mt-6 pt-4 border-t border-blue-400/30 lg:hidden space-y-1.5">
+            <div class="text-[10px] font-bold text-blue-200 uppercase tracking-wider mb-2 px-2">PINTASAN SEMUA LAYAR</div>
+            <button onclick="switchRole('mhs-list')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">👨‍🎓 Mahasiswa: Daftar Kelas</button>
+            <button onclick="switchRole('mhs-detail')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">📊 Mahasiswa: Detail Sesi</button>
+            <button onclick="switchRole('dosen-list')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">👨‍🏫 Dosen: Daftar Kelas</button>
+            <button onclick="switchRole('dosen-detail')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">🚨 Dosen: Detail & Risiko</button>
+            <button onclick="switchRole('prodi-home')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">🏛️ Prodi: Dashboard Utama</button>
+            <button onclick="switchRole('prodi-course')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">📚 Prodi: Detail Matkul</button>
+            <button onclick="switchRole('prodi-class')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">🔍 Prodi: Detail Kelas</button>
+            <a href="ml_visualization.html" class="block w-full text-left px-3 py-2 rounded-lg text-xs bg-white text-blue-700 font-bold mt-2 shadow-2xs">🤖 Visualisasi ML (.pkl)</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informasi Box (Khusus Role Prodi sesuai Gambar 6 & 7) -->
+      <div id="prodiSidebarInfo" class="p-4 m-3 rounded-xl bg-blue-800/40 border border-blue-400/20 text-xs space-y-3 hidden">
+        <div>
+          <div class="font-bold text-white text-xs">Informasi</div>
+          <div class="text-[11px] text-blue-100 mt-1 leading-relaxed">
+            Data diperbarui terakhir pada<br>
+            <span class="font-bold text-white">22 Juli 2026 21:15 WIB</span>
+          </div>
+        </div>
+        <div class="border-t border-blue-400/20 pt-2">
+          <div class="text-[11px] text-blue-200">Model</div>
+          <div class="font-bold text-white">K-Means Clustering</div>
+        </div>
+        <div class="border-t border-blue-400/20 pt-2">
+          <div class="text-[11px] text-blue-200">Periode</div>
+          <div class="font-bold text-white">2022/2023 - Genap</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT WORKSPACE -->
+    <div class="flex-1 flex flex-col min-w-0 w-full">
+
+      <!-- TOP HEADER (RESPONSIVE 2-ROW ON MOBILE, 1-ROW ON DESKTOP) -->
+      <header class="bg-white border-b border-slate-200 px-3.5 sm:px-6 py-2.5 lg:py-0 lg:h-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5 shrink-0 sticky top-0 z-30">
+        <!-- Top Row on Mobile: Hamburger + Mobile Brand + Right User Profile -->
+        <div class="flex items-center justify-between w-full lg:w-auto gap-3">
+          <div class="flex items-center gap-2.5">
+            <button onclick="toggleSidebar()" class="text-slate-600 hover:text-slate-900 p-1.5 rounded-lg hover:bg-slate-100 border border-slate-200 lg:border-transparent">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <span class="lg:hidden font-extrabold text-xs sm:text-sm text-[#0059d6] tracking-wide">BINUS PJJ</span>
+          </div>
+
+          <!-- Mobile-only User Profile & Notification (shown inline on top row for mobile) -->
+          <div class="flex lg:hidden items-center gap-3">
+            <div class="relative cursor-pointer">
+              <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+              <span class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-rose-600 text-white text-[9px] font-bold flex items-center justify-center">3</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div id="headerAvatarMobile" class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center border border-blue-200">EP</div>
+              <div class="text-left max-w-[110px] sm:max-w-none">
+                <div id="headerUserNameMobile" class="text-[11px] font-bold text-slate-800 truncate">Eko Prasetyo</div>
+                <div id="headerUserRoleMobile" class="text-[10px] text-slate-500 truncate">Mahasiswa</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Presentation Screen Switcher (Swipeable horizontally on mobile, inline on desktop) -->
+        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200 text-[11px] overflow-x-auto no-scrollbar whitespace-nowrap w-full lg:w-auto">
+          <button onclick="switchRole('mhs-list')" id="btn-mhs-list" class="px-2.5 py-1.5 lg:py-1 rounded-md font-medium transition shrink-0">Mahasiswa: Kelas</button>
+          <button onclick="switchRole('mhs-detail')" id="btn-mhs-detail" class="px-2.5 py-1.5 lg:py-1 rounded-md font-medium transition shrink-0">Mahasiswa: Detail</button>
+          <span class="text-slate-300 shrink-0">|</span>
+          <button onclick="switchRole('dosen-list')" id="btn-dosen-list" class="px-2.5 py-1.5 lg:py-1 rounded-md font-medium transition shrink-0">Dosen: Kelas</button>
+          <button onclick="switchRole('dosen-detail')" id="btn-dosen-detail" class="px-2.5 py-1.5 lg:py-1 rounded-md font-medium transition shrink-0">Dosen: Detail</button>
+          <span class="text-slate-300 shrink-0">|</span>
+          <button onclick="switchRole('prodi-home')" id="btn-prodi-home" class="px-2.5 py-1.5 lg:py-1 rounded-md font-medium transition shrink-0">Prodi: Dashboard</button>
+          <button onclick="switchRole('prodi-course')" id="btn-prodi-course" class="px-2.5 py-1.5 lg:py-1 rounded-md font-medium transition shrink-0">Prodi: Matkul</button>
+          <button onclick="switchRole('prodi-class')" id="btn-prodi-class" class="px-2.5 py-1.5 lg:py-1 rounded-md font-medium transition shrink-0">Prodi: Kelas</button>
+          <span class="text-slate-300 shrink-0">|</span>
+          <a href="ml_visualization.html" class="px-2.5 py-1.5 lg:py-1 rounded-md font-bold transition text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 shrink-0">🤖 Visualisasi ML (.pkl)</a>
+          <!-- <button onclick="switchRole('system-design')" id="btn-system-design" class="px-2.5 py-1 rounded-md font-medium transition text-indigo-700 shrink-0">📐 Use Case & DB</button> -->
+        </div>
+
+        <!-- Desktop User Profile & Notification -->
+        <div class="hidden lg:flex items-center gap-5 shrink-0">
+          <!-- Notification Bell -->
+          <div id="notifBell" class="relative cursor-pointer">
+            <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            <span class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-rose-600 text-white text-[10px] font-bold flex items-center justify-center">3</span>
+          </div>
+
+          <!-- User Profile Dropdown -->
+          <div class="flex items-center gap-2.5">
+            <div id="headerAvatar" class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center border border-blue-200">
+              EP
+            </div>
+            <div class="text-left">
+              <div id="headerUserName" class="text-xs font-bold text-slate-800">Eko Prasetyo</div>
+              <div id="headerUserRole" class="text-[11px] text-slate-500">Mahasiswa</div>
+            </div>
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </div>
+        </div>
+      </header>
+
+      <!-- CONTENT VIEWS -->
+      <main class="p-3.5 sm:p-6 overflow-y-auto flex-1">
+
+        <!-- =========================================================
+             LAYAR 1: MAHASISWA - DAFTAR KELAS
+             ========================================================= -->
+        <section id="view-mhs-list" class="space-y-4 hidden max-w-7xl mx-auto">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900">Kelas</h2>
+            <p class="text-xs text-blue-600 mt-0.5 font-medium">Kelas</p>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-4 sm:p-6 space-y-4">
+            <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-3">Data Kelas</h3>
+            
+            <div class="flex flex-wrap justify-between items-center gap-3 text-xs">
+              <div class="flex items-center gap-2 text-slate-600">
+                <select class="border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 bg-white"><option>10</option><option>25</option></select>
+                <span>entries per page</span>
+              </div>
+              <div class="relative w-full sm:w-auto">
+                <input type="text" placeholder="Search..." class="border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 w-full sm:w-60 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                <svg class="w-4 h-4 text-slate-400 absolute right-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border border-slate-200">
+                <thead class="bg-slate-50 border-b border-slate-200 text-slate-800 font-bold">
+                  <tr>
+                    <th class="py-3.5 px-4 border-r border-slate-200 w-16">No</th>
+                    <th class="py-3.5 px-4 border-r border-slate-200">Kode Kelas</th>
+                    <th class="py-3.5 px-4 border-r border-slate-200">Nama Kelas</th>
+                    <th class="py-3.5 px-4 border-r border-slate-200">Semester</th>
+                    <th class="py-3.5 px-4">Detail</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-slate-700">
+                  <tr class="hover:bg-slate-50">
+                    <td class="py-3.5 px-4 border-r border-slate-200">1</td>
+                    <td class="py-3.5 px-4 border-r border-slate-200">01PA</td>
+                    <td class="py-3.5 px-4 border-r border-slate-200 font-medium">Enterprise Systems</td>
+                    <td class="py-3.5 px-4 border-r border-slate-200">Ganjil</td>
+                    <td class="py-3.5 px-4">
+                      <button onclick="switchRole('mhs-detail')" class="text-blue-600 hover:underline font-bold flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-purple-700 inline-block"></span> View
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="py-3.5 px-4 border-r border-slate-200">2</td>
+                    <td class="py-3.5 px-4 border-r border-slate-200">01PB</td>
+                    <td class="py-3.5 px-4 border-r border-slate-200 font-medium">IS Strategy, Management and Acquisition</td>
+                    <td class="py-3.5 px-4 border-r border-slate-200">Genap</td>
+                    <td class="py-3.5 px-4">
+                      <button onclick="switchRole('mhs-detail')" class="text-blue-600 hover:underline font-bold flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-purple-700 inline-block"></span> View
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="py-3.5 px-4 border-r border-slate-200">3</td>
+                    <td class="py-3.5 px-4 border-r border-slate-200">01PC</td>
+                    <td class="py-3.5 px-4 border-r border-slate-200 font-medium">Enterprise Architecture</td>
+                    <td class="py-3.5 px-4 border-r border-slate-200">Ganjil</td>
+                    <td class="py-3.5 px-4">
+                      <button onclick="switchRole('mhs-detail')" class="text-blue-600 hover:underline font-bold flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-purple-700 inline-block"></span> View
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="py-3.5 px-4 border-r border-slate-200">4</td>
+                    <td class="py-3.5 px-4 border-r border-slate-200">01PD</td>
+                    <td class="py-3.5 px-4 border-r border-slate-200 font-medium">Business Process Management</td>
+                    <td class="py-3.5 px-4 border-r border-slate-200">Genap</td>
+                    <td class="py-3.5 px-4">
+                      <button onclick="switchRole('mhs-detail')" class="text-blue-600 hover:underline font-bold flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-purple-700 inline-block"></span> View
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-xs text-slate-500 pt-1">Showing 1 to 4 of 4 entries</div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             LAYAR 2: MAHASISWA - DETAIL SESI & ALERT
+             ========================================================= -->
+        <section id="view-mhs-detail" class="space-y-5 max-w-7xl mx-auto">
+          <div class="text-xs font-medium text-slate-500">
+            <a href="#" onclick="switchRole('mhs-list')" class="text-blue-600 hover:underline font-semibold">Kelas</a> &nbsp;/&nbsp; <span class="text-slate-800 font-bold">Enterprise Systems</span>
+          </div>
+
+          <!-- Sesi 1 - 16 Interactive Bar -->
+          <div id="mhsSessionBar" class="flex flex-wrap items-center gap-2 text-xs">
+            <!-- Rendered via JS -->
+          </div>
+
+          <!-- Dynamic Alert Banner -->
+          <div id="mhsAlertBox" class="bg-[#fff1f2] border border-rose-200 rounded-xl p-4 sm:p-5 flex items-start sm:items-center gap-3.5 sm:gap-4 shadow-2xs">
+            <div id="mhsAlertIcon" class="text-rose-600 shrink-0 mt-0.5 sm:mt-0">
+              <svg class="w-8 h-8 sm:w-11 sm:h-11" fill="currentColor" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            </div>
+            <div>
+              <h3 id="mhsAlertTitle" class="text-sm sm:text-lg font-extrabold text-rose-600">Alert: Anda Berisiko Tinggi di Sesi 7</h3>
+              <p id="mhsAlertDesc" class="text-xs text-slate-700 mt-0.5 leading-relaxed">Aktivitas engagement Anda pada beberapa aspek masih rendah. Segera tingkatkan partisipasi agar capaian LO tidak terdampak.</p>
+            </div>
+          </div>
+
+          <!-- 2 Column Grid: Log Activity & Nilai -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <!-- Left: Log Activity Bar Chart -->
+            <div class="lg:col-span-6 bg-white rounded-xl border border-slate-200 p-4 sm:p-6 shadow-xs flex flex-col justify-between">
+              <h4 class="text-sm font-bold text-slate-900 mb-4">Log Activity</h4>
+
+              <div class="relative h-64 flex">
+                <!-- Y-Axis Labels -->
+                <div class="flex flex-col justify-between text-[10px] sm:text-[11px] text-slate-500 pr-2 sm:pr-3 pb-6 pt-4 text-right w-7 sm:w-8">
+                  <span>100</span>
+                  <span>80</span>
+                  <span>60</span>
+                  <span>40</span>
+                  <span>20</span>
+                  <span>0</span>
+                </div>
+
+                <!-- Bars Container -->
+                <div class="flex-1 flex items-end justify-around border-b border-slate-200 px-1.5 sm:px-4 pb-0 relative">
+                  <!-- Horizontal Grid Lines -->
+                  <div class="absolute inset-0 flex flex-col justify-between pointer-events-none pt-5 pb-0">
+                    <div class="border-b border-slate-100 w-full"></div>
+                    <div class="border-b border-slate-100 w-full"></div>
+                    <div class="border-b border-slate-100 w-full"></div>
+                    <div class="border-b border-slate-100 w-full"></div>
+                    <div class="border-b border-slate-100 w-full"></div>
+                    <div></div>
+                  </div>
+
+                  <!-- Bar 1: Download Materi -->
+                  <div class="flex flex-col items-center w-12 sm:w-16 z-10">
+                    <span id="mhsBarLabel1" class="text-[11px] sm:text-xs font-bold text-slate-800 mb-1.5">6/10</span>
+                    <div id="mhsBar1" class="w-7 sm:w-9 bg-[#f5b800] rounded-t transition-all duration-300" style="height: 130px;"></div>
+                  </div>
+                  <!-- Bar 2: PPT -->
+                  <div class="flex flex-col items-center w-12 sm:w-16 z-10">
+                    <span id="mhsBarLabel2" class="text-[11px] sm:text-xs font-bold text-slate-800 mb-1.5">4/10</span>
+                    <div id="mhsBar2" class="w-7 sm:w-9 bg-[#dc2626] rounded-t transition-all duration-300" style="height: 86px;"></div>
+                  </div>
+                  <!-- Bar 3: Video Learning -->
+                  <div class="flex flex-col items-center w-12 sm:w-16 z-10">
+                    <span id="mhsBarLabel3" class="text-[11px] sm:text-xs font-bold text-slate-800 mb-1.5">6/10</span>
+                    <div id="mhsBar3" class="w-7 sm:w-9 bg-[#f5b800] rounded-t transition-all duration-300" style="height: 130px;"></div>
+                  </div>
+                  <!-- Bar 4: Forum Discussion -->
+                  <div class="flex flex-col items-center w-12 sm:w-16 z-10">
+                    <span id="mhsBarLabel4" class="text-[11px] sm:text-xs font-bold text-slate-800 mb-1.5">6/10</span>
+                    <div id="mhsBar4" class="w-7 sm:w-9 bg-[#f5b800] rounded-t transition-all duration-300" style="height: 130px;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- X-Axis Labels -->
+              <div class="flex justify-around text-center text-[10px] sm:text-xs text-slate-700 pl-7 sm:pl-8 pr-1.5 sm:pr-4 mt-3 font-medium">
+                <div class="w-14 sm:w-20">Download<br>Materi</div>
+                <div class="w-14 sm:w-20">PPT</div>
+                <div class="w-14 sm:w-20">Video<br>Learning</div>
+                <div class="w-14 sm:w-20">Forum<br>Discussion</div>
+              </div>
+
+              <!-- Legend -->
+              <div class="flex items-center justify-center gap-4 sm:gap-6 text-xs mt-5 sm:mt-6 pt-3 border-t border-slate-100">
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-[#dc2626] inline-block rounded-xs"></span> Poor</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-[#f5b800] inline-block rounded-xs"></span> Average</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 bg-[#0066ff] inline-block rounded-xs"></span> Excellent</span>
+              </div>
+            </div>
+
+            <!-- Right: Tabel Nilai (9 Komponen) -->
+            <div class="lg:col-span-6 bg-white rounded-xl border border-slate-200 p-4 sm:p-6 shadow-xs">
+              <h4 class="text-sm font-bold text-slate-900 mb-4">Nilai</h4>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border border-slate-200 min-w-[340px]">
+                <thead class="bg-slate-50 border-b border-slate-200 text-slate-800 font-bold">
+                  <tr>
+                    <th class="py-2.5 px-3 border-r border-slate-200 w-12">No</th>
+                    <th class="py-2.5 px-3 border-r border-slate-200">Tugas</th>
+                    <th class="py-2.5 px-3">Nilai</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-slate-700">
+                  <tr class="bg-slate-50/70">
+                    <td class="py-2.5 px-3 border-r border-slate-200">1</td>
+                    <td class="py-2.5 px-3 border-r border-slate-200 font-medium">Tugas Personal 1</td>
+                    <td class="py-2.5 px-3 font-mono text-slate-600">LO1: 100 &nbsp; LO2: 0 &nbsp; LO3: 0</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-3 border-r border-slate-200">2</td>
+                    <td class="py-2.5 px-3 border-r border-slate-200 font-medium">Tugas Personal 2</td>
+                    <td class="py-2.5 px-3 text-slate-400">🔒 Terkunci (Buka Sesi 11)</td>
+                  </tr>
+                  <tr class="bg-slate-50/70">
+                    <td class="py-2.5 px-3 border-r border-slate-200">3</td>
+                    <td class="py-2.5 px-3 border-r border-slate-200 font-medium">Tugas Kelompok 1</td>
+                    <td class="py-2.5 px-3 font-mono text-slate-600">LO1: 95 &nbsp; LO2: 0 &nbsp; LO3: 0</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-3 border-r border-slate-200">4</td>
+                    <td class="py-2.5 px-3 border-r border-slate-200 font-medium">Tugas Kelompok 2</td>
+                    <td class="py-2.5 px-3 font-mono text-slate-600">LO1: 0 &nbsp; LO2: 100 &nbsp; LO3: 0</td>
+                  </tr>
+                  <tr class="bg-slate-50/70">
+                    <td class="py-2.5 px-3 border-r border-slate-200">5</td>
+                    <td class="py-2.5 px-3 border-r border-slate-200 font-medium">Tugas Kelompok 3</td>
+                    <td class="py-2.5 px-3 text-slate-400">🔒 Terkunci (Buka Sesi 12)</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-3 border-r border-slate-200">6</td>
+                    <td class="py-2.5 px-3 border-r border-slate-200 font-medium">Tugas Kelompok 4</td>
+                    <td class="py-2.5 px-3 text-slate-400">🔒 Terkunci (Buka Sesi 14)</td>
+                  </tr>
+                  <tr class="bg-slate-50/70">
+                    <td class="py-2.5 px-3 border-r border-slate-200">7</td>
+                    <td class="py-2.5 px-3 border-r border-slate-200 font-medium">Quiz 1</td>
+                    <td class="py-2.5 px-3 font-mono text-slate-600">LO1: 26 &nbsp; LO2: 4 &nbsp; LO3: 0</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-3 border-r border-slate-200">8</td>
+                    <td class="py-2.5 px-3 border-r border-slate-200 font-medium">Quiz 2</td>
+                    <td class="py-2.5 px-3 text-slate-400">🔒 Terkunci (Buka Sesi 14)</td>
+                  </tr>
+                  <tr class="bg-slate-50/70">
+                    <td class="py-2.5 px-3 border-r border-slate-200">9</td>
+                    <td class="py-2.5 px-3 border-r border-slate-200 font-medium">Final Exam</td>
+                    <td class="py-2.5 px-3 text-slate-400">🔒 Terkunci (Buka Sesi 16)</td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-600 flex items-center gap-2 pt-1">
+            <span class="w-4 h-4 rounded-full border border-blue-600 text-blue-600 font-bold text-[10px] flex items-center justify-center">i</span>
+            <span>Keterangan: Target minimal adalah partisipasi penuh (100%) di setiap aktivitas pada sesi.</span>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             LAYAR 3: DOSEN - KELOLA & DAFTAR KELAS
+             ========================================================= -->
+        <section id="view-dosen-list" class="space-y-5 hidden max-w-7xl mx-auto">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Kelas</h2>
+            <p class="text-xs text-blue-600 mt-0.5 font-medium">Kelas</p>
+          </div>
+
+          <!-- Form Tambah Kelas -->
+          <!-- <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 class="text-sm font-bold text-slate-800">📥 Tambah Kelas</h3>
+              <button onclick="addDosenClass()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-xs transition">💾 Simpan</button>
+            </div>
+            <div class="space-y-3 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-4 items-center gap-2">
+                <label class="text-slate-600 font-medium">Kode Kelas :</label>
+                <input id="inputKodeKelas" type="text" placeholder="Masukkan kode kelas..." class="sm:col-span-3 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500">
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-4 items-center gap-2">
+                <label class="text-slate-600 font-medium">Periode :</label>
+                <input id="inputPeriode" type="text" placeholder="Contoh: 2026" class="sm:col-span-3 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500">
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-4 items-center gap-2">
+                <label class="text-slate-600 font-medium">Semester :</label>
+                <input id="inputSemester" type="text" placeholder="Contoh: Ganjil" class="sm:col-span-3 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500">
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-4 items-center gap-2">
+                <label class="text-slate-600 font-medium">Kelas :</label>
+                <input id="inputKelas" type="text" placeholder="Contoh: LA01 / LB01" class="sm:col-span-3 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500">
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-4 items-center gap-2">
+                <label class="text-slate-600 font-medium">Nama Kelas :</label>
+                <input id="inputNamaKelas" type="text" placeholder="Masukkan nama mata kuliah..." class="sm:col-span-3 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500">
+              </div>
+            </div>
+          </div> -->
+
+          <!-- Tabel Data Kelas Dosen -->
+          <div class="bg-white rounded-xl border border-slate-200 p-4 sm:p-6 shadow-xs space-y-4">
+            <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-3">📋 Data Kelas</h3>
+            <div class="flex flex-wrap justify-between items-center gap-3 text-xs">
+              <div class="flex items-center gap-2 text-slate-600">
+                <select class="border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 bg-white"><option>10</option></select>
+                <span>entries per page</span>
+              </div>
+              <div class="flex items-center gap-2 w-full sm:w-auto">
+                <span class="text-slate-500">Search:</span>
+                <input type="text" placeholder="Cari kelas..." class="border border-slate-200 rounded-lg px-3 py-1.5 w-full sm:w-52">
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border border-slate-200 min-w-[540px]">
+                <thead class="bg-slate-50 border-b border-slate-200 font-bold text-slate-800">
+                  <tr>
+                    <th class="py-3 px-4 border-r border-slate-200 text-center w-14">No</th>
+                    <th class="py-3 px-4 border-r border-slate-200 text-center">Kode Kelas</th>
+                    <th class="py-3 px-4 border-r border-slate-200 text-center">Periode</th>
+                    <th class="py-3 px-4 border-r border-slate-200 text-center">Semester</th>
+                    <th class="py-3 px-4 border-r border-slate-200 text-center">Kelas</th>
+                    <th class="py-3 px-4 border-r border-slate-200">Nama Kelas</th>
+                    <th class="py-3 px-4 text-center">Detail</th>
+                  </tr>
+                </thead>
+                <tbody id="dosenClassTableBody" class="divide-y divide-slate-200">
+                  <tr class="hover:bg-slate-50">
+                    <td class="py-3 px-4 border-r border-slate-200 text-center">1</td>
+                    <td class="py-3 px-4 border-r border-slate-200 text-center">01PA</td>
+                    <td class="py-3 px-4 border-r border-slate-200 text-center">2221</td>
+                    <td class="py-3 px-4 border-r border-slate-200 text-center">Ganjil</td>
+                    <td class="py-3 px-4 border-r border-slate-200 text-center">01PA</td>
+                    <td class="py-3 px-4 border-r border-slate-200 font-medium">Enterprise Systems</td>
+                    <td class="py-3 px-4 text-center">
+                      <button onclick="switchRole('dosen-detail')" class="px-3 py-1 border border-blue-500 text-blue-600 rounded hover:bg-blue-50 font-bold inline-flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-purple-700"></span> View
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="py-3 px-4 border-r border-slate-200 text-center">2</td>
+                    <td class="py-3 px-4 border-r border-slate-200 text-center">02PJ</td>
+                    <td class="py-3 px-4 border-r border-slate-200 text-center">2222</td>
+                    <td class="py-3 px-4 border-r border-slate-200 text-center">Ganjil</td>
+                    <td class="py-3 px-4 border-r border-slate-200 text-center">02PJ</td>
+                    <td class="py-3 px-4 border-r border-slate-200 font-medium">Social Informatics</td>
+                    <td class="py-3 px-4 text-center">
+                      <button onclick="switchRole('dosen-detail')" class="px-3 py-1 border border-blue-500 text-blue-600 rounded hover:bg-blue-50 font-bold inline-flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-purple-700"></span> View
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             LAYAR 4: DOSEN - DETAIL MONITORING & MAHASISWA BERISIKO
+             ========================================================= -->
+        <section id="view-dosen-detail" class="space-y-5 hidden">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Detail</h2>
+            <p class="text-xs text-slate-500 mt-0.5"><a href="#" onclick="switchRole('dosen-list')" class="text-blue-600 hover:underline font-medium">Kelas</a> &nbsp;/&nbsp; <span class="text-slate-800 font-medium">Enterprise Systems (01PA)</span></p>
+          </div>
+
+          <!-- Sesi Pills 1 - 16 -->
+          <div id="dosenSessionBar" class="flex flex-wrap items-center gap-1.5 text-xs">
+            <!-- Rendered via JS -->
+          </div>
+
+          <!-- Main Grid: Left (Charts + Student Table) & Right (At Risk Panel) -->
+          <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+            
+            <!-- Left 9 Cols -->
+            <div class="xl:col-span-9 space-y-5">
+              
+              <!-- Top 2 Cards: Capaian LO & Aktivitas Mahasiswa -->
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
+                
+                <!-- Card Capaian LO -->
+                <div class="md:col-span-5 bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-bold text-slate-800">🎓 Capaian LO</h3>
+                    <select id="dosenLoFilter" onchange="updateDosenLoCard(this.value)" class="border border-slate-200 rounded-lg px-3 py-1.5 text-xs font-medium bg-white">
+                      <option value="TP 1">TP 1</option>
+                      <option value="TP 2">TP 2</option>
+                      <option value="TK 1">TK 1</option>
+                      <option value="TK 2">TK 2</option>
+                      <option value="Quiz 1">Quiz 1</option>
+                      <option value="Final Exam">Final Exam</option>
+                    </select>
+                  </div>
+
+                  <div class="bg-slate-50/80 border border-slate-200/80 rounded-xl p-4 text-center">
+                    <div class="text-xs text-slate-500">Rata-Rata Total Nilai <strong id="dosenLoLabel" class="text-slate-800">TP 1</strong></div>
+                    <div class="mt-1">
+                      <span id="dosenLoTotal" class="text-3xl font-black text-green-600">90.4</span>
+                      <span class="text-xs text-slate-400">/ 100</span>
+                    </div>
+                  </div>
+
+                  <div class="space-y-3 text-xs">
+                    <div class="text-slate-500 font-medium">Rincian Distribusi Per LO:</div>
+                    <div>
+                      <div class="flex justify-between font-bold mb-1">
+                        <span>LO1: Knowledge</span>
+                        <span id="dosenLo1Val" class="text-blue-600">90.4</span>
+                      </div>
+                      <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div id="dosenLo1Bar" class="bg-blue-600 h-2 rounded-full transition-all" style="width: 90.4%"></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between font-bold mb-1">
+                        <span>LO2: Skills</span>
+                        <span id="dosenLo2Val" class="text-green-600">0</span>
+                      </div>
+                      <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div id="dosenLo2Bar" class="bg-green-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="flex justify-between font-bold mb-1">
+                        <span>LO3: Analysis</span>
+                        <span id="dosenLo3Val" class="text-amber-500">0</span>
+                      </div>
+                      <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div id="dosenLo3Bar" class="bg-amber-500 h-2 rounded-full transition-all" style="width: 0%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card Aktivitas Mahasiswa (Sesi 2) -->
+                <div class="md:col-span-7 bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
+                  <h3 id="dosenActTitle" class="text-sm font-bold text-slate-800">📊 Aktivitas Mahasiswa (Sesi 2)</h3>
+
+                  <div class="grid grid-cols-4 text-center text-[11px] font-semibold text-slate-700 mt-3">
+                    <div>Download Materi (LN)</div>
+                    <div>Lihat Handout (PPT)</div>
+                    <div>Video Learning (VBL)</div>
+                    <div>Forum Discussion (FD)</div>
+                  </div>
+
+                  <div class="relative h-48 flex mt-2">
+                    <div class="flex flex-col justify-between text-[10px] text-slate-400 pr-2 pb-2 text-right">
+                      <span>100%</span>
+                      <span>80%</span>
+                      <span>60%</span>
+                      <span>40%</span>
+                      <span>20%</span>
+                      <span>0%</span>
+                    </div>
+                    <div class="flex-1 flex items-end justify-around border-b border-slate-200 px-4">
+                      <div class="flex flex-col items-center">
+                        <span id="dosenBarVal1" class="text-xs font-bold text-amber-500 mb-1">70%</span>
+                        <div id="dosenBar1" class="w-10 bg-[#f59e0b] rounded-t transition-all" style="height: 115px;"></div>
+                      </div>
+                      <div class="flex flex-col items-center">
+                        <span id="dosenBarVal2" class="text-xs font-bold text-rose-600 mb-1">59%</span>
+                        <div id="dosenBar2" class="w-10 bg-[#e11d48] rounded-t transition-all" style="height: 96px;"></div>
+                      </div>
+                      <div class="flex flex-col items-center">
+                        <span id="dosenBarVal3" class="text-xs font-bold text-amber-500 mb-1">66%</span>
+                        <div id="dosenBar3" class="w-10 bg-[#f59e0b] rounded-t transition-all" style="height: 108px;"></div>
+                      </div>
+                      <div class="flex flex-col items-center">
+                        <span id="dosenBarVal4" class="text-xs font-bold text-amber-500 mb-1">64%</span>
+                        <div id="dosenBar4" class="w-10 bg-[#f59e0b] rounded-t transition-all" style="height: 104px;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Tabel Data Mahasiswa & Status Capaian Risiko -->
+              <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <h3 class="text-sm font-bold text-slate-800">📋 Data Mahasiswa</h3>
+                  <button class="px-3.5 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg text-xs font-bold">Capaian</button>
+                </div>
+
+                <div class="flex flex-wrap justify-between items-center gap-2 text-xs">
+                  <div class="flex items-center gap-2 text-slate-500">
+                    <select class="border border-slate-200 rounded px-2 py-1 text-slate-700"><option>10</option></select>
+                    <span>entries per page</span>
+                  </div>
+                  <input type="text" placeholder="Cari mahasiswa (Nama / NIM)..." class="border border-slate-200 rounded-lg px-3 py-1.5 w-full sm:w-60">
+                </div>
+
+                <div class="overflow-x-auto">
+                  <table class="w-full text-left text-xs border border-slate-200">
+                    <thead class="bg-slate-50 border-b border-slate-200 font-bold text-slate-800">
+                      <tr>
+                        <th class="py-2.5 px-2.5 text-center">No</th>
+                        <th class="py-2.5 px-2.5 text-center">NIM</th>
+                        <th class="py-2.5 px-3">Nama Mahasiswa</th>
+                        <th class="py-2.5 px-2 text-center">TP 1</th>
+                        <th class="py-2.5 px-2 text-center">TP 2</th>
+                        <th class="py-2.5 px-2 text-center">TK 1</th>
+                        <th class="py-2.5 px-2 text-center">TK 2</th>
+                        <th class="py-2.5 px-2 text-center">TK 3</th>
+                        <th class="py-2.5 px-2 text-center">TK 4</th>
+                        <th class="py-2.5 px-2 text-center">Quiz 1</th>
+                        <th class="py-2.5 px-2 text-center">Quiz 2</th>
+                        <th class="py-2.5 px-2 text-center">Final Exam</th>
+                        <th class="py-2.5 px-2.5 text-center">Aksi</th>
+                        <th class="py-2.5 px-3 text-center">Capaian</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                      <tr class="hover:bg-slate-50">
+                        <td class="py-2.5 px-2.5 text-center">1</td>
+                        <td class="py-2.5 px-2.5 text-center font-mono underline cursor-pointer">202131121</td>
+                        <td class="py-2.5 px-3 font-medium">Andi Pratama</td>
+                        <td class="py-2.5 px-2 text-center font-bold">61</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2.5 text-center"><button onclick="switchRole('mhs-detail')" class="px-2.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-200 rounded font-semibold hover:bg-blue-100">Detail</button></td>
+                        <td class="py-2.5 px-3 text-center"><span class="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 font-bold text-[11px]">Berisiko Tinggi</span></td>
+                      </tr>
+                      <tr class="hover:bg-slate-50">
+                        <td class="py-2.5 px-2.5 text-center">2</td>
+                        <td class="py-2.5 px-2.5 text-center font-mono">202131125</td>
+                        <td class="py-2.5 px-3 font-medium">Bunga Lestari</td>
+                        <td class="py-2.5 px-2 text-center font-bold">70</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2.5 text-center"><button onclick="switchRole('mhs-detail')" class="px-2.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-200 rounded font-semibold hover:bg-blue-100">Detail</button></td>
+                        <td class="py-2.5 px-3 text-center"><span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[11px]">Berisiko Sedang</span></td>
+                      </tr>
+                      <tr class="hover:bg-slate-50">
+                        <td class="py-2.5 px-2.5 text-center">3</td>
+                        <td class="py-2.5 px-2.5 text-center font-mono">202131126</td>
+                        <td class="py-2.5 px-3 font-medium">Citra Wijaya</td>
+                        <td class="py-2.5 px-2 text-center font-bold">73</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2.5 text-center"><button onclick="switchRole('mhs-detail')" class="px-2.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-200 rounded font-semibold hover:bg-blue-100">Detail</button></td>
+                        <td class="py-2.5 px-3 text-center"><span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold text-[11px]">Berisiko Sedang</span></td>
+                      </tr>
+                      <tr class="hover:bg-slate-50">
+                        <td class="py-2.5 px-2.5 text-center">4</td>
+                        <td class="py-2.5 px-2.5 text-center font-mono">202131127</td>
+                        <td class="py-2.5 px-3 font-medium">Dimas Setiawan</td>
+                        <td class="py-2.5 px-2 text-center font-bold">95</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2.5 text-center"><button onclick="switchRole('mhs-detail')" class="px-2.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-200 rounded font-semibold hover:bg-blue-100">Detail</button></td>
+                        <td class="py-2.5 px-3 text-center"><span class="px-2.5 py-0.5 rounded-full bg-green-100 text-green-700 font-bold text-[11px]">Aman</span></td>
+                      </tr>
+                      <tr class="hover:bg-slate-50">
+                        <td class="py-2.5 px-2.5 text-center">5</td>
+                        <td class="py-2.5 px-2.5 text-center font-mono">202131128</td>
+                        <td class="py-2.5 px-3 font-medium">Eva Maulida</td>
+                        <td class="py-2.5 px-2 text-center font-bold">88</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2 text-center">-</td>
+                        <td class="py-2.5 px-2.5 text-center"><button onclick="switchRole('mhs-detail')" class="px-2.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-200 rounded font-semibold hover:bg-blue-100">Detail</button></td>
+                        <td class="py-2.5 px-3 text-center"><span class="px-2.5 py-0.5 rounded-full bg-green-100 text-green-700 font-bold text-[11px]">Aman</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="flex justify-between items-center text-xs text-slate-500 pt-1">
+                  <span>Showing 1 to 5 of 45 entries</span>
+                  <div class="flex items-center gap-1">
+                    <button class="px-2 py-1 border border-slate-200 rounded">&lt;</button>
+                    <button class="px-2.5 py-1 bg-blue-600 text-white rounded font-bold">1</button>
+                    <button class="px-2.5 py-1 border border-slate-200 rounded">2</button>
+                    <button class="px-2.5 py-1 border border-slate-200 rounded">3</button>
+                    <button class="px-2.5 py-1 border border-slate-200 rounded">4</button>
+                    <button class="px-2.5 py-1 border border-slate-200 rounded">5</button>
+                    <span class="px-1">...</span>
+                    <button class="px-2.5 py-1 border border-slate-200 rounded">9</button>
+                    <button class="px-2 py-1 border border-slate-200 rounded">&gt;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 3 Cols: Daftar Mahasiswa Berisiko — Session 2 -->
+            <div class="xl:col-span-3 bg-white rounded-xl border border-slate-200 p-4 shadow-xs space-y-4 h-fit">
+              <h3 id="dosenRiskHeader" class="text-xs font-bold text-slate-900">👤 Daftar Mahasiswa Berisiko — Session 2</h3>
+              
+              <div class="flex flex-wrap gap-1.5 text-[11px]">
+                <span class="px-2 py-0.5 rounded-full bg-rose-50 text-rose-600 border border-rose-200 font-semibold">🚨 High Risk: 1 mahasiswa</span>
+                <span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-200 font-semibold">⚠️ Medium Risk: 2 mahasiswa</span>
+              </div>
+
+              <!-- High Risk Section -->
+              <div class="space-y-2.5">
+                <div class="text-xs font-bold text-rose-600">🚨 High Risk</div>
+                <div class="border-l-4 border-rose-600 bg-white border border-slate-200 rounded-r-xl p-3.5 space-y-1 shadow-2xs">
+                  <div class="text-xs font-bold text-slate-900">NIM 202131121</div>
+                  <div class="text-[11px] font-bold text-rose-600">Probabilitas Risiko: 70.7%</div>
+                </div>
+
+                <!-- Breakdown Skor Sesi -->
+                <div class="space-y-2.5 pt-2 text-xs">
+                  <div class="flex justify-between items-center border-b border-slate-100 pb-1.5">
+                    <span class="text-slate-600">Forum Discussion (FD)</span>
+                    <div class="flex items-center gap-2">
+                      <span class="font-bold text-rose-600">4 / 10</span>
+                      <div class="w-8 bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-rose-600 h-1.5" style="width:40%"></div></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-between items-center border-b border-slate-100 pb-1.5">
+                    <span class="text-slate-600">Download Materi (LN)</span>
+                    <div class="flex items-center gap-2">
+                      <span class="font-bold text-rose-600">3 / 10</span>
+                      <div class="w-8 bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-rose-600 h-1.5" style="width:30%"></div></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-between items-center border-b border-slate-100 pb-1.5">
+                    <span class="text-slate-600">Download PPT / Handout</span>
+                    <div class="flex items-center gap-2">
+                      <span class="font-bold text-amber-600">5 / 10</span>
+                      <div class="w-8 bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-amber-500 h-1.5" style="width:50%"></div></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-between items-center pb-1">
+                    <span class="text-slate-600">Video-Based Learning (VBL)</span>
+                    <div class="flex items-center gap-2">
+                      <span class="font-bold text-rose-600">3 / 10</span>
+                      <div class="w-8 bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-rose-600 h-1.5" style="width:30%"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Medium Risk Section -->
+              <div class="space-y-2.5 pt-2 border-t border-slate-100">
+                <div class="text-xs font-bold text-amber-600">⚠️ Medium Risk</div>
+                <div class="border-l-4 border-amber-500 bg-white border border-slate-200 rounded-r-xl p-3.5 space-y-1 shadow-2xs">
+                  <div class="text-xs font-bold text-slate-900">NIM 202131125</div>
+                  <div class="text-[11px] font-bold text-amber-600">Probabilitas Risiko: 48.3%</div>
+                </div>
+                <div class="border-l-4 border-amber-500 bg-white border border-slate-200 rounded-r-xl p-3.5 space-y-1 shadow-2xs">
+                  <div class="text-xs font-bold text-slate-900">NIM 202131126</div>
+                  <div class="text-[11px] font-bold text-amber-600">Probabilitas Risiko: 42.1%</div>
+                </div>
+              </div>
+
+              <p class="text-[11px] text-slate-500 pt-2 border-t border-slate-100 leading-relaxed">
+                ⓘ Probabilitas risiko dihitung berdasarkan aktivitas engagement dan capaian LO.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- =========================================================
+             LAYAR 5: PRODI - DASHBOARD OVERVIEW (10 MATA KULIAH)
+             ========================================================= -->
+        <section id="view-prodi-home" class="space-y-5 hidden max-w-7xl mx-auto">
+          <h2 class="text-2xl font-bold text-slate-900">Dashboard Prodi</h2>
+
+          <!-- Filter Periode & Semester -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div>
+              <label class="block text-slate-600 mb-1 font-medium">Periode :</label>
+              <select class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 font-medium"><option>2221</option><option>2222</option></select>
+            </div>
+            <div>
+              <label class="block text-slate-600 mb-1 font-medium">Semester :</label>
+              <select class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 font-medium"><option>Ganjil</option><option>Genap</option></select>
+            </div>
+          </div>
+
+          <!-- 5 Top KPI Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Total Mata Kuliah</div>
+              <div class="text-3xl font-black text-blue-600 my-1.5">9</div>
+              <div class="text-[11px] text-slate-500">Mata Kuliah</div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Rata-rata Capaian LO</div>
+              <div class="text-3xl font-black text-green-600 my-1.5">78.6</div>
+              <div class="text-[11px] text-slate-500">/ 100</div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Mata Kuliah Berisiko</div>
+              <div class="text-3xl font-black text-rose-600 my-1.5">2</div>
+              <div class="text-[11px] text-slate-500">Mata Kuliah</div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Mata Kuliah Baik</div>
+              <div class="text-3xl font-black text-amber-500 my-1.5">5</div>
+              <div class="text-[11px] text-slate-500">Mata Kuliah</div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Mata Kuliah Sangat Baik</div>
+              <div class="text-3xl font-black text-green-600 my-1.5">2</div>
+              <div class="text-[11px] text-slate-500">Mata Kuliah</div>
+            </div>
+          </div>
+
+          <!-- Grid 10 Donut Charts per Mata Kuliah -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+              <h3 class="text-sm font-bold text-slate-800">Capaian Learning Outcome per Mata Kuliah</h3>
+              <div class="flex flex-wrap items-center gap-3 text-[11px] text-slate-600">
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-600"></span> Sangat Buruk (0-54)</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span> Buruk (55-64)</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Cukup (65-74)</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-green-600"></span> Baik (75-84)</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> Sangat Baik (85-100)</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+              <!-- Row 1: 5 Cards -->
+              <div onclick="switchRole('prodi-course')" class="cursor-pointer border border-slate-200 hover:border-blue-500 rounded-xl p-4 text-center space-y-2 transition hover:shadow-md">
+                <div class="text-xs font-bold text-slate-800 h-8 flex items-center justify-center">Enterprise Systems</div>
+                <div class="text-[11px] text-slate-400">IS21F3</div>
+                <div class="flex items-center justify-center gap-3 py-1">
+                  <div class="w-16 h-16 donut-ring"><div class="donut-hole"></div></div>
+                  <div>
+                    <div class="text-2xl font-black text-orange-500">62.3</div>
+                    <span class="px-2 py-0.5 rounded bg-orange-100 text-orange-700 font-bold text-[10px]">Buruk</span>
+                  </div>
+                </div>
+                <div class="text-[11px] text-slate-500">120 Mahasiswa</div>
+              </div>
+
+              <div onclick="switchRole('prodi-course')" class="cursor-pointer border border-slate-200 hover:border-blue-500 rounded-xl p-4 text-center space-y-2 transition hover:shadow-md">
+                <div class="text-xs font-bold text-slate-800 h-8 flex items-center justify-center">IS Strategy, Management and Acquisition</div>
+                <div class="text-[11px] text-slate-400">IS22G2</div>
+                <div class="flex items-center justify-center gap-3 py-1">
+                  <div class="w-16 h-16 donut-ring"><div class="donut-hole"></div></div>
+                  <div>
+                    <div class="text-2xl font-black text-green-600">81.7</div>
+                    <span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Baik</span>
+                  </div>
+                </div>
+                <div class="text-[11px] text-slate-500">95 Mahasiswa</div>
+              </div>
+
+              <div onclick="switchRole('prodi-course')" class="cursor-pointer border border-slate-200 hover:border-blue-500 rounded-xl p-4 text-center space-y-2 transition hover:shadow-md">
+                <div class="text-xs font-bold text-slate-800 h-8 flex items-center justify-center">Enterprise Architecture</div>
+                <div class="text-[11px] text-slate-400">IS21F3</div>
+                <div class="flex items-center justify-center gap-3 py-1">
+                  <div class="w-16 h-16 donut-ring"><div class="donut-hole"></div></div>
+                  <div>
+                    <div class="text-2xl font-black text-blue-600">85.6</div>
+                    <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold text-[10px]">Sangat Baik</span>
+                  </div>
+                </div>
+                <div class="text-[11px] text-slate-500">88 Mahasiswa</div>
+              </div>
+
+              <div onclick="switchRole('prodi-course')" class="cursor-pointer border border-slate-200 hover:border-blue-500 rounded-xl p-4 text-center space-y-2 transition hover:shadow-md">
+                <div class="text-xs font-bold text-slate-800 h-8 flex items-center justify-center">Business Process Management</div>
+                <div class="text-[11px] text-slate-400">IS22G1</div>
+                <div class="flex items-center justify-center gap-3 py-1">
+                  <div class="w-16 h-16 donut-ring"><div class="donut-hole"></div></div>
+                  <div>
+                    <div class="text-2xl font-black text-amber-500">73.4</div>
+                    <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-bold text-[10px]">Cukup</span>
+                  </div>
+                </div>
+                <div class="text-[11px] text-slate-500">110 Mahasiswa</div>
+              </div>
+
+              <div onclick="switchRole('prodi-course')" class="cursor-pointer border border-slate-200 hover:border-blue-500 rounded-xl p-4 text-center space-y-2 transition hover:shadow-md">
+                <div class="text-xs font-bold text-slate-800 h-8 flex items-center justify-center">Enterprise Systems</div>
+                <div class="text-[11px] text-slate-400">IS21F3</div>
+                <div class="flex items-center justify-center gap-3 py-1">
+                  <div class="w-16 h-16 donut-ring"><div class="donut-hole"></div></div>
+                  <div>
+                    <div class="text-2xl font-black text-amber-500">64.1</div>
+                    <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-bold text-[10px]">Cukup</span>
+                  </div>
+                </div>
+                <div class="text-[11px] text-slate-500">102 Mahasiswa</div>
+              </div>
+
+              <!-- Row 2: 5 Cards -->
+              <div onclick="switchRole('prodi-course')" class="cursor-pointer border border-slate-200 hover:border-blue-500 rounded-xl p-4 text-center space-y-2 transition hover:shadow-md">
+                <div class="text-xs font-bold text-slate-800 h-8 flex items-center justify-center">Research Methods in Information Systems</div>
+                <div class="text-[11px] text-slate-400">IS21F2</div>
+                <div class="flex items-center justify-center gap-3 py-1">
+                  <div class="w-16 h-16 donut-ring"><div class="donut-hole"></div></div>
+                  <div>
+                    <div class="text-2xl font-black text-orange-600">56.8</div>
+                    <span class="px-2 py-0.5 rounded bg-orange-100 text-orange-700 font-bold text-[10px]">Buruk</span>
+                  </div>
+                </div>
+                <div class="text-[11px] text-slate-500">85 Mahasiswa</div>
+              </div>
+
+              <div onclick="switchRole('prodi-course')" class="cursor-pointer border border-slate-200 hover:border-blue-500 rounded-xl p-4 text-center space-y-2 transition hover:shadow-md">
+                <div class="text-xs font-bold text-slate-800 h-8 flex items-center justify-center">Advanced Topics in Information Systems</div>
+                <div class="text-[11px] text-slate-400">IS22G2</div>
+                <div class="flex items-center justify-center gap-3 py-1">
+                  <div class="w-16 h-16 donut-ring"><div class="donut-hole"></div></div>
+                  <div>
+                    <div class="text-2xl font-black text-green-600">79.2</div>
+                    <span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Baik</span>
+                  </div>
+                </div>
+                <div class="text-[11px] text-slate-500">75 Mahasiswa</div>
+              </div>
+
+              <div onclick="switchRole('prodi-course')" class="cursor-pointer border border-slate-200 hover:border-blue-500 rounded-xl p-4 text-center space-y-2 transition hover:shadow-md">
+                <div class="text-xs font-bold text-slate-800 h-8 flex items-center justify-center">Knowledge Management Fundamentals</div>
+                <div class="text-[11px] text-slate-400">IS21F1</div>
+                <div class="flex items-center justify-center gap-3 py-1">
+                  <div class="w-16 h-16 donut-ring"><div class="donut-hole"></div></div>
+                  <div>
+                    <div class="text-2xl font-black text-green-600">82.3</div>
+                    <span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Baik</span>
+                  </div>
+                </div>
+                <div class="text-[11px] text-slate-500">92 Mahasiswa</div>
+              </div>
+
+              <div onclick="switchRole('prodi-course')" class="cursor-pointer border border-slate-200 hover:border-blue-500 rounded-xl p-4 text-center space-y-2 transition hover:shadow-md">
+                <div class="text-xs font-bold text-slate-800 h-8 flex items-center justify-center">Management Information Systems for ...</div>
+                <div class="text-[11px] text-slate-400">IS22G1</div>
+                <div class="flex items-center justify-center gap-3 py-1">
+                  <div class="w-16 h-16 donut-ring"><div class="donut-hole"></div></div>
+                  <div>
+                    <div class="text-2xl font-black text-amber-500">74.6</div>
+                    <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-bold text-[10px]">Cukup</span>
+                  </div>
+                </div>
+                <div class="text-[11px] text-slate-500">98 Mahasiswa</div>
+              </div>
+
+              <div onclick="switchRole('prodi-course')" class="cursor-pointer border border-slate-200 hover:border-blue-500 rounded-xl p-4 text-center space-y-2 transition hover:shadow-md">
+                <div class="text-xs font-bold text-slate-800 h-8 flex items-center justify-center">Information Systems Concept</div>
+                <div class="text-[11px] text-slate-400">IS21F1</div>
+                <div class="flex items-center justify-center gap-3 py-1">
+                  <div class="w-16 h-16 donut-ring"><div class="donut-hole"></div></div>
+                  <div>
+                    <div class="text-2xl font-black text-blue-600">86.9</div>
+                    <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold text-[10px]">Sangat Baik</span>
+                  </div>
+                </div>
+                <div class="text-[11px] text-slate-500">80 Mahasiswa</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Insight & Rekomendasi Banner -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
+            <div class="space-y-1.5">
+              <h4 class="text-sm font-bold text-blue-700">Insight & Rekomendasi</h4>
+              <ul class="list-disc list-inside text-xs text-slate-700 space-y-1">
+                <li>2 mata kuliah memiliki capaian dalam kategori Buruk dan perlu perhatian segera.</li>
+                <li>Fokus pada peningkatan aktivitas pembelajaran dan evaluasi LO di mata kuliah berisiko.</li>
+              </ul>
+            </div>
+            <button onclick="switchRole('prodi-course')" class="px-5 py-2.5 border border-blue-600 text-blue-600 hover:bg-blue-50 rounded-lg text-xs font-bold shrink-0 transition">
+              Lihat Detail Rekomendasi
+            </button>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             LAYAR 6: PRODI - PERBANDINGAN KELAS DALAM MATKUL
+             ========================================================= -->
+        <section id="view-prodi-course" class="space-y-5 hidden max-w-7xl mx-auto">
+          <div class="text-xs">
+            <button onclick="switchRole('prodi-home')" class="text-blue-600 hover:underline font-semibold">← Kembali ke Dashboard Prodi</button>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2.5">
+                <h2 class="text-2xl font-bold text-slate-900">Enterprise Systems</h2>
+                <span class="px-2.5 py-0.5 rounded bg-blue-100 text-blue-700 font-bold text-xs">IS21F3</span>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">Ringkasan capaian Learning Outcome (LO) untuk setiap kelas pada mata kuliah Enterprise Systems.</p>
+            </div>
+
+            <div class="flex items-center gap-2 text-xs">
+              <div>
+                <span class="block text-[10px] text-slate-500 mb-0.5">Periode</span>
+                <select class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-medium"><option>2022/2023 - Genap</option></select>
+              </div>
+              <div>
+                <span class="block text-[10px] text-slate-500 mb-0.5">Semester</span>
+                <select class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-medium"><option>Genap</option></select>
+              </div>
+              <button class="mt-4 px-4 py-1.5 border border-blue-600 text-blue-600 rounded-lg font-bold hover:bg-blue-50">Filter</button>
+            </div>
+          </div>
+
+          <!-- 5 Summary Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 text-center">
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Total Kelas</div>
+              <div class="text-2xl font-black text-blue-600 my-1">6</div>
+              <div class="text-[11px] text-slate-500">Kelas</div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Total Mahasiswa</div>
+              <div class="text-2xl font-black text-indigo-700 my-1">412</div>
+              <div class="text-[11px] text-slate-500">Mahasiswa</div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Rata-rata LO</div>
+              <div class="text-2xl font-black text-green-600 my-1">72.8 <span class="text-xs font-normal text-slate-400">/ 100</span></div>
+              <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-bold text-[10px]">Cukup</span>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Kelas Baik</div>
+              <div class="text-2xl font-black text-amber-500 my-1">2</div>
+              <div class="text-[11px] text-slate-500">(≥ 75)</div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Kelas Perlu Perhatian</div>
+              <div class="text-2xl font-black text-rose-600 my-1">4</div>
+              <div class="text-[11px] text-slate-500">(< 75)</div>
+            </div>
+          </div>
+
+          <!-- Grouped Bar Chart: Capaian LO per Kelas (IS21F3A - IS21F3F) -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 class="text-sm font-bold text-slate-800">Capaian LO per Kelas</h3>
+                <p class="text-[11px] text-slate-500">Persentase capaian Learning Outcome (LO) pada setiap kelas.</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-4 text-xs">
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-xs bg-green-600 inline-block"></span> LO 1 (Knowledge)</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-xs bg-blue-600 inline-block"></span> LO 2 (Skills)</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-xs bg-amber-400 inline-block"></span> LO 3 (Analysis)</span>
+                <span class="flex items-center gap-1.5 text-blue-700 font-medium">--- Rata-rata Mata Kuliah (72.8)</span>
+              </div>
+            </div>
+
+            <!-- Bar Chart Graphic (Scrollable on Mobile so 6 classes & dashed line stay aligned) -->
+            <div class="overflow-x-auto pb-2">
+              <div class="relative pt-6 pb-2 px-4 sm:px-6 min-w-[660px]">
+                <!-- Dashed Average Line (72.8%) -->
+                <div class="absolute left-6 right-6 border-t-2 border-dashed border-blue-500/70 z-20 pointer-events-none" style="bottom: 138px;"></div>
+
+                <div class="grid grid-cols-6 gap-4 items-end h-44 border-b border-slate-200 pt-4">
+                  <!-- IS21F3A -->
+                  <div onclick="switchRole('prodi-class')" class="flex flex-col items-center cursor-pointer group">
+                    <div class="flex items-end gap-1.5">
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">80.5</span><div class="w-5 bg-green-600 rounded-t" style="height:112px"></div></div>
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">75.2</span><div class="w-5 bg-blue-600 rounded-t" style="height:105px"></div></div>
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">78.1</span><div class="w-5 bg-amber-400 rounded-t" style="height:109px"></div></div>
+                    </div>
+                  </div>
+                  <!-- IS21F3B -->
+                  <div onclick="switchRole('prodi-class')" class="flex flex-col items-center cursor-pointer group">
+                    <div class="flex items-end gap-1.5">
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">67.3</span><div class="w-5 bg-green-600 rounded-t" style="height:94px"></div></div>
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">61.8</span><div class="w-5 bg-blue-600 rounded-t" style="height:86px"></div></div>
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">64.5</span><div class="w-5 bg-amber-400 rounded-t" style="height:90px"></div></div>
+                    </div>
+                  </div>
+                  <!-- IS21F3C -->
+                  <div onclick="switchRole('prodi-class')" class="flex flex-col items-center cursor-pointer group">
+                    <div class="flex items-end gap-1.5">
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">74.6</span><div class="w-5 bg-green-600 rounded-t" style="height:104px"></div></div>
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">72.1</span><div class="w-5 bg-blue-600 rounded-t" style="height:101px"></div></div>
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">69.8</span><div class="w-5 bg-amber-400 rounded-t" style="height:97px"></div></div>
+                    </div>
+                  </div>
+                  <!-- IS21F3D -->
+                  <div onclick="switchRole('prodi-class')" class="flex flex-col items-center cursor-pointer group">
+                    <div class="flex items-end gap-1.5">
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">58.4</span><div class="w-5 bg-green-600 rounded-t" style="height:81px"></div></div>
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">55.6</span><div class="w-5 bg-blue-600 rounded-t" style="height:77px"></div></div>
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">59.3</span><div class="w-5 bg-amber-400 rounded-t" style="height:83px"></div></div>
+                    </div>
+                  </div>
+                  <!-- IS21F3E -->
+                  <div onclick="switchRole('prodi-class')" class="flex flex-col items-center cursor-pointer group">
+                    <div class="flex items-end gap-1.5">
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">82.7</span><div class="w-5 bg-green-600 rounded-t" style="height:115px"></div></div>
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">79.4</span><div class="w-5 bg-blue-600 rounded-t" style="height:111px"></div></div>
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">85.6</span><div class="w-5 bg-amber-400 rounded-t" style="height:120px"></div></div>
+                    </div>
+                  </div>
+                  <!-- IS21F3F -->
+                  <div onclick="switchRole('prodi-class')" class="flex flex-col items-center cursor-pointer group">
+                    <div class="flex items-end gap-1.5">
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">71.2</span><div class="w-5 bg-green-600 rounded-t" style="height:99px"></div></div>
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">68.0</span><div class="w-5 bg-blue-600 rounded-t" style="height:95px"></div></div>
+                      <div class="flex flex-col items-center"><span class="text-[10px] font-bold mb-0.5">73.5</span><div class="w-5 bg-amber-400 rounded-t" style="height:103px"></div></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- X-Axis Class & Lecturer Labels -->
+                <div class="grid grid-cols-6 gap-4 text-center pt-2 text-[11px]">
+                  <div><div class="font-bold text-slate-800">IS21F3A</div><div class="text-[10px] text-slate-500">68 Mahasiswa</div><div class="text-[10px] text-blue-600 font-medium">Dr. Budi Santoso, S.Kom., M.Kom.</div></div>
+                  <div><div class="font-bold text-slate-800">IS21F3B</div><div class="text-[10px] text-slate-500">62 Mahasiswa</div><div class="text-[10px] text-blue-600 font-medium">Dr. Budi Santoso, S.Kom., M.Kom.</div></div>
+                  <div><div class="font-bold text-slate-800">IS21F3C</div><div class="text-[10px] text-slate-500">70 Mahasiswa</div><div class="text-[10px] text-blue-600 font-medium">Eko Prasetyo, S.Kom., M.Kom.</div></div>
+                  <div><div class="font-bold text-slate-800">IS21F3D</div><div class="text-[10px] text-slate-500">60 Mahasiswa</div><div class="text-[10px] text-blue-600 font-medium">Rina Wijaya, S.Kom., MMSI.</div></div>
+                  <div><div class="font-bold text-slate-800">IS21F3E</div><div class="text-[10px] text-slate-500">78 Mahasiswa</div><div class="text-[10px] text-blue-600 font-medium">Dr. Yusuf Hidayat, S.Kom., M.M.</div></div>
+                  <div><div class="font-bold text-slate-800">IS21F3F</div><div class="text-[10px] text-slate-500">72 Mahasiswa</div><div class="text-[10px] text-blue-600 font-medium">Livia Paramita, S.Kom., M.Kom.</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Grid: Tabel Ringkasan Kelas & Panel Rekomendasi Perbaikan -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <!-- Left 8 Cols: Tabel Ringkasan Capaian per Kelas (6 Kelas) -->
+            <div class="lg:col-span-8 bg-white border border-slate-200 rounded-xl p-5 space-y-4 shadow-xs">
+              <h3 class="text-sm font-bold text-slate-800">Ringkasan Capaian per Kelas</h3>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-[11px] border border-slate-200">
+                  <thead class="bg-slate-50 border-b border-slate-200 font-bold text-slate-700">
+                    <tr>
+                      <th class="py-2.5 px-2">No</th>
+                      <th class="py-2.5 px-2">Kode Kelas</th>
+                      <th class="py-2.5 px-2">Dosen</th>
+                      <th class="py-2.5 px-2 text-center">Jumlah Mhs</th>
+                      <th class="py-2.5 px-2 text-center">LO 1 (Knowledge)</th>
+                      <th class="py-2.5 px-2 text-center">LO 2 (Skills)</th>
+                      <th class="py-2.5 px-2 text-center">LO 3 (Analysis)</th>
+                      <th class="py-2.5 px-2 text-center">Rata-rata LO</th>
+                      <th class="py-2.5 px-2 text-center">Capaian Teaching (%)</th>
+                      <th class="py-2.5 px-2 text-center">Capaian Engagement (%)</th>
+                      <th class="py-2.5 px-2 text-center">Predikat</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200">
+                    <tr onclick="switchRole('prodi-class')" class="hover:bg-blue-50/50 cursor-pointer">
+                      <td class="py-2.5 px-2">1</td>
+                      <td class="py-2.5 px-2 font-bold text-blue-600">IS21F3A</td>
+                      <td class="py-2.5 px-2">Dr. Budi Santoso, S.Kom., M.Kom.</td>
+                      <td class="py-2.5 px-2 text-center">68</td>
+                      <td class="py-2.5 px-2 text-center">80.5</td>
+                      <td class="py-2.5 px-2 text-center">75.2</td>
+                      <td class="py-2.5 px-2 text-center">78.1</td>
+                      <td class="py-2.5 px-2 text-center font-bold">77.9</td>
+                      <td class="py-2.5 px-2 text-center">81.5</td>
+                      <td class="py-2.5 px-2 text-center">84.1</td>
+                      <td class="py-2.5 px-2 text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold">Tinggi</span></td>
+                    </tr>
+                    <tr onclick="switchRole('prodi-class')" class="hover:bg-blue-50/50 cursor-pointer">
+                      <td class="py-2.5 px-2">2</td>
+                      <td class="py-2.5 px-2 font-bold text-blue-600">IS21F3B</td>
+                      <td class="py-2.5 px-2">Dr. Budi Santoso, S.Kom., M.Kom.</td>
+                      <td class="py-2.5 px-2 text-center">62</td>
+                      <td class="py-2.5 px-2 text-center">67.3</td>
+                      <td class="py-2.5 px-2 text-center">61.8</td>
+                      <td class="py-2.5 px-2 text-center">64.5</td>
+                      <td class="py-2.5 px-2 text-center font-bold">64.5</td>
+                      <td class="py-2.5 px-2 text-center">72.4</td>
+                      <td class="py-2.5 px-2 text-center">68.3</td>
+                      <td class="py-2.5 px-2 text-center"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-bold">Sedang</span></td>
+                    </tr>
+                    <tr onclick="switchRole('prodi-class')" class="hover:bg-blue-50/50 cursor-pointer">
+                      <td class="py-2.5 px-2">3</td>
+                      <td class="py-2.5 px-2 font-bold text-blue-600">IS21F3C</td>
+                      <td class="py-2.5 px-2">Eko Prasetyo, S.Kom., M.Kom.</td>
+                      <td class="py-2.5 px-2 text-center">70</td>
+                      <td class="py-2.5 px-2 text-center">74.6</td>
+                      <td class="py-2.5 px-2 text-center">72.1</td>
+                      <td class="py-2.5 px-2 text-center">69.8</td>
+                      <td class="py-2.5 px-2 text-center font-bold">72.2</td>
+                      <td class="py-2.5 px-2 text-center">78.5</td>
+                      <td class="py-2.5 px-2 text-center">77.6</td>
+                      <td class="py-2.5 px-2 text-center"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-bold">Sedang</span></td>
+                    </tr>
+                    <tr onclick="switchRole('prodi-class')" class="hover:bg-blue-50/50 cursor-pointer">
+                      <td class="py-2.5 px-2">4</td>
+                      <td class="py-2.5 px-2 font-bold text-blue-600">IS21F3D</td>
+                      <td class="py-2.5 px-2">Rina Wijaya, S.Kom., MMSI.</td>
+                      <td class="py-2.5 px-2 text-center">60</td>
+                      <td class="py-2.5 px-2 text-center">58.4</td>
+                      <td class="py-2.5 px-2 text-center">55.6</td>
+                      <td class="py-2.5 px-2 text-center">59.3</td>
+                      <td class="py-2.5 px-2 text-center font-bold">57.8</td>
+                      <td class="py-2.5 px-2 text-center">67.2</td>
+                      <td class="py-2.5 px-2 text-center">61.4</td>
+                      <td class="py-2.5 px-2 text-center"><span class="px-2 py-0.5 rounded bg-rose-100 text-rose-700 font-bold">Rendah</span></td>
+                    </tr>
+                    <tr onclick="switchRole('prodi-class')" class="hover:bg-blue-50/50 cursor-pointer">
+                      <td class="py-2.5 px-2">5</td>
+                      <td class="py-2.5 px-2 font-bold text-blue-600">IS21F3E</td>
+                      <td class="py-2.5 px-2">Dr. Yusuf Hidayat, S.Kom., M.M.</td>
+                      <td class="py-2.5 px-2 text-center">78</td>
+                      <td class="py-2.5 px-2 text-center">82.7</td>
+                      <td class="py-2.5 px-2 text-center">79.4</td>
+                      <td class="py-2.5 px-2 text-center">85.6</td>
+                      <td class="py-2.5 px-2 text-center font-bold">82.6</td>
+                      <td class="py-2.5 px-2 text-center">85.9</td>
+                      <td class="py-2.5 px-2 text-center">87.2</td>
+                      <td class="py-2.5 px-2 text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold">Tinggi</span></td>
+                    </tr>
+                    <tr onclick="switchRole('prodi-class')" class="hover:bg-blue-50/50 cursor-pointer">
+                      <td class="py-2.5 px-2">6</td>
+                      <td class="py-2.5 px-2 font-bold text-blue-600">IS21F3F</td>
+                      <td class="py-2.5 px-2">Livia Paramita, S.Kom., M.Kom.</td>
+                      <td class="py-2.5 px-2 text-center">72</td>
+                      <td class="py-2.5 px-2 text-center">71.2</td>
+                      <td class="py-2.5 px-2 text-center">68.0</td>
+                      <td class="py-2.5 px-2 text-center">73.5</td>
+                      <td class="py-2.5 px-2 text-center font-bold">70.9</td>
+                      <td class="py-2.5 px-2 text-center">75.3</td>
+                      <td class="py-2.5 px-2 text-center">72.8</td>
+                      <td class="py-2.5 px-2 text-center"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-bold">Sedang</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="flex items-center gap-3 text-[11px] text-slate-600 pt-1">
+                <span>Keterangan Predikat:</span>
+                <span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold">Tinggi (≥ 75)</span>
+                <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-bold">Sedang (65–74)</span>
+                <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-700 font-bold">Rendah (&lt; 65)</span>
+              </div>
+            </div>
+
+            <!-- Right 4 Cols: Rekomendasi Perbaikan Mata Kuliah -->
+            <div class="lg:col-span-4 bg-white border border-slate-200 rounded-xl p-5 space-y-3 shadow-xs">
+              <h3 class="text-sm font-bold text-slate-800">Rekomendasi Perbaikan Mata Kuliah</h3>
+              
+              <div class="p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-blue-700">Perbaikan Course Design</span>
+                  <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 font-bold text-[10px]">Prioritas: Tinggi</span>
+                </div>
+                <ul class="list-disc list-inside text-[11px] text-slate-600 space-y-1 leading-relaxed">
+                  <li>Perkuat alignment antara materi, aktivitas, dan LO terutama pada LO 2 (Skills).</li>
+                  <li>Tambahkan studi kasus dan proyek aplikatif di area ERP implementasi.</li>
+                </ul>
+              </div>
+
+              <div class="p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-blue-700">Perbaikan Teaching & Learning</span>
+                  <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 font-bold text-[10px]">Prioritas: Sedang</span>
+                </div>
+                <ul class="list-disc list-inside text-[11px] text-slate-600 space-y-1 leading-relaxed">
+                  <li>Tingkatkan interaksi dua arah pada kelas dengan capaian teaching rendah.</li>
+                  <li>Berikan pelatihan penggunaan tools pendukung pembelajaran aktif.</li>
+                </ul>
+              </div>
+
+              <div class="p-3.5 rounded-xl border border-slate-200 space-y-1.5 text-xs">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-blue-700">Perbaikan Engagement</span>
+                  <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 font-bold text-[10px]">Prioritas: Sedang</span>
+                </div>
+                <ul class="list-disc list-inside text-[11px] text-slate-600 space-y-1 leading-relaxed">
+                  <li>Tingkatkan partisipasi forum dan diskusi kelas.</li>
+                  <li>Berikan gamifikasi atau reward untuk aktivitas mahasiswa.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             LAYAR 7: PRODI - DETAIL KELAS ES21F3A & 3 ASPEK LENGKAP
+             ========================================================= -->
+        <section id="view-prodi-class" class="space-y-5 hidden max-w-7xl mx-auto">
+          <div class="text-xs text-slate-500">
+            <span class="text-blue-600 cursor-pointer hover:underline font-medium" onclick="switchRole('prodi-course')">Dosen &gt; Dr. Budi Santoso, S.Kom., M.Kom.</span> &gt; <span class="font-bold text-slate-800">Detail Kelas</span>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-3">
+                <h2 class="text-2xl font-bold text-slate-900">Detail Kelas - ES21F3A</h2>
+                <span class="px-2.5 py-0.5 rounded bg-green-100 text-green-700 font-bold text-xs">Enterprise Systems A</span>
+              </div>
+              <p class="text-xs text-slate-500 mt-1">Ringkasan capaian Learning Outcome (LO) untuk kelas yang diampu.</p>
+            </div>
+
+            <div class="flex items-center gap-2 text-xs">
+              <div>
+                <span class="block text-[10px] text-slate-500 mb-0.5">Periode</span>
+                <select class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-medium"><option>2022/2023 - Genap</option></select>
+              </div>
+              <div>
+                <span class="block text-[10px] text-slate-500 mb-0.5">Semester</span>
+                <select class="bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-medium"><option>Genap</option></select>
+              </div>
+              <button class="mt-4 px-4 py-1.5 border border-blue-600 text-blue-600 rounded-lg font-bold hover:bg-blue-50">Filter</button>
+            </div>
+          </div>
+
+          <!-- 5 Top Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 text-center">
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Jumlah Mahasiswa</div>
+              <div class="text-2xl font-black text-blue-600 my-1">68</div>
+              <div class="text-[11px] text-slate-500">Mahasiswa</div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Rata-rata LO Kelas</div>
+              <div class="text-2xl font-black text-green-600 my-1">77.9 <span class="text-xs font-normal text-slate-500">/ 100</span></div>
+              <span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Capaian Teaching</div>
+              <div class="text-2xl font-black text-green-600 my-1">81.5%</div>
+              <span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Capaian Engagement</div>
+              <div class="text-2xl font-black text-blue-600 my-1">84.1%</div>
+              <span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
+              <div class="text-xs font-bold text-slate-700">Predikat Kelas</div>
+              <div class="text-2xl font-black text-green-700 my-2">Tinggi</div>
+            </div>
+          </div>
+
+          <!-- 2 Column Layout: Left (Informasi Kelas + Keterangan Predikat) & Right (Rincian Capaian 3 Aspek) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            
+            <!-- Left 4 Cols -->
+            <div class="lg:col-span-4 space-y-5">
+              <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-3">
+                <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2">Informasi Kelas</h3>
+                <div class="divide-y divide-slate-100 text-xs">
+                  <div class="py-2 flex justify-between"><span class="font-bold text-slate-700">Kode Kelas</span><span>ES21F3A</span></div>
+                  <div class="py-2 flex justify-between"><span class="font-bold text-slate-700">Mata Kuliah</span><span>Enterprise Systems</span></div>
+                  <div class="py-2 flex justify-between"><span class="font-bold text-slate-700">Dosen</span><span>Dr. Budi Santoso, S.Kom., M.Kom.</span></div>
+                  <div class="py-2 flex justify-between"><span class="font-bold text-slate-700">Jumlah Mahasiswa</span><span>68</span></div>
+                  <div class="py-2 flex justify-between"><span class="font-bold text-slate-700">Periode</span><span>2022/2023 - Genap</span></div>
+                  <div class="py-2 flex justify-between"><span class="font-bold text-slate-700">Semester</span><span>Genap</span></div>
+                  <div class="py-2 flex justify-between"><span class="font-bold text-slate-700">Kurikulum</span><span>2021</span></div>
+                  <div class="py-2 flex justify-between"><span class="font-bold text-slate-700">Tanggal Update</span><span>22 Juli 2026 21:15 WIB</span></div>
+                </div>
+              </div>
+
+              <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-3">
+                <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2">Keterangan Predikat</h3>
+                <div class="space-y-2.5 text-xs">
+                  <div class="flex items-center gap-3">
+                    <span class="px-2.5 py-1 rounded bg-green-100 text-green-700 font-bold w-28 text-center">Tinggi (≥ 75)</span>
+                    <span class="text-slate-600">Capaian LO sangat baik</span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-2.5 py-1 rounded bg-amber-100 text-amber-700 font-bold w-28 text-center">Sedang (65 – 74)</span>
+                    <span class="text-slate-600">Capaian LO cukup, perlu ditingkatkan</span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-2.5 py-1 rounded bg-rose-100 text-rose-700 font-bold w-28 text-center">Rendah (&lt; 65)</span>
+                    <span class="text-slate-600">Capaian LO rendah, perlu perhatian serius</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 8 Cols: Rincian Capaian Table -->
+            <div class="lg:col-span-8 bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4">
+              <!-- Sub-tabs -->
+              <div class="flex gap-5 border-b border-slate-200 text-xs font-semibold">
+                <button class="pb-2.5 border-b-2 border-blue-600 text-blue-600 font-bold">Ringkasan Kelas</button>
+                <button class="pb-2.5 text-slate-500 hover:text-slate-800">Capaian Course</button>
+                <button class="pb-2.5 text-slate-500 hover:text-slate-800">Capaian Teaching</button>
+                <button class="pb-2.5 text-slate-500 hover:text-slate-800">Capaian Engagement</button>
+              </div>
+
+              <h3 class="text-sm font-bold text-slate-800">Rincian Capaian</h3>
+              
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                  <thead class="border-b border-slate-200 text-slate-700 font-bold">
+                    <tr>
+                      <th class="py-2 px-2 text-blue-700">Aspek Learning Outcome (LO)</th>
+                      <th class="py-2 px-2 text-center">Rata-rata (%)</th>
+                      <th class="py-2 px-2 text-center">Predikat</th>
+                      <th class="py-2 px-2">Keterangan</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    <tr><td class="py-2 px-2">Kejelasan Tujuan Pembelajaran</td><td class="text-center">82.3</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td>Tujuan pembelajaran disampaikan dengan jelas</td></tr>
+                    <tr><td class="py-2 px-2">Kualitas Materi</td><td class="text-center">79.1</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td>Materi relevan dan sesuai dengan LO</td></tr>
+                    <tr><td class="py-2 px-2">Kesesuaian Materi dengan LO</td><td class="text-center">76.4</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td>Materi mendukung pencapaian LO</td></tr>
+                    <tr><td class="py-2 px-2">Aktivitas Pembelajaran</td><td class="text-center">75.6</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td>Aktivitas variatif dan melibatkan mahasiswa</td></tr>
+                    <tr><td class="py-2 px-2">Evaluasi & Penilaian</td><td class="text-center">74.2</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-bold text-[10px]">Sedang</span></td><td>Evaluasi sudah baik, perlu variasi instrumen</td></tr>
+                    <tr class="font-bold bg-slate-50/70"><td class="py-2 px-2">Rata-rata Course</td><td class="text-center">77.9</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td></td></tr>
+
+                    <!-- Aspek 2 -->
+                    <tr class="font-bold text-blue-700"><td colspan="4" class="pt-4 pb-1 px-2">Capaian Teaching</td></tr>
+                    <tr><td class="py-2 px-2">Kejelasan Penyampaian</td><td class="text-center">81.5</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td>Dosen menyampaikan materi dengan jelas</td></tr>
+                    <tr><td class="py-2 px-2">Penguasaan Materi</td><td class="text-center">83.2</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td>Dosen menguasai materi dengan baik</td></tr>
+                    <tr><td class="py-2 px-2">Interaksi & Komunikasi</td><td class="text-center">78.9</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td>Dosen responsif dalam diskusi dan tanya jawab</td></tr>
+                    <tr><td class="py-2 px-2">Pemberian Umpan Balik</td><td class="text-center">76.4</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td>Umpan balik diberikan tepat waktu</td></tr>
+                    <tr><td class="py-2 px-2">Pengelolaan Kelas</td><td class="text-center">72.5</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-bold text-[10px]">Sedang</span></td><td>Pengelolaan kelas sudah baik, perlu peningkatan</td></tr>
+                    <tr class="font-bold bg-slate-50/70"><td class="py-2 px-2">Rata-rata Teaching</td><td class="text-center">78.5</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td></td></tr>
+
+                    <!-- Aspek 3 -->
+                    <tr class="font-bold text-blue-700"><td colspan="4" class="pt-4 pb-1 px-2">Capaian Engagement</td></tr>
+                    <tr><td class="py-2 px-2">Kehadiran (VBL & Sesi Live)</td><td class="text-center">84.1</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td>Kehadiran mahasiswa sangat baik</td></tr>
+                    <tr><td class="py-2 px-2">Partisipasi Forum Diskusi</td><td class="text-center">68.3</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-700 font-bold text-[10px]">Sedang</span></td><td>Partisipasi masih dapat ditingkatkan</td></tr>
+                    <tr><td class="py-2 px-2">Upload/Submit Tugas Tepat Waktu</td><td class="text-center">74.6</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td>Mayoritas tugas dikumpulkan tepat waktu</td></tr>
+                    <tr><td class="py-2 px-2">Akses Materi (PPT, Modul, dll.)</td><td class="text-center">81.2</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td>Mahasiswa aktif mengakses materi</td></tr>
+                    <tr><td class="py-2 px-2">Durasi Belajar (Video Learning)</td><td class="text-center">77.5</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td>Durasi belajar sudah optimal</td></tr>
+                    <tr class="font-bold bg-slate-50/70"><td class="py-2 px-2">Rata-rata Engagement</td><td class="text-center">77.1</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td></td></tr>
+
+                    <!-- Grand Total -->
+                    <tr class="font-extrabold text-slate-900 border-t-2 border-slate-200"><td class="py-3 px-2">Rata-rata Keseluruhan LO Kelas</td><td class="text-center">77.9</td><td class="text-center"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 font-bold text-[10px]">Tinggi</span></td><td></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- =========================================================
+             LAYAR 8 (BONUS PRESENTASI): RANCANGAN USE CASE & DATABASE ERD
+             ========================================================= -->
+        <section id="view-system-design" class="space-y-6 hidden max-w-7xl mx-auto">
+          <div class="bg-gradient-to-r from-[#0059d6] to-indigo-700 text-white rounded-2xl p-6 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white/20 uppercase tracking-wider">Technical Blueprint</span>
+              <h2 class="text-2xl font-extrabold mt-1">Rancangan Use Case, Database (ERD), & Arsitektur Sistem</h2>
+              <p class="text-xs text-blue-100 mt-1">Spesifikasi Teknis Sistem Early Warning & Evaluasi Capaian LO PJJ BINUS (React/Next.js + Python FastAPI + MySQL)</p>
+            </div>
+            <div class="flex gap-2 text-xs">
+              <span class="px-3 py-1.5 rounded-lg bg-white/15 font-bold">9 Tabel Relasional</span>
+              <span class="px-3 py-1.5 rounded-lg bg-white/15 font-bold">3 Aktor + 2 Model ML</span>
+            </div>
+          </div>
+
+          <!-- 1. PEMETAAN USE CASE PER AKTOR -->
+          <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
+            <h3 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3">1. Rancangan Use Case Berdasarkan 3 Role Pengguna</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <!-- Actor 1: Mahasiswa -->
+              <div class="border border-blue-200 bg-blue-50/40 rounded-xl p-4 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="font-extrabold text-blue-700 text-sm">👨‍🎓 Aktor 1: Mahasiswa</span>
+                  <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold text-[10px]">Self-Awareness</span>
+                </div>
+                <p class="text-[11px] text-slate-600"><strong>Goals:</strong> Lebih aware terhadap aktivitasnya di LMS setiap sesi.</p>
+                <ul class="space-y-1.5 text-slate-700 list-disc list-inside">
+                  <li><strong>UC-01:</strong> Melihat daftar kelas yang diikuti pada semester berjalan.</li>
+                  <li><strong>UC-02:</strong> Memilih navigasi <strong>Sesi 1 s/d Sesi 16</strong>.</li>
+                  <li><strong>UC-03:</strong> Menerima <strong>Alert Risiko Tinggi/Sedang</strong> pada sesi aktif.</li>
+                  <li><strong>UC-04:</strong> Melihat grafik <strong>Log Activity</strong> (<code>LN</code>, <code>PPT</code>, <code>VBL</code>, <code>FD</code>).</li>
+                  <li><strong>UC-05:</strong> Melihat tabel <strong>9 Komponen Nilai</strong> (TP 1–2, TK 1–4, Quiz 1–2, Final Exam) & status gembok sesi.</li>
+                </ul>
+              </div>
+
+              <!-- Actor 2: Dosen -->
+              <div class="border border-emerald-200 bg-emerald-50/40 rounded-xl p-4 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="font-extrabold text-emerald-700 text-sm">👨‍🏫 Aktor 2: Dosen</span>
+                  <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold text-[10px]">Early Intervention</span>
+                </div>
+                <p class="text-[11px] text-slate-600"><strong>Goals:</strong> Memotivasi mahasiswa yang kurang aktif di kelas atau personal.</p>
+                <ul class="space-y-1.5 text-slate-700 list-disc list-inside">
+                  <li><strong>UC-06:</strong> Menambah & mengelola kelas yang diampu.</li>
+                  <li><strong>UC-07:</strong> Memfilter <strong>Capaian LO (LO1 Knowledge, LO2 Skills, LO3 Analysis)</strong> per instrumen tugas.</li>
+                  <li><strong>UC-08:</strong> Memantau grafik rata-rata aktivitas kelas per sesi (<code>LN%</code>, <code>PPT%</code>, <code>VBL%</code>, <code>FD%</code>).</li>
+                  <li><strong>UC-09:</strong> Melihat <strong>Daftar Mahasiswa High & Medium Risk</strong> beserta <strong>Probabilitas Risiko (%)</strong>.</li>
+                  <li><strong>UC-10:</strong> Melihat tabel rekap nilai & status capaian seluruh mahasiswa.</li>
+                </ul>
+              </div>
+
+              <!-- Actor 3: Admin Prodi -->
+              <div class="border border-purple-200 bg-purple-50/40 rounded-xl p-4 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="font-extrabold text-purple-700 text-sm">🏛️ Aktor 3: Admin Prodi</span>
+                  <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold text-[10px]">Quality Improvement</span>
+                </div>
+                <p class="text-[11px] text-slate-600"><strong>Goals:</strong> Evaluasi & rekomendasi perbaikan kualitas mata kuliah.</p>
+                <ul class="space-y-1.5 text-slate-700 list-disc list-inside">
+                  <li><strong>UC-11:</strong> Melihat overview capaian LO seluruh mata kuliah (Donut Chart & 5 Predikat).</li>
+                  <li><strong>UC-12:</strong> Membandingkan capaian <strong>LO1, LO2, LO3 antar-kelas paralel</strong> (<code>IS21F3A–F</code>).</li>
+                  <li><strong>UC-13:</strong> Melihat evaluasi <strong>3 Aspek (LO/Course, Teaching, Engagement)</strong> hasil <em>K-Means Clustering</em>.</li>
+                  <li><strong>UC-14:</strong> Menerima <strong>Rekomendasi Perbaikan Mata Kuliah</strong> berprioritas.</li>
+                  <li><strong>UC-15:</strong> Membedah 15 sub-indikator detail per kelas & dosen.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. RANCANGAN SKEMA DATABASE (9 TABEL RELASIONAL) -->
+          <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+              <div>
+                <h3 class="text-base font-bold text-slate-900">2. Rancangan Skema Database Relasional (ERD - 9 Tabel Utama)</h3>
+                <p class="text-xs text-slate-500">File SQL siap pakai tersedia di: <code>c:\laragon\www\pjj_binus\database_schema.sql</code></p>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-mono font-bold">MySQL / PostgreSQL</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <!-- Table 1 -->
+              <div class="border border-slate-200 rounded-xl overflow-hidden">
+                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
+                  <span>1. users</span><span class="text-blue-300">Master Aktor</span>
+                </div>
+                <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
+                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
+                  <div>• <strong>nim_nip</strong> (VARCHAR, UNIQUE)</div>
+                  <div>• <strong>name</strong> (VARCHAR)</div>
+                  <div>• <strong>email</strong> (VARCHAR)</div>
+                  <div>• <strong>role</strong> ENUM('mahasiswa','dosen','prodi')</div>
+                </div>
+              </div>
+
+              <!-- Table 2 -->
+              <div class="border border-slate-200 rounded-xl overflow-hidden">
+                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
+                  <span>2. courses</span><span class="text-blue-300">Master Matkul</span>
+                </div>
+                <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
+                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
+                  <div>• <strong>course_code</strong> (VARCHAR) <em>e.g. IS21F3</em></div>
+                  <div>• <strong>course_name</strong> (VARCHAR)</div>
+                  <div>• <strong>curriculum_year</strong> (INT) <em>e.g. 2021</em></div>
+                  <div>• <strong>avg_lo_score</strong> (DECIMAL)</div>
+                </div>
+              </div>
+
+              <!-- Table 3 -->
+              <div class="border border-slate-200 rounded-xl overflow-hidden">
+                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
+                  <span>3. classes</span><span class="text-blue-300">Kelas Paralel</span>
+                </div>
+                <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
+                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
+                  <div>🔗 <strong>course_id</strong> (FK → courses.id)</div>
+                  <div>🔗 <strong>dosen_id</strong> (FK → users.id)</div>
+                  <div>• <strong>class_code</strong> (VARCHAR) <em>01PA / IS21F3A</em></div>
+                  <div>• <strong>period</strong> (VARCHAR) <em>2221</em></div>
+                  <div>• <strong>semester</strong> ENUM('Ganjil','Genap')</div>
+                </div>
+              </div>
+
+              <!-- Table 4 -->
+              <div class="border border-slate-200 rounded-xl overflow-hidden">
+                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
+                  <span>4. enrollments</span><span class="text-blue-300">KRS Mahasiswa</span>
+                </div>
+                <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
+                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
+                  <div>🔗 <strong>class_id</strong> (FK → classes.id)</div>
+                  <div>🔗 <strong>mahasiswa_id</strong> (FK → users.id)</div>
+                  <div>• <strong>capaian_status</strong> ENUM('Berisiko Tinggi','Berisiko Sedang','Aman')</div>
+                </div>
+              </div>
+
+              <!-- Table 5 -->
+              <div class="border border-rose-300 bg-rose-50/20 rounded-xl overflow-hidden">
+                <div class="bg-rose-700 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
+                  <span>5. session_activity_logs</span><span class="text-rose-200">Behavior + ML</span>
+                </div>
+                <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
+                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
+                  <div>🔗 <strong>enrollment_id</strong> (FK → enrollments.id)</div>
+                  <div>• <strong>session_number</strong> (INT 1..16)</div>
+                  <div>• <strong>download_materi_ln</strong> (DECIMAL 0..10)</div>
+                  <div>• <strong>lihat_handout_ppt</strong> (DECIMAL 0..10)</div>
+                  <div>• <strong>video_learning_vbl</strong> (DECIMAL 0..10)</div>
+                  <div>• <strong>forum_discussion_fd</strong> (DECIMAL 0..10)</div>
+                  <div>🤖 <strong>risk_probability</strong> (DECIMAL) <em>70.7%</em></div>
+                  <div>🤖 <strong>risk_level</strong> ENUM('High','Medium','Safe')</div>
+                </div>
+              </div>
+
+              <!-- Table 6 -->
+              <div class="border border-slate-200 rounded-xl overflow-hidden">
+                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
+                  <span>6. assessment_configs</span><span class="text-blue-300">9 Tugas & Lock</span>
+                </div>
+                <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
+                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
+                  <div>🔗 <strong>course_id</strong> (FK → courses.id)</div>
+                  <div>• <strong>code</strong> ('TP1','TP2','TK1'..'FINAL')</div>
+                  <div>• <strong>unlock_session</strong> (INT 1..16)</div>
+                  <div>• <strong>weight_lo1, weight_lo2, weight_lo3</strong></div>
+                </div>
+              </div>
+
+              <!-- Table 7 -->
+              <div class="border border-blue-300 bg-blue-50/20 rounded-xl overflow-hidden">
+                <div class="bg-blue-700 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
+                  <span>7. student_assessments</span><span class="text-blue-200">Kognitif LO1-3</span>
+                </div>
+                <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
+                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
+                  <div>🔗 <strong>enrollment_id</strong> (FK → enrollments.id)</div>
+                  <div>🔗 <strong>assessment_config_id</strong> (FK)</div>
+                  <div>• <strong>total_score</strong> (DECIMAL)</div>
+                  <div>• <strong>lo1_knowledge_score</strong> (DECIMAL)</div>
+                  <div>• <strong>lo2_skills_score</strong> (DECIMAL)</div>
+                  <div>• <strong>lo3_analysis_score</strong> (DECIMAL)</div>
+                </div>
+              </div>
+
+              <!-- Table 8 -->
+              <div class="border border-purple-300 bg-purple-50/20 rounded-xl overflow-hidden">
+                <div class="bg-purple-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
+                  <span>8. class_prodi_evaluations</span><span class="text-purple-200">3 Aspek + K-Means</span>
+                </div>
+                <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
+                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
+                  <div>🔗 <strong>class_id</strong> (FK → classes.id)</div>
+                  <div>• <strong>avg_lo1, avg_lo2, avg_lo3, avg_lo_total</strong></div>
+                  <div>• <strong>5 Kolom Indikator Course Design</strong></div>
+                  <div>• <strong>5 Kolom Indikator Teaching Dosen</strong></div>
+                  <div>• <strong>5 Kolom Indikator Engagement LMS</strong></div>
+                  <div>🤖 <strong>kmeans_predikat</strong> ('Tinggi','Sedang','Rendah')</div>
+                </div>
+              </div>
+
+              <!-- Table 9 -->
+              <div class="border border-slate-200 rounded-xl overflow-hidden">
+                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
+                  <span>9. course_recommendations</span><span class="text-blue-300">Insight Prodi</span>
+                </div>
+                <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
+                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
+                  <div>🔗 <strong>course_id</strong> (FK → courses.id)</div>
+                  <div>• <strong>aspect_category</strong> ('Course Design','Teaching','Engagement')</div>
+                  <div>• <strong>priority</strong> ENUM('Tinggi','Sedang','Rendah')</div>
+                  <div>• <strong>recommendation_text</strong> (TEXT)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    const views = [
+      'mhs-list', 'mhs-detail',
+      'dosen-list', 'dosen-detail',
+      'prodi-home', 'prodi-course', 'prodi-class',
+      'system-design'
+    ];
+
+    let activeMhsSession = 7;
+    let activeDosenSession = 2;
+
+    function renderMhsSessions() {
+      const container = document.getElementById('mhsSessionBar');
+      container.innerHTML = '';
+      for (let i = 1; i <= 16; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = `Sesi ${i}`;
+        btn.onclick = () => selectMhsSession(i);
+        if (i === activeMhsSession) {
+          btn.className = "px-3.5 py-1.5 rounded-lg bg-[#0059d6] text-white font-bold shadow-xs";
+        } else if (i === 1) {
+          btn.className = "px-3.5 py-1.5 rounded-lg bg-[#16a34a] text-white font-bold";
+        } else {
+          btn.className = "px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold";
+        }
+        container.appendChild(btn);
+      }
+    }
+
+    function selectMhsSession(sesi) {
+      activeMhsSession = sesi;
+      renderMhsSessions();
+      const box = document.getElementById('mhsAlertBox');
+      const title = document.getElementById('mhsAlertTitle');
+      const desc = document.getElementById('mhsAlertDesc');
+
+      if (sesi === 1) {
+        box.className = "bg-green-50 border border-green-200 rounded-xl p-5 flex items-center gap-4";
+        title.className = "text-lg font-extrabold text-green-700";
+        title.textContent = `Status Aman di Sesi ${sesi}`;
+        desc.textContent = "Partisipasi Anda pada sesi ini telah memenuhi target aktivitas LMS.";
+        setMhsBars(9, 8, 9, 8);
+      } else {
+        box.className = "bg-[#fff1f2] border border-rose-200 rounded-xl p-5 flex items-center gap-4";
+        title.className = "text-lg font-extrabold text-rose-600";
+        title.textContent = `Alert: Anda Berisiko Tinggi di Sesi ${sesi}`;
+        desc.textContent = "Aktivitas engagement Anda pada beberapa aspek masih rendah. Segera tingkatkan partisipasi agar capaian LO tidak terdampak.";
+        setMhsBars(6, 4, 6, 6);
+      }
+    }
+
+    function setMhsBars(v1, v2, v3, v4) {
+      const vals = [v1, v2, v3, v4];
+      vals.forEach((v, idx) => {
+        const n = idx + 1;
+        document.getElementById(`mhsBarLabel${n}`).textContent = `${v}/10`;
+        const bar = document.getElementById(`mhsBar${n}`);
+        bar.style.height = `${v * 21.5}px`;
+        if (v <= 4) bar.className = "w-7 sm:w-9 bg-[#dc2626] rounded-t transition-all duration-300";
+        else if (v <= 7) bar.className = "w-7 sm:w-9 bg-[#f5b800] rounded-t transition-all duration-300";
+        else bar.className = "w-7 sm:w-9 bg-[#0066ff] rounded-t transition-all duration-300";
+      });
+    }
+
+    function renderDosenSessions() {
+      const container = document.getElementById('dosenSessionBar');
+      container.innerHTML = '';
+      for (let i = 1; i <= 16; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = `✓ Sesi ${i}`;
+        btn.onclick = () => {
+          activeDosenSession = i;
+          renderDosenSessions();
+          document.getElementById('dosenActTitle').textContent = `📊 Aktivitas Mahasiswa (Sesi ${i})`;
+          document.getElementById('dosenRiskHeader').textContent = `👤 Daftar Mahasiswa Berisiko — Session ${i}`;
+        };
+        if (i === activeDosenSession) {
+          btn.className = "px-3 py-1.5 rounded-full bg-[#0059d6] text-white font-bold shadow-xs";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-full bg-[#15803d] text-white font-bold hover:opacity-90";
+        }
+        container.appendChild(btn);
+      }
+    }
+
+    function updateDosenLoCard(val) {
+      document.getElementById('dosenLoLabel').textContent = val;
+      const presets = {
+        'TP 1': { total: '90.4', lo1: 90.4, lo2: 0, lo3: 0 },
+        'TP 2': { total: '82.1', lo1: 0, lo2: 82.1, lo3: 0 },
+        'TK 1': { total: '86.5', lo1: 86.5, lo2: 0, lo3: 0 },
+        'TK 2': { total: '79.0', lo1: 0, lo2: 79.0, lo3: 0 },
+        'Quiz 1': { total: '74.2', lo1: 78.0, lo2: 70.4, lo3: 0 },
+        'Final Exam': { total: '76.8', lo1: 80.0, lo2: 75.0, lo3: 75.4 }
+      };
+      const d = presets[val] || presets['TP 1'];
+      document.getElementById('dosenLoTotal').textContent = d.total;
+      document.getElementById('dosenLo1Val').textContent = d.lo1;
+      document.getElementById('dosenLo1Bar').style.width = `${d.lo1}%`;
+      document.getElementById('dosenLo2Val').textContent = d.lo2;
+      document.getElementById('dosenLo2Bar').style.width = `${d.lo2}%`;
+      document.getElementById('dosenLo3Val').textContent = d.lo3;
+      document.getElementById('dosenLo3Bar').style.width = `${d.lo3}%`;
+    }
+
+    function addDosenClass() {
+      const kode = document.getElementById('inputKodeKelas').value || '03PK';
+      const periode = document.getElementById('inputPeriode').value || '2221';
+      const smt = document.getElementById('inputSemester').value || 'Ganjil';
+      const kls = document.getElementById('inputKelas').value || 'LA01';
+      const nama = document.getElementById('inputNamaKelas').value || 'Enterprise Architecture';
+      const tbody = document.getElementById('dosenClassTableBody');
+      const count = tbody.children.length + 1;
+      const tr = document.createElement('tr');
+      tr.className = "hover:bg-slate-50";
+      tr.innerHTML = `
+        <td class="py-3 px-4 border-r border-slate-200 text-center">${count}</td>
+        <td class="py-3 px-4 border-r border-slate-200 text-center">${kode}</td>
+        <td class="py-3 px-4 border-r border-slate-200 text-center">${periode}</td>
+        <td class="py-3 px-4 border-r border-slate-200 text-center">${smt}</td>
+        <td class="py-3 px-4 border-r border-slate-200 text-center">${kls}</td>
+        <td class="py-3 px-4 border-r border-slate-200 font-medium">${nama}</td>
+        <td class="py-3 px-4 text-center">
+          <button onclick="switchRole('dosen-detail')" class="px-3 py-1 border border-blue-500 text-blue-600 rounded hover:bg-blue-50 font-bold inline-flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-purple-700"></span> View
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function toggleSidebar() {
+      const sb = document.getElementById('appSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (window.innerWidth < 1024) {
+        const isClosed = sb.classList.contains('-translate-x-full');
+        if (isClosed) {
+          sb.classList.remove('-translate-x-full');
+          backdrop.classList.remove('hidden');
+        } else {
+          sb.classList.add('-translate-x-full');
+          backdrop.classList.add('hidden');
+        }
+      } else {
+        sb.classList.toggle('lg:hidden');
+      }
+    }
+
+    function closeMobileSidebar() {
+      const sb = document.getElementById('appSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      sb.classList.add('-translate-x-full');
+      backdrop.classList.add('hidden');
+    }
+
+    function switchRole(viewId) {
+      closeMobileSidebar();
+      views.forEach(v => {
+        document.getElementById(`view-${v}`).classList.add('hidden');
+        const btn = document.getElementById(`btn-${v}`);
+        if (btn) {
+          btn.className = "px-2.5 py-1.5 lg:py-1 rounded-md text-slate-600 hover:bg-white font-medium transition shrink-0";
+        }
+      });
+
+      document.getElementById(`view-${viewId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`btn-${viewId}`);
+      if (activeBtn) {
+        activeBtn.className = "px-2.5 py-1.5 lg:py-1 rounded-md bg-[#0059d6] font-bold text-white shadow-2xs transition shrink-0";
+      }
+
+      const nav = document.getElementById('sidebarNav');
+      const prodiInfo = document.getElementById('prodiSidebarInfo');
+      const userName = document.getElementById('headerUserName');
+      const userRole = document.getElementById('headerUserRole');
+      const avatar = document.getElementById('headerAvatar');
+      const userNameMobile = document.getElementById('headerUserNameMobile');
+      const userRoleMobile = document.getElementById('headerUserRoleMobile');
+      const avatarMobile = document.getElementById('headerAvatarMobile');
+      const notifBell = document.getElementById('notifBell');
+
+      if (viewId.startsWith('mhs')) {
+        userName.textContent = "Eko Prasetyo";
+        userRole.textContent = "Mahasiswa";
+        avatar.textContent = "EP";
+        if (userNameMobile) { userNameMobile.textContent = "Eko Prasetyo"; userRoleMobile.textContent = "Mahasiswa"; avatarMobile.textContent = "EP"; }
+        notifBell.classList.remove('hidden');
+        prodiInfo.classList.add('hidden');
+        nav.innerHTML = `
+          <a href="#" onclick="switchRole('mhs-list')" class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-blue-600 text-white font-bold shadow-2xs">💻 Kelas</a>
+        `;
+      } else if (viewId.startsWith('dosen')) {
+        userName.textContent = "Titan, S.Kom., MMSI., CDMS";
+        userRole.textContent = "Dosen";
+        avatar.textContent = "TT";
+        if (userNameMobile) { userNameMobile.textContent = "Titan, S.Kom."; userRoleMobile.textContent = "Dosen"; avatarMobile.textContent = "TT"; }
+        notifBell.classList.remove('hidden');
+        prodiInfo.classList.add('hidden');
+        nav.innerHTML = `
+          <a href="#" onclick="switchRole('dosen-list')" class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-blue-600 text-white font-bold shadow-2xs">💻 Kelas</a>
+        `;
+      } else {
+        userName.textContent = "Admin Prodi Informatika Binus";
+        userRole.textContent = "Program Studi";
+        avatar.textContent = "AP";
+        if (userNameMobile) { userNameMobile.textContent = "Admin Prodi"; userRoleMobile.textContent = "Program Studi"; avatarMobile.textContent = "AP"; }
+        notifBell.classList.add('hidden');
+        if (viewId === 'prodi-home') {
+          prodiInfo.classList.add('hidden');
+        } else {
+          prodiInfo.classList.remove('hidden');
+        }
+        nav.innerHTML = `
+          <a href="#" onclick="switchRole('prodi-home')" class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg ${viewId === 'prodi-home' ? 'bg-blue-600 font-bold text-white' : 'text-blue-100 hover:bg-blue-700'}">📊 Dashboard Prodi</a>
+          <a href="#" onclick="switchRole('prodi-course')" class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg ${viewId === 'prodi-course' || viewId === 'prodi-class' ? 'bg-blue-600 font-bold text-white' : 'text-blue-100 hover:bg-blue-700'}">💻 Kelas</a>
+          <a href="#" onclick="switchRole('prodi-class')" class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg text-blue-100 hover:bg-blue-700">👨‍🏫 Dosen</a>
+        `;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderMhsSessions();
+      renderDosenSessions();
+      switchRole('mhs-detail');
+    });
+  </script>
+</body>
+</html>
+

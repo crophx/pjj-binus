@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualisasi Machine Learning (.pkl) - BINUS PJJ Early Warning & Evaluasi LO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    .cluster-donut {
+      border-radius: 50%;
+      background: conic-gradient(
+        #16a34a 0% 84.19%,
+        #eab308 84.19% 93.95%,
+        #f97316 93.95% 98.95%,
+        #dc2626 98.95% 100%
+      );
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cluster-donut-hole {
+      width: 64%;
+      height: 64%;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    input[type="range"] {
+      accent-color: #0059d6;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-[#f4f6f9] text-slate-800 antialiased min-h-screen flex flex-col font-sans overflow-x-hidden">
+
+  <!-- MAIN APPLICATION SHELL -->
+  <div class="flex flex-1 min-h-screen relative">
+
+    <!-- MOBILE SIDEBAR BACKDROP OVERLAY -->
+    <div id="mlSidebarBackdrop" onclick="closeMlSidebar()" class="fixed inset-0 bg-slate-900/50 backdrop-blur-2xs z-40 hidden lg:hidden transition-opacity"></div>
+
+    <!-- LEFT SIDEBAR (BINUS BLUE - SLIDE DRAWER ON MOBILE, DOCKED ON DESKTOP) -->
+    <aside id="appSidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0059d6] text-white flex flex-col justify-between shrink-0 select-none transition-transform duration-200 -translate-x-full lg:translate-x-0 lg:static">
+      <div>
+        <div class="px-5 py-4 sm:px-6 sm:py-5 border-b border-blue-400/30 flex items-center justify-between">
+          <div>
+            <div class="text-[10px] font-bold uppercase tracking-widest text-blue-200">ML Model Inspector</div>
+            <h1 class="text-base sm:text-lg font-extrabold tracking-wide mt-0.5">BINUS UNIVERSITY</h1>
+          </div>
+          <button onclick="closeMlSidebar()" class="lg:hidden p-1 rounded-lg text-blue-100 hover:text-white hover:bg-blue-700/50">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="p-4 space-y-5">
+          <div>
+            <div class="text-[11px] font-bold text-blue-200 uppercase tracking-wider mb-2 px-2">NAVIGASI UTAMA</div>
+            <nav class="space-y-1.5 text-xs font-medium">
+              <a href="index.html" class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold transition">
+                <span>⬅️</span> Kembali ke Dashboard Utama
+              </a>
+              <a href="#sec-overview" onclick="closeMlSidebar()" class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg bg-blue-600 text-white font-bold shadow-2xs">
+                <span>🤖</span> Pipeline 2 File .pkl
+              </a>
+              <a href="#sec-clusters" onclick="closeMlSidebar()" class="flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-blue-100 hover:bg-blue-700 transition">
+                <span>📊</span> Distribusi 4 Klaster (N=5.725)
+              </a>
+              <a href="#sec-centroids" onclick="closeMlSidebar()" class="flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-blue-100 hover:bg-blue-700 transition">
+                <span>📈</span> Grafik Centroid 8 Fitur
+              </a>
+              <a href="#sec-scaler" onclick="closeMlSidebar()" class="flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-blue-100 hover:bg-blue-700 transition">
+                <span>⚖️</span> Parameter RobustScaler
+              </a>
+              <a href="#sec-simulator" onclick="closeMlSidebar()" class="flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-blue-100 hover:bg-blue-700 transition">
+                <span>🎛️</span> Live Simulator Prediksi .pkl
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- Model Metadata Box -->
+      <div class="p-4 m-3 rounded-xl bg-blue-900/50 border border-blue-400/20 text-xs space-y-2.5">
+        <div class="font-bold text-white flex items-center justify-between">
+          <span>Status File .pkl</span>
+          <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-[10px]">Loaded</span>
+        </div>
+        <div class="border-t border-blue-400/20 pt-2 space-y-1 text-[11px]">
+          <div class="flex justify-between"><span class="text-blue-200">File 1:</span><span class="font-mono font-bold text-white">scaler.pkl</span></div>
+          <div class="flex justify-between"><span class="text-blue-200">File 2:</span><span class="font-mono font-bold text-white">clustering_model.pkl</span></div>
+          <div class="flex justify-between"><span class="text-blue-200">Scikit-Learn:</span><span class="font-mono text-white">v1.9.0</span></div>
+          <div class="flex justify-between"><span class="text-blue-200">Sampel Latih:</span><span class="font-bold text-white">5.725 Baris</span></div>
+          <div class="flex justify-between"><span class="text-blue-200">Jumlah Fitur:</span><span class="font-bold text-white">8 Fitur</span></div>
+          <div class="flex justify-between"><span class="text-blue-200">Jumlah Klaster:</span><span class="font-bold text-white">4 Klaster</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT WORKSPACE -->
+    <div class="flex-1 flex flex-col min-w-0 w-full">
+
+      <!-- TOP HEADER (RESPONSIVE 2-ROW ON MOBILE, 1-ROW ON DESKTOP) -->
+      <header class="bg-white border-b border-slate-200 px-3.5 sm:px-6 py-2.5 lg:py-0 lg:h-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5 shrink-0 sticky top-0 z-30">
+        <div class="flex items-center justify-between w-full lg:w-auto gap-2">
+          <div class="flex items-center gap-2 sm:gap-3">
+            <button onclick="toggleMlSidebar()" class="text-slate-600 hover:text-slate-900 p-1.5 rounded-lg hover:bg-slate-100 border border-slate-200 lg:border-transparent">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+
+            <a href="index.html" class="px-2.5 sm:px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] sm:text-xs font-bold flex items-center gap-1.5 transition shrink-0">
+              <span>←</span> <span class="hidden sm:inline">Dashboard 3 Role (index.html)</span><span class="sm:hidden">Dashboard Utama</span>
+            </a>
+            <span class="hidden md:inline text-slate-300">|</span>
+            <span class="hidden md:inline-block px-3 py-1.5 rounded-lg bg-[#0059d6] text-white text-xs font-bold shadow-2xs">
+              🤖 Halaman Visualisasi Machine Learning (2 File .pkl)
+            </span>
+          </div>
+
+          <a href="#sec-simulator" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] sm:text-xs font-bold shadow-2xs transition shrink-0">
+            🎛️ <span class="hidden sm:inline">Coba Live</span> Simulator
+          </a>
+        </div>
+
+        <!-- Mobile Quick Section Jump Bar -->
+        <div class="flex lg:hidden items-center gap-1.5 bg-slate-100 p-1 rounded-lg border border-slate-200 text-[11px] overflow-x-auto no-scrollbar whitespace-nowrap w-full">
+          <a href="#sec-overview" class="px-2.5 py-1 rounded-md bg-[#0059d6] text-white font-bold shrink-0">🤖 Pipeline .pkl</a>
+          <a href="#sec-clusters" class="px-2.5 py-1 rounded-md text-slate-700 hover:bg-white font-medium shrink-0">📊 4 Klaster</a>
+          <a href="#sec-centroids" class="px-2.5 py-1 rounded-md text-slate-700 hover:bg-white font-medium shrink-0">📈 Centroid 8 Fitur</a>
+          <a href="#sec-scaler" class="px-2.5 py-1 rounded-md text-slate-700 hover:bg-white font-medium shrink-0">⚖️ RobustScaler</a>
+          <a href="#sec-simulator" class="px-2.5 py-1 rounded-md text-emerald-700 bg-emerald-50 border border-emerald-200 font-bold shrink-0">🎛️ Live Simulator</a>
+        </div>
+      </header>
+
+      <!-- MAIN CONTENT -->
+      <main class="p-3.5 sm:p-6 overflow-y-auto flex-1 space-y-5 sm:space-y-7 max-w-7xl mx-auto w-full">
+
+        <!-- HERO BANNER -->
+        <section id="sec-overview" class="bg-gradient-to-r from-[#0059d6] via-blue-700 to-indigo-800 text-white rounded-2xl p-4 sm:p-6 shadow-md">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 sm:gap-6">
+            <div class="space-y-2 max-w-3xl">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-blue-100 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider">
+                <span>📦 Ekstraksi Langsung dari File Binary Model</span>
+              </div>
+              <h2 class="text-lg sm:text-2xl font-extrabold tracking-tight">Visualisasi & Bedah Parameter 2 File Machine Learning (`.pkl`)</h2>
+              <p class="text-xs text-blue-100 leading-relaxed">
+                Halaman ini menampilkan parameter asli yang diekstrak langsung dari <code class="bg-white/20 px-1.5 py-0.5 rounded font-mono font-bold text-white">scaler.pkl</code> (<span class="font-semibold">RobustScaler</span>) dan <code class="bg-white/20 px-1.5 py-0.5 rounded font-mono font-bold text-white">clustering_model.pkl</code> (<span class="font-semibold">K-Means Clustering</span>) yang telah dilatih pada <strong>5.725 sampel data</strong> dengan <strong>8 fitur input</strong> dan menghasilkan <strong>4 klaster performa/risiko</strong>.
+              </p>
+            </div>
+
+            <!-- Pipeline Flow Mini Card -->
+            <div class="bg-white/10 backdrop-blur-xs border border-white/20 rounded-xl p-3.5 sm:p-4 shrink-0 text-xs space-y-2 w-full lg:w-auto lg:min-w-[290px]">
+              <div class="text-[10px] font-bold uppercase tracking-wider text-blue-200">Alur Eksekusi Pipeline ML</div>
+              <div class="flex items-center justify-between gap-2 bg-slate-900/40 p-2.5 rounded-lg border border-white/10">
+                <div class="text-center">
+                  <div class="font-mono font-bold text-amber-300 text-[11px]">Input X</div>
+                  <div class="text-[10px] text-blue-200">8 Fitur</div>
+                </div>
+                <span class="text-blue-300 font-bold">→</span>
+                <div class="text-center">
+                  <div class="font-mono font-bold text-cyan-300 text-[11px]">scaler.pkl</div>
+                  <div class="text-[10px] text-blue-200">RobustScaler</div>
+                </div>
+                <span class="text-blue-300 font-bold">→</span>
+                <div class="text-center">
+                  <div class="font-mono font-bold text-emerald-300 text-[11px]">clustering_model.pkl</div>
+                  <div class="text-[10px] text-blue-200">KMeans (k=4)</div>
+                </div>
+              </div>
+              <div class="text-[10px] text-blue-100 flex justify-between pt-1">
+                <span>Rumus Scaling: <code class="font-mono text-white">(X - center_) / scale_</code></span>
+                <span>Metrik: <code class="font-mono text-white">Euclidean</code></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             BAGIAN 1: KARTU SPESIFIKASI 2 FILE .PKL
+             ========================================================= -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- File 1: scaler.pkl -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+            <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+              <div>
+                <span class="px-2 py-0.5 rounded bg-cyan-100 text-cyan-800 font-bold text-[10px] uppercase">Tahap 1 • Preprocessing</span>
+                <h3 class="text-base font-extrabold text-slate-900 mt-1 font-mono">1. scaler.pkl</h3>
+                <p class="text-xs text-slate-500"><code class="text-blue-600 font-mono">sklearn.preprocessing._data.RobustScaler</code></p>
+              </div>
+              <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-mono text-xs font-bold">631 Bytes</span>
+            </div>
+
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Menormalisasi 8 fitur input menggunakan statistik yang <strong>tahan terhadap ekstrem/outlier</strong>, yaitu mengurangkan nilai dengan <strong>Median (<code class="font-mono">center_</code>)</strong> lalu membagi dengan <strong>Interquartile Range / IQR (<code class="font-mono">scale_</code> = Q75 - Q25)</strong>.
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <div class="text-[10px] text-slate-400 font-mono">n_features_in_</div>
+                <div class="text-sm font-black text-slate-800 mt-0.5">8 Fitur</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <div class="text-[10px] text-slate-400 font-mono">quantile_range</div>
+                <div class="text-sm font-black text-slate-800 mt-0.5">(25.0, 75.0)</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <div class="text-[10px] text-slate-400 font-mono">with_centering / scaling</div>
+                <div class="text-sm font-black text-emerald-600 mt-0.5">True / True</div>
+              </div>
+            </div>
+
+            <div class="bg-slate-900 text-slate-100 rounded-xl p-3.5 font-mono text-[11px] space-y-1.5 overflow-x-auto">
+              <div class="text-cyan-400 font-bold"># Isi Vektor Parameter di dalam scaler.pkl:</div>
+              <div><span class="text-amber-300">center_</span> = [77.1429, 78.0952, 70.0, 70.0, 70.0, 70.0, 100.0, 100.0]</div>
+              <div><span class="text-emerald-300">scale_ </span> = [ 6.7993,  6.2877, 30.0, 20.0, 20.0, 20.0,   1.0,  16.6667]</div>
+            </div>
+          </div>
+
+          <!-- File 2: clustering_model.pkl -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+            <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+              <div>
+                <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold text-[10px] uppercase">Tahap 2 • Unsupervised Clustering</span>
+                <h3 class="text-base font-extrabold text-slate-900 mt-1 font-mono">2. clustering_model.pkl</h3>
+                <p class="text-xs text-slate-500"><code class="text-indigo-600 font-mono">sklearn.cluster._kmeans.KMeans</code></p>
+              </div>
+              <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-mono text-xs font-bold">23.883 Bytes</span>
+            </div>
+
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Mengelompokkan data yang sudah dinormalisasi oleh <code class="font-mono">scaler.pkl</code> ke dalam <strong>4 Klaster (<code class="font-mono">n_clusters = 4</code>)</strong> berdasarkan jarak <em>Euclidean</em> terdekat ke 4 titik pusat klaster (<code class="font-mono">cluster_centers_</code>).
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <div class="text-[10px] text-slate-400 font-mono">n_clusters</div>
+                <div class="text-sm font-black text-indigo-700 mt-0.5">4 Klaster</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <div class="text-[10px] text-slate-400 font-mono">labels_.shape</div>
+                <div class="text-sm font-black text-slate-800 mt-0.5">5.725 Data</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <div class="text-[10px] text-slate-400 font-mono">inertia_ (WCSS)</div>
+                <div class="text-sm font-black text-slate-800 mt-0.5">42.983,13</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <div class="text-[10px] text-slate-400 font-mono">init / n_iter_</div>
+                <div class="text-sm font-black text-emerald-600 mt-0.5">k-means++ (3)</div>
+              </div>
+            </div>
+
+            <div class="bg-slate-900 text-slate-100 rounded-xl p-3.5 font-mono text-[11px] space-y-1.5 overflow-x-auto">
+              <div class="text-indigo-400 font-bold"># Hyperparameter & Hasil Training di clustering_model.pkl:</div>
+              <div>KMeans(n_clusters=<span class="text-amber-300">4</span>, init=<span class="text-emerald-300">'k-means++'</span>, max_iter=<span class="text-amber-300">500</span>, n_init=<span class="text-amber-300">30</span>, random_state=<span class="text-amber-300">42</span>)</div>
+              <div>Distribusi labels_: <span class="text-emerald-300">C0: 4820</span> | <span class="text-amber-300">C2: 559</span> | <span class="text-orange-300">C3: 286</span> | <span class="text-rose-400">C1: 60</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             BAGIAN 2: DISTRIBUSI 4 KLASTER PADA 5.725 SAMPEL DATA LATIH
+             ========================================================= -->
+        <section id="sec-clusters" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div>
+              <h3 class="text-base font-extrabold text-slate-900">📊 Distribusi Populasi & Interpretasi 4 Klaster (`N = 5.725` Sampel)</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Hasil pengelompokan dari atribut <code class="font-mono text-blue-600">clustering_model.labels_</code> yang diurutkan dari performa terbaik hingga paling berisiko.</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-semibold">Total Sampel: <strong>5.725</strong></span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            <!-- Left 4 Cols: Donut Chart & Stacked Bar -->
+            <div class="lg:col-span-4 flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-4">
+              <div class="w-44 h-44 cluster-donut shadow-inner">
+                <div class="cluster-donut-hole">
+                  <span class="text-2xl font-black text-slate-900">5.725</span>
+                  <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total Data</span>
+                </div>
+              </div>
+
+              <!-- Horizontal Stacked Bar -->
+              <div class="w-full space-y-1.5">
+                <div class="flex justify-between text-[10px] font-bold text-slate-500">
+                  <span>Proporsi Populasi Klaster</span>
+                  <span>100%</span>
+                </div>
+                <div class="w-full h-3.5 rounded-full overflow-hidden flex bg-slate-200">
+                  <div class="bg-green-600 h-full" style="width: 84.19%" title="Cluster 0: 84.19%"></div>
+                  <div class="bg-amber-500 h-full" style="width: 9.76%" title="Cluster 2: 9.76%"></div>
+                  <div class="bg-orange-500 h-full" style="width: 5.00%" title="Cluster 3: 5.00%"></div>
+                  <div class="bg-rose-600 h-full" style="width: 1.05%" title="Cluster 1: 1.05%"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5 pt-2 text-[11px]">
+                  <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-600 shrink-0"></span><span><strong>Cluster 0:</strong> 84.19%</span></div>
+                  <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span><span><strong>Cluster 2:</strong> 9.76%</span></div>
+                  <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-orange-500 shrink-0"></span><span><strong>Cluster 3:</strong> 5.00%</span></div>
+                  <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-600 shrink-0"></span><span><strong>Cluster 1:</strong> 1.05%</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 8 Cols: 4 Cluster Cards -->
+            <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Cluster 0 -->
+              <div class="border-l-4 border-l-green-600 border border-slate-200 rounded-xl p-4 space-y-2 bg-green-50/20">
+                <div class="flex items-center justify-between">
+                  <span class="px-2.5 py-0.5 rounded bg-green-100 text-green-800 font-extrabold text-xs">Cluster 0 (Optimal / Aman)</span>
+                  <span class="text-sm font-black text-green-700">4.820 Data (84.19%)</span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Kelompok mayoritas dengan performa akademik stabil (<strong>F1: 76.9, F2: 77.5</strong>), aktivitas tugas di median (<strong>~70.0</strong>), serta tingkat partisipasi penuh (<strong>F7: 100%, F8: 93.1%</strong>).
+                </p>
+                <div class="text-[11px] font-mono text-slate-500 pt-1 border-t border-slate-200/60">
+                  Rata-rata Centroid (Asli): <strong>78.48 / 100</strong>
+                </div>
+              </div>
+
+              <!-- Cluster 2 -->
+              <div class="border-l-4 border-l-amber-500 border border-slate-200 rounded-xl p-4 space-y-2 bg-amber-50/20">
+                <div class="flex items-center justify-between">
+                  <span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 font-extrabold text-xs">Cluster 2 (Cukup / Low Risk)</span>
+                  <span class="text-sm font-black text-amber-600">559 Data (9.76%)</span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Mulai mengalami penurunan pada <strong>Fitur 3 (50.6)</strong> dan <strong>Fitur 6 (51.8)</strong>, serta partisipasi <strong>Fitur 7 turun ke 83.3% (5/6)</strong> dan <strong>Fitur 8 di 76.1%</strong>. Perlu pengingat ringan.
+                </p>
+                <div class="text-[11px] font-mono text-slate-500 pt-1 border-t border-slate-200/60">
+                  Rata-rata Centroid (Asli): <strong>69.21 / 100</strong>
+                </div>
+              </div>
+
+              <!-- Cluster 3 -->
+              <div class="border-l-4 border-l-orange-500 border border-slate-200 rounded-xl p-4 space-y-2 bg-orange-50/20">
+                <div class="flex items-center justify-between">
+                  <span class="px-2.5 py-0.5 rounded bg-orange-100 text-orange-800 font-extrabold text-xs">Cluster 3 (Medium Risk)</span>
+                  <span class="text-sm font-black text-orange-600">286 Data (5.00%)</span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Penurunan signifikan pada aktivitas <strong>Fitur 3 (42.1)</strong> dan <strong>Fitur 6 (41.7)</strong>. Kehadiran/partisipasi <strong>Fitur 7 merosot ke 63.6%</strong> dan <strong>Fitur 8 ke 54.3%</strong>. Perlu intervensi dosen.
+                </p>
+                <div class="text-[11px] font-mono text-slate-500 pt-1 border-t border-slate-200/60">
+                  Rata-rata Centroid (Asli): <strong>61.85 / 100</strong>
+                </div>
+              </div>
+
+              <!-- Cluster 1 -->
+              <div class="border-l-4 border-l-rose-600 border border-slate-200 rounded-xl p-4 space-y-2 bg-rose-50/30">
+                <div class="flex items-center justify-between">
+                  <span class="px-2.5 py-0.5 rounded bg-rose-100 text-rose-800 font-extrabold text-xs">Cluster 1 (High Risk / Kritis)</span>
+                  <span class="text-sm font-black text-rose-600">60 Data (1.05%)</span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Anomali pasif ekstrem! Nilai <strong>Fitur 3 (29.0)</strong> & <strong>Fitur 6 (29.3)</strong> anjlok, sementara <strong>Fitur 7 (18.6%)</strong> dan <strong>Fitur 8 (15.3%)</strong> sangat kritis (berjarak <strong>-81.4 IQR</strong> dari median).
+                </p>
+                <div class="text-[11px] font-mono text-slate-500 pt-1 border-t border-slate-200/60">
+                  Rata-rata Centroid (Asli): <strong>47.39 / 100</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Visualisasi Sebaran Baris Data Asli (labels_) -->
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="text-xs font-bold text-slate-800">🧬 Peta Sebaran Sampel dari <code class="font-mono text-blue-600">kmeans.labels_</code> (200 Sampel Pertama dari 5.725 Baris)</div>
+              <div class="text-[11px] text-slate-500">Hover kotak untuk melihat indeks baris & hasil klasternya</div>
+            </div>
+            <div id="labelsGrid" class="flex flex-wrap gap-1 pt-1"></div>
+            <div class="text-[11px] text-slate-500 pt-1">
+              <strong>60 Indeks Baris yang Masuk Cluster 1 (High Risk Kritis) di Dataset Asli:</strong>
+              <span class="font-mono text-[10px] text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200 inline-block mt-1">
+                [194, 244, 264, 404, 424, 639, 642, 658, 661, 918, 921, 933, 968, 1230, 1235, 1362, 1460, 1520, 1639, 1688, 1694, 1710, 1711, 1714, 2364, 2390, 2414, 2878, 3092, 3308..5560]
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             BAGIAN 3: GRAFIK & TABEL CENTROID 8 FITUR (ASLI VS SCALED)
+             ========================================================= -->
+        <section id="sec-centroids" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div>
+              <h3 class="text-base font-extrabold text-slate-900">📈 Profil Titik Pusat Klaster (<code class="font-mono text-blue-600">cluster_centers_</code>) pada 8 Fitur</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Perbandingan rata-rata ke-8 fitur di setiap klaster setelah dikembalikan ke skala asli (<code class="font-mono">0–100</code>) via <code class="font-mono">scaler.inverse_transform()</code>.</p>
+            </div>
+
+            <!-- Toggle Mode Grafik -->
+            <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
+              <button id="btnScaleOrig" onclick="setCentroidMode('orig')" class="px-3 py-1.5 rounded-lg bg-[#0059d6] text-white font-bold shadow-2xs transition">
+                Skala Asli (0 – 100)
+              </button>
+              <button id="btnScaleRobust" onclick="setCentroidMode('scaled')" class="px-3 py-1.5 rounded-lg text-slate-600 hover:bg-white font-medium transition">
+                Skala RobustScaler (Z-IQR)
+              </button>
+            </div>
+          </div>
+
+          <!-- Legend -->
+          <div class="flex flex-wrap items-center justify-between gap-4 text-xs bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200/80">
+            <div class="flex flex-wrap items-center gap-4">
+              <span class="flex items-center gap-1.5 font-semibold"><span class="w-3 h-3 rounded-xs bg-green-600 inline-block"></span> Cluster 0 (Optimal - 84.2%)</span>
+              <span class="flex items-center gap-1.5 font-semibold"><span class="w-3 h-3 rounded-xs bg-amber-500 inline-block"></span> Cluster 2 (Cukup - 9.8%)</span>
+              <span class="flex items-center gap-1.5 font-semibold"><span class="w-3 h-3 rounded-xs bg-orange-500 inline-block"></span> Cluster 3 (Medium Risk - 5.0%)</span>
+              <span class="flex items-center gap-1.5 font-semibold"><span class="w-3 h-3 rounded-xs bg-rose-600 inline-block"></span> Cluster 1 (High Risk - 1.1%)</span>
+            </div>
+            <span id="centroidModeNote" class="text-[11px] text-blue-700 font-medium">Menampilkan nilai asli hasil inverse_transform (0–100)</span>
+          </div>
+
+          <!-- Grouped Bar Chart Container -->
+          <div id="centroidChartContainer" class="pt-6 pb-2 px-2 overflow-x-auto">
+            <div id="centroidBarsGrid" class="grid grid-cols-8 gap-4 min-w-[780px] items-end h-60 border-b border-slate-200 pt-6 px-2">
+              <!-- Rendered dynamically by JS -->
+            </div>
+            <div id="centroidLabelsGrid" class="grid grid-cols-8 gap-4 min-w-[780px] text-center pt-3 px-2">
+              <!-- Rendered dynamically by JS -->
+            </div>
+          </div>
+
+          <!-- Tabel Matriks Centroid Lengkap -->
+          <div class="overflow-x-auto pt-2">
+            <table class="w-full text-left text-xs border border-slate-200 rounded-xl overflow-hidden">
+              <thead class="bg-slate-100 border-b border-slate-200 text-slate-700 font-bold">
+                <tr>
+                  <th class="py-3 px-3 border-r border-slate-200">Klaster & Status</th>
+                  <th class="py-3 px-2.5 text-center border-r border-slate-200">Populasi</th>
+                  <th class="py-3 px-2.5 text-center">Fitur 1<br><span class="text-[10px] font-normal text-slate-500">(Kognitif 1)</span></th>
+                  <th class="py-3 px-2.5 text-center">Fitur 2<br><span class="text-[10px] font-normal text-slate-500">(Kognitif 2)</span></th>
+                  <th class="py-3 px-2.5 text-center bg-blue-50/50">Fitur 3 ⭐<br><span class="text-[10px] font-normal text-blue-600">(Aktivitas 1)</span></th>
+                  <th class="py-3 px-2.5 text-center">Fitur 4<br><span class="text-[10px] font-normal text-slate-500">(Aktivitas 2)</span></th>
+                  <th class="py-3 px-2.5 text-center">Fitur 5<br><span class="text-[10px] font-normal text-slate-500">(Aktivitas 3)</span></th>
+                  <th class="py-3 px-2.5 text-center bg-blue-50/50">Fitur 6 ⭐<br><span class="text-[10px] font-normal text-blue-600">(Aktivitas 4)</span></th>
+                  <th class="py-3 px-2.5 text-center bg-amber-50/60">Fitur 7 🔥<br><span class="text-[10px] font-normal text-amber-700">(Partisipasi 1)</span></th>
+                  <th class="py-3 px-2.5 text-center bg-amber-50/60">Fitur 8 🔥<br><span class="text-[10px] font-normal text-amber-700">(Partisipasi 2)</span></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 font-mono text-[11px]">
+                <tr class="hover:bg-green-50/30">
+                  <td class="py-3 px-3 font-sans font-bold text-green-700 border-r border-slate-200">🟢 Cluster 0 (Optimal)</td>
+                  <td class="py-3 px-2.5 text-center font-bold border-r border-slate-200">4.820 (84.2%)</td>
+                  <td class="py-3 px-2.5 text-center">76.88 <span class="block text-[9px] text-slate-400">(-0.04)</span></td>
+                  <td class="py-3 px-2.5 text-center">77.48 <span class="block text-[9px] text-slate-400">(-0.10)</span></td>
+                  <td class="py-3 px-2.5 text-center font-bold bg-blue-50/30">69.88 <span class="block text-[9px] text-slate-400">(-0.00)</span></td>
+                  <td class="py-3 px-2.5 text-center">70.34 <span class="block text-[9px] text-slate-400">(+0.02)</span></td>
+                  <td class="py-3 px-2.5 text-center">70.26 <span class="block text-[9px] text-slate-400">(+0.01)</span></td>
+                  <td class="py-3 px-2.5 text-center font-bold bg-blue-50/30">69.94 <span class="block text-[9px] text-slate-400">(-0.00)</span></td>
+                  <td class="py-3 px-2.5 text-center font-black text-green-700 bg-amber-50/30">100.00 <span class="block text-[9px] text-slate-400">(0.00)</span></td>
+                  <td class="py-3 px-2.5 text-center font-black text-green-700 bg-amber-50/30">93.07 <span class="block text-[9px] text-slate-400">(-0.42)</span></td>
+                </tr>
+                <tr class="hover:bg-amber-50/30">
+                  <td class="py-3 px-3 font-sans font-bold text-amber-600 border-r border-slate-200">🟡 Cluster 2 (Cukup)</td>
+                  <td class="py-3 px-2.5 text-center font-bold border-r border-slate-200">559 (9.8%)</td>
+                  <td class="py-3 px-2.5 text-center">76.52 <span class="block text-[9px] text-slate-400">(-0.09)</span></td>
+                  <td class="py-3 px-2.5 text-center">77.11 <span class="block text-[9px] text-slate-400">(-0.16)</span></td>
+                  <td class="py-3 px-2.5 text-center font-bold bg-blue-50/30">50.64 <span class="block text-[9px] text-slate-400">(-0.65)</span></td>
+                  <td class="py-3 px-2.5 text-center">69.55 <span class="block text-[9px] text-slate-400">(-0.02)</span></td>
+                  <td class="py-3 px-2.5 text-center">68.59 <span class="block text-[9px] text-slate-400">(-0.07)</span></td>
+                  <td class="py-3 px-2.5 text-center font-bold bg-blue-50/30">51.77 <span class="block text-[9px] text-slate-400">(-0.91)</span></td>
+                  <td class="py-3 px-2.5 text-center font-black text-amber-600 bg-amber-50/30">83.33 <span class="block text-[9px] text-slate-400">(-16.67)</span></td>
+                  <td class="py-3 px-2.5 text-center font-black text-amber-600 bg-amber-50/30">76.15 <span class="block text-[9px] text-slate-400">(-1.43)</span></td>
+                </tr>
+                <tr class="hover:bg-orange-50/30">
+                  <td class="py-3 px-3 font-sans font-bold text-orange-600 border-r border-slate-200">🟠 Cluster 3 (Medium Risk)</td>
+                  <td class="py-3 px-2.5 text-center font-bold border-r border-slate-200">286 (5.0%)</td>
+                  <td class="py-3 px-2.5 text-center">76.41 <span class="block text-[9px] text-slate-400">(-0.11)</span></td>
+                  <td class="py-3 px-2.5 text-center">76.91 <span class="block text-[9px] text-slate-400">(-0.19)</span></td>
+                  <td class="py-3 px-2.5 text-center font-bold bg-blue-50/30">42.13 <span class="block text-[9px] text-slate-400">(-0.93)</span></td>
+                  <td class="py-3 px-2.5 text-center">69.44 <span class="block text-[9px] text-slate-400">(-0.03)</span></td>
+                  <td class="py-3 px-2.5 text-center">70.35 <span class="block text-[9px] text-slate-400">(+0.02)</span></td>
+                  <td class="py-3 px-2.5 text-center font-bold bg-blue-50/30">41.75 <span class="block text-[9px] text-slate-400">(-1.41)</span></td>
+                  <td class="py-3 px-2.5 text-center font-black text-orange-600 bg-amber-50/30">63.58 <span class="block text-[9px] text-slate-400">(-36.42)</span></td>
+                  <td class="py-3 px-2.5 text-center font-black text-orange-600 bg-amber-50/30">54.25 <span class="block text-[9px] text-slate-400">(-2.74)</span></td>
+                </tr>
+                <tr class="hover:bg-rose-50/30">
+                  <td class="py-3 px-3 font-sans font-bold text-rose-600 border-r border-slate-200">🔴 Cluster 1 (High Risk)</td>
+                  <td class="py-3 px-2.5 text-center font-bold border-r border-slate-200">60 (1.1%)</td>
+                  <td class="py-3 px-2.5 text-center">75.84 <span class="block text-[9px] text-slate-400">(-0.19)</span></td>
+                  <td class="py-3 px-2.5 text-center">76.59 <span class="block text-[9px] text-slate-400">(-0.24)</span></td>
+                  <td class="py-3 px-2.5 text-center font-bold text-rose-600 bg-blue-50/30">29.00 <span class="block text-[9px] text-slate-400">(-1.37)</span></td>
+                  <td class="py-3 px-2.5 text-center">68.00 <span class="block text-[9px] text-slate-400">(-0.10)</span></td>
+                  <td class="py-3 px-2.5 text-center">66.50 <span class="block text-[9px] text-slate-400">(-0.18)</span></td>
+                  <td class="py-3 px-2.5 text-center font-bold text-rose-600 bg-blue-50/30">29.33 <span class="block text-[9px] text-slate-400">(-2.03)</span></td>
+                  <td class="py-3 px-2.5 text-center font-black text-rose-600 bg-amber-50/30">18.61 <span class="block text-[9px] text-rose-500">(-81.39)</span></td>
+                  <td class="py-3 px-2.5 text-center font-black text-rose-600 bg-amber-50/30">15.28 <span class="block text-[9px] text-rose-500">(-5.08)</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="text-[11px] text-slate-500 mt-2">
+              💡 <strong>Catatan Tabel:</strong> Angka utama adalah nilai pada <strong>skala asli (0–100)</strong>, sedangkan angka di dalam kurung <code class="font-mono">(-x.xx)</code> adalah koordinat di dalam ruang <strong>RobustScaler</strong>. Terlihat jelas bahwa <strong>Fitur 7, Fitur 8, Fitur 3, dan Fitur 6</strong> adalah 4 variabel penentu utama yang memisahkan klaster.
+            </p>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             BAGIAN 4: PARAMETER ROBUSTSCALER (SCALER.PKL) & FEATURE SENSITIVITY
+             ========================================================= -->
+        <section id="sec-scaler" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-5">
+          <div class="border-b border-slate-100 pb-3">
+            <h3 class="text-base font-extrabold text-slate-900">⚖️ Bedah Parameter <code class="font-mono text-blue-600">scaler.pkl</code> (Median <code class="font-mono">center_</code> vs IQR <code class="font-mono">scale_</code>)</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Mengapa Fitur 7 memiliki bobot jarak paling besar di K-Means? Karena nilai IQR (<code class="font-mono">scale_</code>)-nya adalah <code class="font-mono">1.0</code>, sehingga setiap penurunan 1 poin dari 100 menggeser koordinat sejauh 1.0 satuan Euclidean.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Feature 1 & 2 -->
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-extrabold text-slate-800">Fitur 1 & Fitur 2</span>
+                <span class="px-2 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-bold">Variasi Rendah</span>
+              </div>
+              <div class="text-[11px] text-slate-600 space-y-1 font-mono">
+                <div>F1: Median = <strong>77.14</strong> | IQR = <strong>6.80</strong></div>
+                <div>F2: Median = <strong>78.10</strong> | IQR = <strong>6.29</strong></div>
+              </div>
+              <p class="text-[11px] text-slate-500 leading-relaxed">
+                Mewakili skor dasar akademik/LO yang nilainya relatif seragam antar mahasiswa (rentang kuartil sempit ~6.5 poin).
+              </p>
+            </div>
+
+            <!-- Feature 4 & 5 -->
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-extrabold text-slate-800">Fitur 4 & Fitur 5</span>
+                <span class="px-2 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-bold">Stabil di 70</span>
+              </div>
+              <div class="text-[11px] text-slate-600 space-y-1 font-mono">
+                <div>F4: Median = <strong>70.00</strong> | IQR = <strong>20.00</strong></div>
+                <div>F5: Median = <strong>70.00</strong> | IQR = <strong>20.00</strong></div>
+              </div>
+              <p class="text-[11px] text-slate-500 leading-relaxed">
+                Komponen evaluasi/aktivitas yang rata-ratanya bertahan di kisaran 66.5–70.3 baik pada klaster aman maupun klaster berisiko.
+              </p>
+            </div>
+
+            <!-- Feature 3 & 6 -->
+            <div class="p-4 rounded-xl border border-blue-200 bg-blue-50/40 space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-extrabold text-blue-900">Fitur 3 & Fitur 6 ⭐</span>
+                <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-700 text-[10px] font-bold">Pembeda Sekunder</span>
+              </div>
+              <div class="text-[11px] text-blue-900 space-y-1 font-mono">
+                <div>F3: Median = <strong>70.00</strong> | IQR = <strong>30.00</strong></div>
+                <div>F6: Median = <strong>70.00</strong> | IQR = <strong>20.00</strong></div>
+              </div>
+              <p class="text-[11px] text-slate-600 leading-relaxed">
+                Turun drastis dari <strong>~70.0</strong> (Cluster 0) ke <strong>~51.0</strong> (Cluster 2), <strong>~42.0</strong> (Cluster 3), hingga <strong>~29.0</strong> (Cluster 1).
+              </p>
+            </div>
+
+            <!-- Feature 7 & 8 -->
+            <div class="p-4 rounded-xl border border-amber-300 bg-amber-50/50 space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-extrabold text-amber-900">Fitur 7 & Fitur 8 🔥</span>
+                <span class="px-2 py-0.5 rounded bg-amber-200 text-amber-900 text-[10px] font-bold">Pembeda Utama</span>
+              </div>
+              <div class="text-[11px] text-amber-900 space-y-1 font-mono">
+                <div>F7: Median = <strong>100.0</strong> | IQR = <strong>1.00</strong></div>
+                <div>F8: Median = <strong>100.0</strong> | IQR = <strong>16.67</strong></div>
+              </div>
+              <p class="text-[11px] text-slate-600 leading-relaxed">
+                Indikator kehadiran/penyelesaian wajib. Karena mayoritas bernilai 100%, penurunan F7 & F8 langsung mendeteksi mahasiswa pasif.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             BAGIAN 5: LIVE SIMULATOR PREDIKSI .PKL (REAL-TIME JS ENGINE)
+             ========================================================= -->
+        <section id="sec-simulator" class="bg-white rounded-2xl border-2 border-blue-600/30 p-4 sm:p-6 shadow-sm space-y-5 sm:space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-extrabold uppercase mb-1">
+                <span>⚡ Real-Time Inference Engine (100% Identik dengan Python .pkl)</span>
+              </div>
+              <h3 class="text-base sm:text-lg font-extrabold text-slate-900">🎛️ Live Simulator Prediksi <code class="font-mono text-blue-600">scaler.pkl</code> + <code class="font-mono text-blue-600">clustering_model.pkl</code></h3>
+              <p class="text-xs text-slate-500 mt-0.5">Geser nilai ke-8 fitur di bawah ini atau pilih <em>preset</em> untuk menguji bagaimana model mengelompokkan data secara langsung.</p>
+            </div>
+
+            <!-- Preset Buttons (2x2 Grid on Mobile, Flex on Desktop) -->
+            <div class="space-y-1.5 sm:space-y-0">
+              <span class="text-slate-500 font-medium text-[11px] block sm:inline sm:mr-1">Uji Cepat Centroid:</span>
+              <div class="grid grid-cols-2 sm:inline-flex gap-2 text-xs">
+                <button onclick="loadSimulatorPreset(0)" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold shadow-2xs transition text-center">🟢 Preset C0</button>
+                <button onclick="loadSimulatorPreset(2)" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold shadow-2xs transition text-center">🟡 Preset C2</button>
+                <button onclick="loadSimulatorPreset(3)" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white font-bold shadow-2xs transition text-center">🟠 Preset C3</button>
+                <button onclick="loadSimulatorPreset(1)" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold shadow-2xs transition text-center">🔴 Preset C1</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
+            <!-- Left 7 Cols: 8 Feature Sliders -->
+            <div class="lg:col-span-7 space-y-3 bg-slate-50 p-3.5 sm:p-5 rounded-xl border border-slate-200">
+              <div class="flex flex-wrap justify-between items-center gap-1 pb-2 border-b border-slate-200">
+                <span class="text-xs font-extrabold text-slate-800">Input 8 Fitur Mentah (Skala 0 – 100)</span>
+                <span class="text-[10px] sm:text-[11px] font-mono text-slate-500">Output RobustScaler: (X - center_) / scale_</span>
+              </div>
+
+              <div id="slidersContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+            <!-- Right 5 Cols: Real-time Prediction Output & Euclidean Distance Bars -->
+            <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+              <!-- Prediction Result Card -->
+              <div id="simResultCard" class="rounded-2xl p-5 border-2 transition-all space-y-3 bg-green-50 border-green-500">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-600">Hasil Prediksi Model K-Means</span>
+                  <span id="simClusterBadge" class="px-3 py-1 rounded-full bg-green-600 text-white font-extrabold text-xs">Cluster 0</span>
+                </div>
+                <div>
+                  <div id="simStatusTitle" class="text-xl font-black text-green-900">🟢 Optimal / Aman (Low Risk)</div>
+                  <p id="simStatusDesc" class="text-xs text-slate-700 mt-1 leading-relaxed">
+                    Data berada paling dekat dengan pusat Cluster 0. Partisipasi dan capaian akademik mahasiswa/kelas berada dalam kondisi sangat baik.
+                  </p>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-2 border-t border-black/10 text-xs">
+                  <div>
+                    <span class="text-[10px] text-slate-500 block">Jarak Euclidean Terdekat</span>
+                    <span id="simMinDist" class="font-mono font-black text-sm text-slate-900">0.0000</span>
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-slate-500 block">Indeks Risiko Relatif</span>
+                    <span id="simRiskScore" class="font-mono font-black text-sm text-slate-900">4.2% (Aman)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Euclidean Distance to All 4 Centroids -->
+              <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-slate-800">📏 Jarak Euclidean ke 4 Titik Centroid (<code class="font-mono text-blue-600">clustering_model.transform</code>)</span>
+                  <span class="text-[10px] text-slate-500">Terkecil = Terpilih</span>
+                </div>
+                <div id="distanceBars" class="space-y-2.5 text-xs">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- 2D Live Projection Map (Fitur 7 vs Fitur 8) -->
+              <div class="bg-slate-900 text-white rounded-xl p-4 space-y-2">
+                <div class="flex justify-between items-center text-[11px]">
+                  <span class="font-bold text-blue-300">🗺️ Peta Posisi Input terhadap 4 Centroid (F7 vs F8)</span>
+                  <span class="font-mono text-[10px] text-slate-400">Sumbu X: F7 | Sumbu Y: F8</span>
+                </div>
+                <div class="relative w-full h-36 bg-slate-800/90 rounded-lg border border-slate-700 overflow-hidden" id="scatterBox">
+                  <!-- Grid lines -->
+                  <div class="absolute inset-0 grid grid-cols-4 grid-rows-4 pointer-events-none">
+                    <div class="border-r border-b border-slate-700/50"></div><div class="border-r border-b border-slate-700/50"></div><div class="border-r border-b border-slate-700/50"></div><div class="border-b border-slate-700/50"></div>
+                    <div class="border-r border-b border-slate-700/50"></div><div class="border-r border-b border-slate-700/50"></div><div class="border-r border-b border-slate-700/50"></div><div class="border-b border-slate-700/50"></div>
+                    <div class="border-r border-b border-slate-700/50"></div><div class="border-r border-b border-slate-700/50"></div><div class="border-r border-b border-slate-700/50"></div><div class="border-b border-slate-700/50"></div>
+                    <div class="border-r border-slate-700/50"></div><div class="border-r border-slate-700/50"></div><div class="border-r border-slate-700/50"></div><div></div>
+                  </div>
+                  <!-- Centroid Markers (F7, F8 in 0..100%) -->
+                  <!-- C0: (100, 93.07) -->
+                  <div class="absolute w-3.5 h-3.5 -ml-1.5 -mb-1.5 rounded-full bg-green-500 border-2 border-white shadow" style="left: 96%; bottom: 90%;" title="Centroid Cluster 0 (100.0, 93.1)"></div>
+                  <span class="absolute text-[9px] font-bold text-green-300" style="left: 86%; bottom: 78%;">C0</span>
+
+                  <!-- C2: (83.33, 76.15) -->
+                  <div class="absolute w-3.5 h-3.5 -ml-1.5 -mb-1.5 rounded-full bg-amber-400 border-2 border-white shadow" style="left: 82%; bottom: 75%;" title="Centroid Cluster 2 (83.3, 76.1)"></div>
+                  <span class="absolute text-[9px] font-bold text-amber-300" style="left: 75%; bottom: 65%;">C2</span>
+
+                  <!-- C3: (63.58, 54.25) -->
+                  <div class="absolute w-3.5 h-3.5 -ml-1.5 -mb-1.5 rounded-full bg-orange-500 border-2 border-white shadow" style="left: 63%; bottom: 54%;" title="Centroid Cluster 3 (63.6, 54.3)"></div>
+                  <span class="absolute text-[9px] font-bold text-orange-300" style="left: 56%; bottom: 44%;">C3</span>
+
+                  <!-- C1: (18.61, 15.28) -->
+                  <div class="absolute w-3.5 h-3.5 -ml-1.5 -mb-1.5 rounded-full bg-rose-500 border-2 border-white shadow" style="left: 18.6%; bottom: 15.3%;" title="Centroid Cluster 1 (18.6, 15.3)"></div>
+                  <span class="absolute text-[9px] font-bold text-rose-300" style="left: 22%; bottom: 12%;">C1</span>
+
+                  <!-- Live User Point -->
+                  <div id="userScatterPoint" class="absolute w-4 h-4 -ml-2 -mb-2 rounded-full bg-cyan-400 border-2 border-white shadow-lg ring-4 ring-cyan-400/30 transition-all duration-150" style="left: 96%; bottom: 90%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       JAVASCRIPT: EXACT PARAMETERS FROM SCALER.PKL & CLUSTERING_MODEL.PKL
+       ========================================================= -->
+  <script>
+    // 1. Exact parameters extracted from scaler.pkl (RobustScaler)
+    const SCALER_CENTER = [77.14285714285714, 78.0952380952381, 70.0, 70.0, 70.0, 70.0, 100.0, 100.0];
+    const SCALER_SCALE  = [6.799326989681421, 6.287692307692308, 30.0, 20.0, 20.0, 20.0, 1.0, 16.666666666666668];
+
+    // 2. Exact cluster_centers_ extracted from clustering_model.pkl (KMeans, n_clusters=4)
+    const CLUSTER_CENTERS_SCALED = [
+      [-0.0384547124, -0.0980361442, -0.00414937759,  0.0168049793,  0.0130705394, -0.00280082988, -8.8817842e-15, -0.415560166], // Cluster 0
+      [-0.1919172310, -0.2395247560, -1.36666667000, -0.1000000000, -0.1750000000, -2.03333333000, -81.3888889000, -5.083333330], // Cluster 1
+      [-0.0915679214, -0.1564181890, -0.64519976100, -0.0223613596, -0.0706618962, -0.91144901600, -16.6666667000, -1.431127010], // Cluster 2
+      [-0.1071754100, -0.1883883550, -0.92890442900, -0.0279720280,  0.0174825175, -1.41258741000, -36.4219114000, -2.744755240]  // Cluster 3
+    ];
+
+    // 3. Inverse-transformed cluster centers (Original 0-100 scale)
+    const CLUSTER_CENTERS_ORIG = [
+      [76.8814, 77.4788, 69.8755, 70.3361, 70.2614, 69.9440, 100.0000, 93.0740], // Cluster 0
+      [75.8379, 76.5892, 29.0000, 68.0000, 66.5000, 29.3333,  18.6111, 15.2778], // Cluster 1
+      [76.5203, 77.1117, 50.6440, 69.5528, 68.5868, 51.7710,  83.3333, 76.1479], // Cluster 2
+      [76.4141, 76.9107, 42.1329, 69.4406, 70.3497, 41.7483,  63.5781, 54.2541]  // Cluster 3
+    ];
+
+    const FEATURE_META = [
+      { id: 0, code: "Fitur 1 (X0)", desc: "Skor Kognitif / LO 1" },
+      { id: 1, code: "Fitur 2 (X1)", desc: "Skor Kognitif / LO 2" },
+      { id: 2, code: "Fitur 3 (X2)", desc: "Aktivitas / Tugas 1 ⭐" },
+      { id: 3, code: "Fitur 4 (X3)", desc: "Aktivitas / Tugas 2" },
+      { id: 4, code: "Fitur 5 (X4)", desc: "Aktivitas / Tugas 3" },
+      { id: 5, code: "Fitur 6 (X5)", desc: "Aktivitas / Tugas 4 ⭐" },
+      { id: 6, code: "Fitur 7 (X6)", desc: "Partisipasi Wajib 1 🔥" },
+      { id: 7, code: "Fitur 8 (X7)", desc: "Partisipasi Sesi 2 🔥" }
+    ];
+
+    const CLUSTER_META = {
+      0: {
+        name: "Cluster 0",
+        title: "🟢 Optimal / Aman (Low Risk)",
+        badgeClass: "bg-green-600 text-white",
+        cardClass: "bg-green-50 border-green-500",
+        titleClass: "text-green-900",
+        barColor: "bg-green-600",
+        desc: "Data berada paling dekat dengan pusat Cluster 0 (84.19% populasi). Partisipasi penuh dan capaian akademik sangat stabil."
+      },
+      2: {
+        name: "Cluster 2",
+        title: "🟡 Cukup / Perlu Perhatian Ringan",
+        badgeClass: "bg-amber-500 text-white",
+        cardClass: "bg-amber-50 border-amber-500",
+        titleClass: "text-amber-900",
+        barColor: "bg-amber-500",
+        desc: "Data masuk ke Cluster 2 (9.76% populasi). Terdeteksi penurunan ringan pada keaktifan Fitur 3, 6, dan Fitur 7 (~83%)."
+      },
+      3: {
+        name: "Cluster 3",
+        title: "🟠 Berisiko Sedang–Tinggi (Medium Risk)",
+        badgeClass: "bg-orange-500 text-white",
+        cardClass: "bg-orange-50 border-orange-500",
+        titleClass: "text-orange-900",
+        barColor: "bg-orange-500",
+        desc: "Data masuk ke Cluster 3 (5.00% populasi). Aktivitas belajar dan partisipasi turun ke kisaran 42%–63%. Disarankan intervensi dosen."
+      },
+      1: {
+        name: "Cluster 1",
+        title: "🔴 Berisiko Kritis / Pasif Ekstrem (High Risk)",
+        badgeClass: "bg-rose-600 text-white",
+        cardClass: "bg-rose-50 border-rose-600",
+        titleClass: "text-rose-900",
+        barColor: "bg-rose-600",
+        desc: "PERINGATAN KRITIS! Data masuk ke Cluster 1 (1.05% populasi). Keaktifan dan partisipasi sangat rendah (< 30%). Wajib ditindaklanjuti segera."
+      }
+    };
+
+    // First 200 labels from kmeans.labels_
+    const FIRST_200_LABELS = [
+      0,0,0,0,3,0,0,0,0,0,0,3,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,
+      0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,3,0,3,0,0,0,2,0,0,3,0,0,0,0,0,0,3,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,2,0,0,3,0,0,0,0,0,
+      2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,3,0,0,3,0,0,3,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,0,0,0,0,0
+    ];
+
+    let currentCentroidMode = 'orig';
+    let currentInputs = [...CLUSTER_CENTERS_ORIG[0]];
+
+    function renderLabelsGrid() {
+      const container = document.getElementById('labelsGrid');
+      container.innerHTML = '';
+      const colorMap = {
+        0: 'bg-green-500 hover:bg-green-600',
+        2: 'bg-amber-400 hover:bg-amber-500',
+        3: 'bg-orange-500 hover:bg-orange-600',
+        1: 'bg-rose-600 hover:bg-rose-700 ring-2 ring-rose-300'
+      };
+      FIRST_200_LABELS.forEach((lbl, idx) => {
+        const div = document.createElement('div');
+        div.className = `w-3 h-3 rounded-xs cursor-pointer transition ${colorMap[lbl]}`;
+        div.title = `Baris Data #${idx} → Cluster ${lbl}`;
+        container.appendChild(div);
+      });
+    }
+
+    function setCentroidMode(mode) {
+      currentCentroidMode = mode;
+      const btnOrig = document.getElementById('btnScaleOrig');
+      const btnRobust = document.getElementById('btnScaleRobust');
+      const note = document.getElementById('centroidModeNote');
+
+      if (mode === 'orig') {
+        btnOrig.className = "px-3 py-1.5 rounded-lg bg-[#0059d6] text-white font-bold shadow-2xs transition";
+        btnRobust.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:bg-white font-medium transition";
+        note.textContent = "Menampilkan nilai asli hasil inverse_transform (0–100)";
+      } else {
+        btnRobust.className = "px-3 py-1.5 rounded-lg bg-[#0059d6] text-white font-bold shadow-2xs transition";
+        btnOrig.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:bg-white font-medium transition";
+        note.textContent = "Menampilkan magnitudo deviasi IQR di ruang RobustScaler (|Z-IQR|)";
+      }
+      renderCentroidChart();
+    }
+
+    function renderCentroidChart() {
+      const barsGrid = document.getElementById('centroidBarsGrid');
+      const labelsGrid = document.getElementById('centroidLabelsGrid');
+      barsGrid.innerHTML = '';
+      labelsGrid.innerHTML = '';
+
+      const order = [0, 2, 3, 1];
+      const colors = {
+        0: 'bg-green-600',
+        2: 'bg-amber-500',
+        3: 'bg-orange-500',
+        1: 'bg-rose-600'
+      };
+
+      FEATURE_META.forEach((feat, fIdx) => {
+        const group = document.createElement('div');
+        group.className = "flex flex-col items-center";
+
+        const barsWrap = document.createElement('div');
+        barsWrap.className = "flex items-end gap-1.5 h-48";
+
+        order.forEach(cIdx => {
+          const col = document.createElement('div');
+          col.className = "flex flex-col items-center";
+
+          let val, heightPx, labelText;
+          if (currentCentroidMode === 'orig') {
+            val = CLUSTER_CENTERS_ORIG[cIdx][fIdx];
+            heightPx = Math.max(8, Math.round((val / 100) * 175));
+            labelText = val.toFixed(1);
+          } else {
+            val = CLUSTER_CENTERS_SCALED[cIdx][fIdx];
+            // Log-scaled height so extreme -81.39 and smaller -1.41 are both visible
+            const absVal = Math.abs(val);
+            heightPx = Math.max(6, Math.min(175, Math.round(Math.log10(absVal + 1) * 88)));
+            labelText = val.toFixed(2);
+          }
+
+          col.innerHTML = `
+            <span class="text-[9px] font-mono font-bold text-slate-600 mb-1">${labelText}</span>
+            <div class="w-4 ${colors[cIdx]} rounded-t transition-all duration-300" style="height: ${heightPx}px" title="Cluster ${cIdx} - ${feat.code}: ${val.toFixed(4)}"></div>
+          `;
+          barsWrap.appendChild(col);
+        });
+
+        group.appendChild(barsWrap);
+        barsGrid.appendChild(group);
+
+        const lbl = document.createElement('div');
+        lbl.innerHTML = `
+          <div class="text-xs font-extrabold text-slate-800">${feat.code}</div>
+          <div class="text-[10px] text-slate-500">${feat.desc}</div>
+        `;
+        labelsGrid.appendChild(lbl);
+      });
+    }
+
+    function renderSliders() {
+      const container = document.getElementById('slidersContainer');
+      container.innerHTML = '';
+
+      FEATURE_META.forEach((feat, idx) => {
+        const val = currentInputs[idx];
+        const scaled = (val - SCALER_CENTER[idx]) / SCALER_SCALE[idx];
+        const card = document.createElement('div');
+        card.className = "bg-white p-3 rounded-xl border border-slate-200 shadow-2xs space-y-1.5";
+        card.innerHTML = `
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-800">${feat.code}</span>
+            <span id="sliderVal_${idx}" class="font-mono font-black text-blue-700">${val.toFixed(1)}</span>
+          </div>
+          <div class="text-[10px] text-slate-500 flex justify-between">
+            <span>${feat.desc}</span>
+            <span id="sliderScaled_${idx}" class="font-mono text-slate-400">scaled: ${scaled >= 0 ? '+' : ''}${scaled.toFixed(2)}</span>
+          </div>
+          <input id="sliderInput_${idx}" type="range" min="0" max="100" step="0.5" value="${val}"
+            oninput="onSliderChange(${idx}, this.value)"
+            class="w-full h-1.5 bg-slate-200 rounded-lg cursor-pointer">
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function onSliderChange(idx, rawVal) {
+      currentInputs[idx] = parseFloat(rawVal);
+      document.getElementById(`sliderVal_${idx}`).textContent = currentInputs[idx].toFixed(1);
+      const scaled = (currentInputs[idx] - SCALER_CENTER[idx]) / SCALER_SCALE[idx];
+      document.getElementById(`sliderScaled_${idx}`).textContent = `scaled: ${scaled >= 0 ? '+' : ''}${scaled.toFixed(2)}`;
+      runModelInference();
+    }
+
+    function loadSimulatorPreset(clusterIdx) {
+      currentInputs = [...CLUSTER_CENTERS_ORIG[clusterIdx]];
+      FEATURE_META.forEach((_, idx) => {
+        const inputEl = document.getElementById(`sliderInput_${idx}`);
+        if (inputEl) {
+          inputEl.value = currentInputs[idx];
+          document.getElementById(`sliderVal_${idx}`).textContent = currentInputs[idx].toFixed(1);
+          const scaled = (currentInputs[idx] - SCALER_CENTER[idx]) / SCALER_SCALE[idx];
+          document.getElementById(`sliderScaled_${idx}`).textContent = `scaled: ${scaled >= 0 ? '+' : ''}${scaled.toFixed(2)}`;
+        }
+      });
+      runModelInference();
+    }
+
+    function runModelInference() {
+      // Step 1: RobustScaler transform -> (X - center_) / scale_
+      const xScaled = currentInputs.map((x, i) => (x - SCALER_CENTER[i]) / SCALER_SCALE[i]);
+
+      // Step 2: Euclidean distance to each of the 4 cluster_centers_
+      const distances = CLUSTER_CENTERS_SCALED.map((center, cIdx) => {
+        let sumSq = 0;
+        for (let i = 0; i < 8; i++) {
+          const diff = xScaled[i] - center[i];
+          sumSq += diff * diff;
+        }
+        return { cluster: cIdx, dist: Math.sqrt(sumSq) };
+      });
+
+      // Find argmin distance
+      const sorted = [...distances].sort((a, b) => a.dist - b.dist);
+      const best = sorted[0];
+      const meta = CLUSTER_META[best.cluster];
+
+      // Update Result Card
+      const card = document.getElementById('simResultCard');
+      card.className = `rounded-2xl p-5 border-2 transition-all space-y-3 ${meta.cardClass}`;
+      const badge = document.getElementById('simClusterBadge');
+      badge.className = `px-3 py-1 rounded-full font-extrabold text-xs ${meta.badgeClass}`;
+      badge.textContent = meta.name;
+
+      const title = document.getElementById('simStatusTitle');
+      title.className = `text-xl font-black ${meta.titleClass}`;
+      title.textContent = meta.title;
+
+      document.getElementById('simStatusDesc').textContent = meta.desc;
+      document.getElementById('simMinDist').textContent = best.dist.toFixed(4);
+
+      // Compute relative risk index based on distance to C0 vs C1
+      const d0 = distances[0].dist;
+      const d1 = distances[1].dist;
+      const riskPct = Math.min(99.5, Math.max(2.5, (d0 / (d0 + d1 + 0.0001)) * 100));
+      document.getElementById('simRiskScore').textContent = `${riskPct.toFixed(1)}%`;
+
+      // Render Distance Bars in order [0, 2, 3, 1]
+      const distContainer = document.getElementById('distanceBars');
+      distContainer.innerHTML = '';
+      const maxDist = Math.max(...distances.map(d => d.dist), 1);
+
+      [0, 2, 3, 1].forEach(cIdx => {
+        const dObj = distances[cIdx];
+        const isWinner = dObj.cluster === best.cluster;
+        const cMeta = CLUSTER_META[cIdx];
+        const widthPct = Math.max(6, Math.min(100, (dObj.dist / maxDist) * 100));
+
+        const row = document.createElement('div');
+        row.className = `p-2 rounded-lg border ${isWinner ? 'bg-white border-blue-500 shadow-2xs' : 'border-transparent'}`;
+        row.innerHTML = `
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-bold ${isWinner ? 'text-blue-700' : 'text-slate-700'}">
+              ${cMeta.name} ${isWinner ? '✓ (Terdekat)' : ''}
+            </span>
+            <span class="font-mono font-bold ${isWinner ? 'text-blue-700' : 'text-slate-500'}">${dObj.dist.toFixed(3)}</span>
+          </div>
+          <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+            <div class="${cMeta.barColor} h-2 rounded-full transition-all duration-200" style="width: ${widthPct}%"></div>
+          </div>
+        `;
+        distContainer.appendChild(row);
+      });
+
+      // Update 2D Scatter Point (F7 = idx 6, F8 = idx 7)
+      const pt = document.getElementById('userScatterPoint');
+      const xPct = Math.max(4, Math.min(96, currentInputs[6]));
+      const yPct = Math.max(6, Math.min(92, currentInputs[7]));
+      pt.style.left = `${xPct}%`;
+      pt.style.bottom = `${yPct}%`;
+    }
+
+    function toggleMlSidebar() {
+      const sb = document.getElementById('appSidebar');
+      const backdrop = document.getElementById('mlSidebarBackdrop');
+      if (window.innerWidth < 1024) {
+        const isClosed = sb.classList.contains('-translate-x-full');
+        if (isClosed) {
+          sb.classList.remove('-translate-x-full');
+          backdrop.classList.remove('hidden');
+        } else {
+          sb.classList.add('-translate-x-full');
+          backdrop.classList.add('hidden');
+        }
+      } else {
+        sb.classList.toggle('lg:hidden');
+      }
+    }
+
+    function closeMlSidebar() {
+      const sb = document.getElementById('appSidebar');
+      const backdrop = document.getElementById('mlSidebarBackdrop');
+      sb.classList.add('-translate-x-full');
+      backdrop.classList.add('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderLabelsGrid();
+      renderCentroidChart();
+      renderSliders();
+      runModelInference();
+    });
+  </script>
+</body>
+</html>
+
