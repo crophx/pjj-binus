@@ -154,7 +154,7 @@
               </div>
               <h2 class="text-lg sm:text-2xl font-extrabold tracking-tight">Visualisasi & Bedah Parameter 2 File Machine Learning (`.pkl`)</h2>
               <p class="text-xs text-blue-100 leading-relaxed">
-                Halaman ini menampilkan parameter asli yang diekstrak langsung dari <code class="bg-white/20 px-1.5 py-0.5 rounded font-mono font-bold text-white">scaler.pkl</code> (<span class="font-semibold">RobustScaler</span>) dan <code class="bg-white/20 px-1.5 py-0.5 rounded font-mono font-bold text-white">clustering_model.pkl</code> (<span class="font-semibold">K-Means Clustering</span>) yang telah dilatih pada <strong>5.725 sampel data</strong> dengan <strong>8 fitur input</strong> dan menghasilkan <strong>4 klaster performa/risiko</strong>.
+                Halaman ini menampilkan parameter asli yang diekstrak langsung dari <code class="bg-white/20 px-1.5 py-0.5 rounded font-mono font-bold text-white">scaler.pkl</code> (<span class="font-semibold">RobustScaler</span>) dan <code class="bg-white/20 px-1.5 py-0.5 rounded font-mono font-bold text-white">clustering_model.pkl</code> (<span class="font-semibold">K-Means Clustering</span>) yang telah dilatih pada <strong>5.725 sampel data</strong> dengan <strong>8 fitur input</strong> dan menghasilkan <strong>4 klaster Learning Profile (C0–C3)</strong>.
               </p>
             </div>
 
@@ -275,7 +275,7 @@
           <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
             <div>
               <h3 class="text-base font-extrabold text-slate-900">📊 Distribusi Populasi & Interpretasi 4 Klaster (`N = 5.725` Sampel)</h3>
-              <p class="text-xs text-slate-500 mt-0.5">Hasil pengelompokan dari atribut <code class="font-mono text-blue-600">clustering_model.labels_</code> yang diurutkan dari performa terbaik hingga paling berisiko.</p>
+              <p class="text-xs text-slate-500 mt-0.5">Hasil pengelompokan dari atribut <code class="font-mono text-blue-600">clustering_model.labels_</code> yang diurutkan dari capaian tertinggi hingga terendah. Distribusi diverifikasi ulang dari centroid pada <code class="font-mono">Dataset_Student_Clustering_V3.xlsx</code>.</p>
             </div>
             <div class="flex items-center gap-2 text-xs">
               <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-semibold">Total Sampel: <strong>5.725</strong></span>
@@ -318,7 +318,7 @@
               <!-- Cluster 0 -->
               <div class="border-l-4 border-l-green-600 border border-slate-200 rounded-xl p-4 space-y-2 bg-green-50/20">
                 <div class="flex items-center justify-between">
-                  <span class="px-2.5 py-0.5 rounded bg-green-100 text-green-800 font-extrabold text-xs">Cluster 0 (Optimal / Aman)</span>
+                  <span class="px-2.5 py-0.5 rounded bg-green-100 text-green-800 font-extrabold text-xs">C0 · High Achievement</span>
                   <span class="text-sm font-black text-green-700">4.820 Data (84.19%)</span>
                 </div>
                 <p class="text-xs text-slate-600 leading-relaxed">
@@ -332,11 +332,11 @@
               <!-- Cluster 2 -->
               <div class="border-l-4 border-l-amber-500 border border-slate-200 rounded-xl p-4 space-y-2 bg-amber-50/20">
                 <div class="flex items-center justify-between">
-                  <span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 font-extrabold text-xs">Cluster 2 (Cukup / Low Risk)</span>
+                  <span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 font-extrabold text-xs">C2 · Developing</span>
                   <span class="text-sm font-black text-amber-600">559 Data (9.76%)</span>
                 </div>
                 <p class="text-xs text-slate-600 leading-relaxed">
-                  Mulai mengalami penurunan pada <strong>Fitur 3 (50.6)</strong> dan <strong>Fitur 6 (51.8)</strong>, serta partisipasi <strong>Fitur 7 turun ke 83.3% (5/6)</strong> dan <strong>Fitur 8 di 76.1%</strong>. Perlu pengingat ringan.
+                  Mulai mengalami penurunan pada <strong>FD_pct (50.6)</strong> dan <strong>VBL_pct (51.8)</strong>, serta <strong>Submit_pct turun ke 83.3% (5/6)</strong> dan <strong>Ketepatan_pct di 76.1%</strong>. Perlu penguatan Forum Diskusi dan VBL.
                 </p>
                 <div class="text-[11px] font-mono text-slate-500 pt-1 border-t border-slate-200/60">
                   Rata-rata Centroid (Asli): <strong>69.21 / 100</strong>
@@ -346,11 +346,11 @@
               <!-- Cluster 3 -->
               <div class="border-l-4 border-l-orange-500 border border-slate-200 rounded-xl p-4 space-y-2 bg-orange-50/20">
                 <div class="flex items-center justify-between">
-                  <span class="px-2.5 py-0.5 rounded bg-orange-100 text-orange-800 font-extrabold text-xs">Cluster 3 (Medium Risk)</span>
+                  <span class="px-2.5 py-0.5 rounded bg-orange-100 text-orange-800 font-extrabold text-xs">C3 · Improvement</span>
                   <span class="text-sm font-black text-orange-600">286 Data (5.00%)</span>
                 </div>
                 <p class="text-xs text-slate-600 leading-relaxed">
-                  Penurunan signifikan pada aktivitas <strong>Fitur 3 (42.1)</strong> dan <strong>Fitur 6 (41.7)</strong>. Kehadiran/partisipasi <strong>Fitur 7 merosot ke 63.6%</strong> dan <strong>Fitur 8 ke 54.3%</strong>. Perlu intervensi dosen.
+                  Penurunan signifikan pada aktivitas <strong>FD_pct (42.1)</strong> dan <strong>VBL_pct (41.7)</strong>. Penyelesaian tugas <strong>Submit_pct merosot ke 63.6%</strong> dan <strong>Ketepatan_pct ke 54.3%</strong>. Perlu perbaikan aktivitas pembelajaran dan struktur course.
                 </p>
                 <div class="text-[11px] font-mono text-slate-500 pt-1 border-t border-slate-200/60">
                   Rata-rata Centroid (Asli): <strong>61.85 / 100</strong>
@@ -360,11 +360,11 @@
               <!-- Cluster 1 -->
               <div class="border-l-4 border-l-rose-600 border border-slate-200 rounded-xl p-4 space-y-2 bg-rose-50/30">
                 <div class="flex items-center justify-between">
-                  <span class="px-2.5 py-0.5 rounded bg-rose-100 text-rose-800 font-extrabold text-xs">Cluster 1 (High Risk / Kritis)</span>
+                  <span class="px-2.5 py-0.5 rounded bg-rose-100 text-rose-800 font-extrabold text-xs">C1 · Critical Engagement</span>
                   <span class="text-sm font-black text-rose-600">60 Data (1.05%)</span>
                 </div>
                 <p class="text-xs text-slate-600 leading-relaxed">
-                  Anomali pasif ekstrem! Nilai <strong>Fitur 3 (29.0)</strong> & <strong>Fitur 6 (29.3)</strong> anjlok, sementara <strong>Fitur 7 (18.6%)</strong> dan <strong>Fitur 8 (15.3%)</strong> sangat kritis (berjarak <strong>-81.4 IQR</strong> dari median).
+                  Engagement forum dan video sangat rendah: <strong>FD_pct (29.0)</strong> &amp; <strong>VBL_pct (29.3)</strong>, sementara <strong>Submit_pct (18.6%)</strong> dan <strong>Ketepatan_pct (15.3%)</strong> sangat rendah (berjarak <strong>-81.4 IQR</strong> dari median).
                 </p>
                 <div class="text-[11px] font-mono text-slate-500 pt-1 border-t border-slate-200/60">
                   Rata-rata Centroid (Asli): <strong>47.39 / 100</strong>
@@ -381,7 +381,7 @@
             </div>
             <div id="labelsGrid" class="flex flex-wrap gap-1 pt-1"></div>
             <div class="text-[11px] text-slate-500 pt-1">
-              <strong>60 Indeks Baris yang Masuk Cluster 1 (High Risk Kritis) di Dataset Asli:</strong>
+              <strong>60 Indeks Baris yang Masuk Cluster 1 (C1 · Critical Engagement) di Dataset Asli:</strong>
               <span class="font-mono text-[10px] text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200 inline-block mt-1">
                 [194, 244, 264, 404, 424, 639, 642, 658, 661, 918, 921, 933, 968, 1230, 1235, 1362, 1460, 1520, 1639, 1688, 1694, 1710, 1711, 1714, 2364, 2390, 2414, 2878, 3092, 3308..5560]
               </span>
@@ -413,10 +413,10 @@
           <!-- Legend -->
           <div class="flex flex-wrap items-center justify-between gap-4 text-xs bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200/80">
             <div class="flex flex-wrap items-center gap-4">
-              <span class="flex items-center gap-1.5 font-semibold"><span class="w-3 h-3 rounded-xs bg-green-600 inline-block"></span> Cluster 0 (Optimal - 84.2%)</span>
-              <span class="flex items-center gap-1.5 font-semibold"><span class="w-3 h-3 rounded-xs bg-amber-500 inline-block"></span> Cluster 2 (Cukup - 9.8%)</span>
-              <span class="flex items-center gap-1.5 font-semibold"><span class="w-3 h-3 rounded-xs bg-orange-500 inline-block"></span> Cluster 3 (Medium Risk - 5.0%)</span>
-              <span class="flex items-center gap-1.5 font-semibold"><span class="w-3 h-3 rounded-xs bg-rose-600 inline-block"></span> Cluster 1 (High Risk - 1.1%)</span>
+              <span class="flex items-center gap-1.5 font-semibold"><span class="w-3 h-3 rounded-xs bg-green-600 inline-block"></span> C0 · High Achievement - 84.2%</span>
+              <span class="flex items-center gap-1.5 font-semibold"><span class="w-3 h-3 rounded-xs bg-amber-500 inline-block"></span> C2 · Developing - 9.8%</span>
+              <span class="flex items-center gap-1.5 font-semibold"><span class="w-3 h-3 rounded-xs bg-orange-500 inline-block"></span> C3 · Improvement - 5.0%</span>
+              <span class="flex items-center gap-1.5 font-semibold"><span class="w-3 h-3 rounded-xs bg-rose-600 inline-block"></span> C1 · Critical Engagement - 1.1%</span>
             </div>
             <span id="centroidModeNote" class="text-[11px] text-blue-700 font-medium">Menampilkan nilai asli hasil inverse_transform (0–100)</span>
           </div>
@@ -438,19 +438,19 @@
                 <tr>
                   <th class="py-3 px-3 border-r border-slate-200">Klaster & Status</th>
                   <th class="py-3 px-2.5 text-center border-r border-slate-200">Populasi</th>
-                  <th class="py-3 px-2.5 text-center">Fitur 1<br><span class="text-[10px] font-normal text-slate-500">(Kognitif 1)</span></th>
-                  <th class="py-3 px-2.5 text-center">Fitur 2<br><span class="text-[10px] font-normal text-slate-500">(Kognitif 2)</span></th>
-                  <th class="py-3 px-2.5 text-center bg-blue-50/50">Fitur 3 ⭐<br><span class="text-[10px] font-normal text-blue-600">(Aktivitas 1)</span></th>
-                  <th class="py-3 px-2.5 text-center">Fitur 4<br><span class="text-[10px] font-normal text-slate-500">(Aktivitas 2)</span></th>
-                  <th class="py-3 px-2.5 text-center">Fitur 5<br><span class="text-[10px] font-normal text-slate-500">(Aktivitas 3)</span></th>
-                  <th class="py-3 px-2.5 text-center bg-blue-50/50">Fitur 6 ⭐<br><span class="text-[10px] font-normal text-blue-600">(Aktivitas 4)</span></th>
-                  <th class="py-3 px-2.5 text-center bg-amber-50/60">Fitur 7 🔥<br><span class="text-[10px] font-normal text-amber-700">(Partisipasi 1)</span></th>
-                  <th class="py-3 px-2.5 text-center bg-amber-50/60">Fitur 8 🔥<br><span class="text-[10px] font-normal text-amber-700">(Partisipasi 2)</span></th>
+                  <th class="py-3 px-2.5 text-center">Fitur 1<br><span class="text-[10px] font-normal text-slate-500">(Course_pct)</span></th>
+                  <th class="py-3 px-2.5 text-center">Fitur 2<br><span class="text-[10px] font-normal text-slate-500">(Dosen_pct)</span></th>
+                  <th class="py-3 px-2.5 text-center bg-blue-50/50">Fitur 3 ⭐<br><span class="text-[10px] font-normal text-blue-600">(FD_pct)</span></th>
+                  <th class="py-3 px-2.5 text-center">Fitur 4<br><span class="text-[10px] font-normal text-slate-500">(PPT_pct)</span></th>
+                  <th class="py-3 px-2.5 text-center">Fitur 5<br><span class="text-[10px] font-normal text-slate-500">(LN_pct)</span></th>
+                  <th class="py-3 px-2.5 text-center bg-blue-50/50">Fitur 6 ⭐<br><span class="text-[10px] font-normal text-blue-600">(VBL_pct)</span></th>
+                  <th class="py-3 px-2.5 text-center bg-amber-50/60">Fitur 7 🔥<br><span class="text-[10px] font-normal text-amber-700">(Submit_pct)</span></th>
+                  <th class="py-3 px-2.5 text-center bg-amber-50/60">Fitur 8 🔥<br><span class="text-[10px] font-normal text-amber-700">(Ketepatan_pct)</span></th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-200 font-mono text-[11px]">
                 <tr class="hover:bg-green-50/30">
-                  <td class="py-3 px-3 font-sans font-bold text-green-700 border-r border-slate-200">🟢 Cluster 0 (Optimal)</td>
+                  <td class="py-3 px-3 font-sans font-bold text-green-700 border-r border-slate-200">🟢 C0 · High Achievement</td>
                   <td class="py-3 px-2.5 text-center font-bold border-r border-slate-200">4.820 (84.2%)</td>
                   <td class="py-3 px-2.5 text-center">76.88 <span class="block text-[9px] text-slate-400">(-0.04)</span></td>
                   <td class="py-3 px-2.5 text-center">77.48 <span class="block text-[9px] text-slate-400">(-0.10)</span></td>
@@ -462,7 +462,7 @@
                   <td class="py-3 px-2.5 text-center font-black text-green-700 bg-amber-50/30">93.07 <span class="block text-[9px] text-slate-400">(-0.42)</span></td>
                 </tr>
                 <tr class="hover:bg-amber-50/30">
-                  <td class="py-3 px-3 font-sans font-bold text-amber-600 border-r border-slate-200">🟡 Cluster 2 (Cukup)</td>
+                  <td class="py-3 px-3 font-sans font-bold text-amber-600 border-r border-slate-200">🟡 C2 · Developing</td>
                   <td class="py-3 px-2.5 text-center font-bold border-r border-slate-200">559 (9.8%)</td>
                   <td class="py-3 px-2.5 text-center">76.52 <span class="block text-[9px] text-slate-400">(-0.09)</span></td>
                   <td class="py-3 px-2.5 text-center">77.11 <span class="block text-[9px] text-slate-400">(-0.16)</span></td>
@@ -474,7 +474,7 @@
                   <td class="py-3 px-2.5 text-center font-black text-amber-600 bg-amber-50/30">76.15 <span class="block text-[9px] text-slate-400">(-1.43)</span></td>
                 </tr>
                 <tr class="hover:bg-orange-50/30">
-                  <td class="py-3 px-3 font-sans font-bold text-orange-600 border-r border-slate-200">🟠 Cluster 3 (Medium Risk)</td>
+                  <td class="py-3 px-3 font-sans font-bold text-orange-600 border-r border-slate-200">🟠 C3 · Improvement</td>
                   <td class="py-3 px-2.5 text-center font-bold border-r border-slate-200">286 (5.0%)</td>
                   <td class="py-3 px-2.5 text-center">76.41 <span class="block text-[9px] text-slate-400">(-0.11)</span></td>
                   <td class="py-3 px-2.5 text-center">76.91 <span class="block text-[9px] text-slate-400">(-0.19)</span></td>
@@ -486,7 +486,7 @@
                   <td class="py-3 px-2.5 text-center font-black text-orange-600 bg-amber-50/30">54.25 <span class="block text-[9px] text-slate-400">(-2.74)</span></td>
                 </tr>
                 <tr class="hover:bg-rose-50/30">
-                  <td class="py-3 px-3 font-sans font-bold text-rose-600 border-r border-slate-200">🔴 Cluster 1 (High Risk)</td>
+                  <td class="py-3 px-3 font-sans font-bold text-rose-600 border-r border-slate-200">🔴 C1 · Critical Engagement</td>
                   <td class="py-3 px-2.5 text-center font-bold border-r border-slate-200">60 (1.1%)</td>
                   <td class="py-3 px-2.5 text-center">75.84 <span class="block text-[9px] text-slate-400">(-0.19)</span></td>
                   <td class="py-3 px-2.5 text-center">76.59 <span class="block text-[9px] text-slate-400">(-0.24)</span></td>
@@ -518,7 +518,7 @@
             <!-- Feature 1 & 2 -->
             <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2">
               <div class="flex justify-between items-center">
-                <span class="text-xs font-extrabold text-slate-800">Fitur 1 & Fitur 2</span>
+                <span class="text-xs font-extrabold text-slate-800">Fitur 1 & Fitur 2 (Course_pct, Dosen_pct)</span>
                 <span class="px-2 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-bold">Variasi Rendah</span>
               </div>
               <div class="text-[11px] text-slate-600 space-y-1 font-mono">
@@ -533,7 +533,7 @@
             <!-- Feature 4 & 5 -->
             <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2">
               <div class="flex justify-between items-center">
-                <span class="text-xs font-extrabold text-slate-800">Fitur 4 & Fitur 5</span>
+                <span class="text-xs font-extrabold text-slate-800">Fitur 4 & Fitur 5 (PPT_pct, LN_pct)</span>
                 <span class="px-2 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-bold">Stabil di 70</span>
               </div>
               <div class="text-[11px] text-slate-600 space-y-1 font-mono">
@@ -541,14 +541,14 @@
                 <div>F5: Median = <strong>70.00</strong> | IQR = <strong>20.00</strong></div>
               </div>
               <p class="text-[11px] text-slate-500 leading-relaxed">
-                Komponen evaluasi/aktivitas yang rata-ratanya bertahan di kisaran 66.5–70.3 baik pada klaster aman maupun klaster berisiko.
+                Komponen evaluasi/aktivitas yang rata-ratanya bertahan di kisaran 66.5–70.3 baik pada klaster berkapasitas tinggi maupun rendah.
               </p>
             </div>
 
             <!-- Feature 3 & 6 -->
             <div class="p-4 rounded-xl border border-blue-200 bg-blue-50/40 space-y-2">
               <div class="flex justify-between items-center">
-                <span class="text-xs font-extrabold text-blue-900">Fitur 3 & Fitur 6 ⭐</span>
+                <span class="text-xs font-extrabold text-blue-900">Fitur 3 & Fitur 6 (FD_pct, VBL_pct) ⭐</span>
                 <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-700 text-[10px] font-bold">Pembeda Sekunder</span>
               </div>
               <div class="text-[11px] text-blue-900 space-y-1 font-mono">
@@ -563,7 +563,7 @@
             <!-- Feature 7 & 8 -->
             <div class="p-4 rounded-xl border border-amber-300 bg-amber-50/50 space-y-2">
               <div class="flex justify-between items-center">
-                <span class="text-xs font-extrabold text-amber-900">Fitur 7 & Fitur 8 🔥</span>
+                <span class="text-xs font-extrabold text-amber-900">Fitur 7 & Fitur 8 (Submit_pct, Ketepatan_pct) 🔥</span>
                 <span class="px-2 py-0.5 rounded bg-amber-200 text-amber-900 text-[10px] font-bold">Pembeda Utama</span>
               </div>
               <div class="text-[11px] text-amber-900 space-y-1 font-mono">
@@ -624,7 +624,7 @@
                   <span id="simClusterBadge" class="px-3 py-1 rounded-full bg-green-600 text-white font-extrabold text-xs">Cluster 0</span>
                 </div>
                 <div>
-                  <div id="simStatusTitle" class="text-xl font-black text-green-900">🟢 Optimal / Aman (Low Risk)</div>
+                  <div id="simStatusTitle" class="text-xl font-black text-green-900">🟢 C0 — High Achievement and Consistent Engagement</div>
                   <p id="simStatusDesc" class="text-xs text-slate-700 mt-1 leading-relaxed">
                     Data berada paling dekat dengan pusat Cluster 0. Partisipasi dan capaian akademik mahasiswa/kelas berada dalam kondisi sangat baik.
                   </p>
@@ -635,8 +635,8 @@
                     <span id="simMinDist" class="font-mono font-black text-sm text-slate-900">0.0000</span>
                   </div>
                   <div>
-                    <span class="text-[10px] text-slate-500 block">Indeks Risiko Relatif</span>
-                    <span id="simRiskScore" class="font-mono font-black text-sm text-slate-900">4.2% (Aman)</span>
+                    <span class="text-[10px] text-slate-500 block">Kedekatan Relatif ke C1 (vs C0)</span>
+                    <span id="simRiskScore" class="font-mono font-black text-sm text-slate-900">4.2%</span>
                   </div>
                 </div>
               </div>
@@ -720,52 +720,52 @@
     ];
 
     const FEATURE_META = [
-      { id: 0, code: "Fitur 1 (X0)", desc: "Skor Kognitif / LO 1" },
-      { id: 1, code: "Fitur 2 (X1)", desc: "Skor Kognitif / LO 2" },
-      { id: 2, code: "Fitur 3 (X2)", desc: "Aktivitas / Tugas 1 ⭐" },
-      { id: 3, code: "Fitur 4 (X3)", desc: "Aktivitas / Tugas 2" },
-      { id: 4, code: "Fitur 5 (X4)", desc: "Aktivitas / Tugas 3" },
-      { id: 5, code: "Fitur 6 (X5)", desc: "Aktivitas / Tugas 4 ⭐" },
-      { id: 6, code: "Fitur 7 (X6)", desc: "Partisipasi Wajib 1 🔥" },
-      { id: 7, code: "Fitur 8 (X7)", desc: "Partisipasi Sesi 2 🔥" }
+      { id: 0, code: "Fitur 1 (X0)", desc: "Course_pct: Pengalaman Course (TLE P1–P3)" },
+      { id: 1, code: "Fitur 2 (X1)", desc: "Dosen_pct: Pengalaman Teaching (TLE P4–P9)" },
+      { id: 2, code: "Fitur 3 (X2)", desc: "FD_pct: Forum Diskusi ⭐" },
+      { id: 3, code: "Fitur 4 (X3)", desc: "PPT_pct: Handout PPT" },
+      { id: 4, code: "Fitur 5 (X4)", desc: "LN_pct: Learning Notes" },
+      { id: 5, code: "Fitur 6 (X5)", desc: "VBL_pct: Video Learning ⭐" },
+      { id: 6, code: "Fitur 7 (X6)", desc: "Submit_pct: Penyelesaian Tugas 🔥" },
+      { id: 7, code: "Fitur 8 (X7)", desc: "Ketepatan_pct: ≥ 2 hari sebelum deadline 🔥" }
     ];
 
     const CLUSTER_META = {
       0: {
         name: "Cluster 0",
-        title: "🟢 Optimal / Aman (Low Risk)",
+        title: "🟢 C0 — High Achievement and Consistent Engagement",
         badgeClass: "bg-green-600 text-white",
         cardClass: "bg-green-50 border-green-500",
         titleClass: "text-green-900",
         barColor: "bg-green-600",
-        desc: "Data berada paling dekat dengan pusat Cluster 0 (84.19% populasi). Partisipasi penuh dan capaian akademik sangat stabil."
+        desc: "Data berada paling dekat dengan pusat Cluster 0 (84.19% populasi). Engagement stabil, submission dan ketepatan tinggi."
       },
       2: {
         name: "Cluster 2",
-        title: "🟡 Cukup / Perlu Perhatian Ringan",
+        title: "🟡 C2 — Developing Learning Engagement and LO Attainment",
         badgeClass: "bg-amber-500 text-white",
         cardClass: "bg-amber-50 border-amber-500",
         titleClass: "text-amber-900",
         barColor: "bg-amber-500",
-        desc: "Data masuk ke Cluster 2 (9.76% populasi). Terdeteksi penurunan ringan pada keaktifan Fitur 3, 6, dan Fitur 7 (~83%)."
+        desc: "Data masuk ke Cluster 2 (9.76% populasi). Forum Diskusi dan VBL tingkat menengah (~51%), submission relatif tinggi (~83%)."
       },
       3: {
         name: "Cluster 3",
-        title: "🟠 Berisiko Sedang–Tinggi (Medium Risk)",
+        title: "🟠 C3 — Learning Engagement and Achievement Improvement",
         badgeClass: "bg-orange-500 text-white",
         cardClass: "bg-orange-50 border-orange-500",
         titleClass: "text-orange-900",
         barColor: "bg-orange-500",
-        desc: "Data masuk ke Cluster 3 (5.00% populasi). Aktivitas belajar dan partisipasi turun ke kisaran 42%–63%. Disarankan intervensi dosen."
+        desc: "Data masuk ke Cluster 3 (5.00% populasi). Forum dan VBL ~42%, submission ~64%, ketepatan ~54%. Fokus pada kualitas aktivitas dan struktur course."
       },
       1: {
         name: "Cluster 1",
-        title: "🔴 Berisiko Kritis / Pasif Ekstrem (High Risk)",
+        title: "🔴 C1 — Critical Engagement and Assessment Support",
         badgeClass: "bg-rose-600 text-white",
         cardClass: "bg-rose-50 border-rose-600",
         titleClass: "text-rose-900",
         barColor: "bg-rose-600",
-        desc: "PERINGATAN KRITIS! Data masuk ke Cluster 1 (1.05% populasi). Keaktifan dan partisipasi sangat rendah (< 30%). Wajib ditindaklanjuti segera."
+        desc: "Data masuk ke Cluster 1 (1.05% populasi). Forum dan VBL ~29%, submission ~19%, ketepatan ~15%. Prioritas peninjauan desain course dan dukungan asesmen."
       }
     };
 
@@ -953,7 +953,7 @@
       document.getElementById('simStatusDesc').textContent = meta.desc;
       document.getElementById('simMinDist').textContent = best.dist.toFixed(4);
 
-      // Compute relative risk index based on distance to C0 vs C1
+      // Kedekatan relatif ke C1 dibanding C0 (bukan probabilitas)
       const d0 = distances[0].dist;
       const d1 = distances[1].dist;
       const riskPct = Math.min(99.5, Math.max(2.5, (d0 / (d0 + d1 + 0.0001)) * 100));

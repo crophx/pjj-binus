@@ -60,7 +60,7 @@
             <button onclick="switchRole('mhs-list')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">👨‍🎓 Mahasiswa: Daftar Kelas</button>
             <button onclick="switchRole('mhs-detail')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">📊 Mahasiswa: Detail Sesi</button>
             <button onclick="switchRole('dosen-list')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">👨‍🏫 Dosen: Daftar Kelas</button>
-            <button onclick="switchRole('dosen-detail')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">🚨 Dosen: Detail & Risiko</button>
+            <button onclick="switchRole('dosen-detail')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">🚨 Dosen: Detail Kelas</button>
             <button onclick="switchRole('prodi-home')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">🏛️ Prodi: Dashboard Utama</button>
             <button onclick="switchRole('prodi-course')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">📚 Prodi: Detail Matkul</button>
             <button onclick="switchRole('prodi-class')" class="w-full text-left px-3 py-2 rounded-lg text-xs text-blue-100 hover:bg-blue-700">🔍 Prodi: Detail Kelas</button>
@@ -259,77 +259,32 @@
             <!-- Rendered via JS -->
           </div>
 
-          <!-- Alert Banner Sesuai Gambar 1: Perhatian: Tingkatkan Aktivitas Pembelajaran Anda -->
+          <!-- Alert Banner: konstruktif, tanpa label risiko. Isi dirender oleh renderMhsAlert() -->
           <div id="mhsAlertBox" class="bg-[#fffbeb] border border-[#fef3c7] rounded-xl p-4 sm:p-5 flex items-start gap-3.5 sm:gap-4 shadow-2xs">
             <div id="mhsAlertIcon" class="text-amber-500 shrink-0 mt-0.5">
               <svg class="w-7 h-7 sm:w-9 sm:h-9" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10h2v4h-2zm0 6h2v2h-2z"/></svg>
             </div>
             <div>
-              <h3 id="mhsAlertTitle" class="text-sm sm:text-base font-bold text-amber-900">Perhatian: Tingkatkan Aktivitas Pembelajaran Anda</h3>
-              <p id="mhsAlertDesc" class="text-xs text-slate-700 mt-1 leading-relaxed">
-                Aktivitas PPT dan penyelesaian asesmen Anda masih perlu ditingkatkan. Luangkan waktu untuk mempelajari materi presentasi dan selesaikan kuis sebelum tenggat waktu agar capaian pembelajaran Anda tetap optimal.
-              </p>
+              <h3 id="mhsAlertTitle" class="text-sm sm:text-base font-bold text-amber-900"></h3>
+              <p id="mhsAlertDesc" class="text-xs text-slate-700 mt-1 leading-relaxed"></p>
             </div>
           </div>
 
           <!-- 2 Column Grid: Kiri (Learning Activity & Learning Outcome Progress) & Kanan (Assessment Status) -->
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-            
+
             <!-- Left 6 Cols: 2 Progress Cards -->
             <div class="lg:col-span-6 space-y-5">
-              
-              <!-- Card 1: Learning Activity Progress (Horizontal Progress Bars) -->
+
+              <!-- Card 1: Learning Activity Progress -->
               <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-4">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                   <h4 class="text-sm font-bold text-slate-900">Learning Activity Progress</h4>
-                  <span class="text-[11px] text-slate-400 font-medium">Sesi Aktif: <strong class="text-blue-600 font-bold">Sesi 7</strong></span>
+                  <span class="text-[11px] text-slate-400 font-medium">Sesi Aktif: <strong id="mhsActiveSessionLabel" class="text-blue-600 font-bold">Sesi 7</strong></span>
                 </div>
 
-                <div class="space-y-4 text-xs">
-                  <!-- Download Materi -->
-                  <div>
-                    <div class="flex justify-between items-center mb-1.5">
-                      <span class="font-medium text-slate-700">Download Materi</span>
-                      <span class="font-bold text-slate-800">60%</span>
-                    </div>
-                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                      <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style="width: 60%"></div>
-                    </div>
-                  </div>
-
-                  <!-- PPT -->
-                  <div>
-                    <div class="flex justify-between items-center mb-1.5">
-                      <span class="font-medium text-slate-700">PPT</span>
-                      <span class="font-bold text-amber-600">40%</span>
-                    </div>
-                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                      <div class="bg-amber-500 h-2.5 rounded-full transition-all duration-500" style="width: 40%"></div>
-                    </div>
-                  </div>
-
-                  <!-- Video Learning -->
-                  <div>
-                    <div class="flex justify-between items-center mb-1.5">
-                      <span class="font-medium text-slate-700">Video Learning</span>
-                      <span class="font-bold text-slate-800">60%</span>
-                    </div>
-                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                      <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style="width: 60%"></div>
-                    </div>
-                  </div>
-
-                  <!-- Forum Discussion -->
-                  <div>
-                    <div class="flex justify-between items-center mb-1.5">
-                      <span class="font-medium text-slate-700">Forum Discussion</span>
-                      <span class="font-bold text-slate-800">60%</span>
-                    </div>
-                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                      <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style="width: 60%"></div>
-                    </div>
-                  </div>
-                </div>
+                <div id="mhsActivityBars" class="space-y-4 text-xs"></div>
+                <div id="mhsActivityNote" class="hidden text-[11px] text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100"></div>
 
                 <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
                   <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span> Normal (≥ 60%)</span>
@@ -344,44 +299,8 @@
                   <span class="text-[11px] text-slate-400 font-medium">Kumulatif Capaian</span>
                 </div>
 
-                <div class="space-y-4 text-xs">
-                  <!-- LO 1 -->
-                  <div>
-                    <div class="flex justify-between items-center mb-1.5">
-                      <span class="font-medium text-slate-700">LO 1: Knowledge</span>
-                      <span class="font-bold text-blue-700">74%</span>
-                    </div>
-                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                      <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style="width: 74%"></div>
-                    </div>
-                  </div>
-
-                  <!-- LO 2 -->
-                  <div>
-                    <div class="flex justify-between items-center mb-1.5">
-                      <span class="font-medium text-slate-700">LO 2: Skills</span>
-                      <span class="font-bold text-amber-600">18%</span>
-                    </div>
-                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                      <div class="bg-amber-500 h-2.5 rounded-full transition-all duration-500" style="width: 18%"></div>
-                    </div>
-                  </div>
-
-                  <!-- LO 3 -->
-                  <div>
-                    <div class="flex justify-between items-center mb-1.5">
-                      <span class="font-medium text-slate-700">LO 3: Analysis</span>
-                      <span class="font-bold text-slate-400">—</span>
-                    </div>
-                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                      <div class="bg-slate-300 h-2.5 rounded-full" style="width: 0%"></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="pt-2 text-[11px] text-slate-500 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100">
-                  💡 <strong>Catatan:</strong> LO3 akan dinilai pada tugas kelompok sesi 12 dan Final Exam sesi 16.
-                </div>
+                <div id="mhsLoBars" class="space-y-4 text-xs"></div>
+                <div id="mhsLoNote" class="hidden pt-2 text-[11px] text-slate-500 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100"></div>
               </div>
 
             </div>
@@ -399,102 +318,23 @@
                     <tr>
                       <th class="py-3 px-3.5 border-r border-slate-200 w-12 text-center">No</th>
                       <th class="py-3 px-4 border-r border-slate-200">Asesmen</th>
+                      <th class="py-3 px-3 border-r border-slate-200 text-center w-16">Sesi</th>
                       <th class="py-3 px-4 text-center">Status</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-slate-200 text-slate-700">
-                    <tr class="hover:bg-slate-50">
-                      <td class="py-2.5 px-3.5 border-r border-slate-200 text-center font-medium">1</td>
-                      <td class="py-2.5 px-4 border-r border-slate-200 font-semibold text-slate-800">Tugas Personal 1</td>
-                      <td class="py-2.5 px-4 text-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-green-100 text-green-700">
-                          Dinilai
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50">
-                      <td class="py-2.5 px-3.5 border-r border-slate-200 text-center font-medium">2</td>
-                      <td class="py-2.5 px-4 border-r border-slate-200 font-semibold text-slate-800">Tugas Kelompok 1</td>
-                      <td class="py-2.5 px-4 text-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-green-100 text-green-700">
-                          Dinilai
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50">
-                      <td class="py-2.5 px-3.5 border-r border-slate-200 text-center font-medium">3</td>
-                      <td class="py-2.5 px-4 border-r border-slate-200 font-semibold text-slate-800">Tugas Kelompok 2</td>
-                      <td class="py-2.5 px-4 text-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-green-100 text-green-700">
-                          Dinilai
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50">
-                      <td class="py-2.5 px-3.5 border-r border-slate-200 text-center font-medium">4</td>
-                      <td class="py-2.5 px-4 border-r border-slate-200 font-semibold text-slate-800">Tugas Personal 2</td>
-                      <td class="py-2.5 px-4 text-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-green-100 text-green-700">
-                          Dinilai
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50">
-                      <td class="py-2.5 px-3.5 border-r border-slate-200 text-center font-medium">5</td>
-                      <td class="py-2.5 px-4 border-r border-slate-200 font-semibold text-slate-800">Tugas Kelompok 3</td>
-                      <td class="py-2.5 px-4 text-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-green-100 text-green-700">
-                          Dinilai
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50">
-                      <td class="py-2.5 px-3.5 border-r border-slate-200 text-center font-medium">6</td>
-                      <td class="py-2.5 px-4 border-r border-slate-200 text-slate-500">Tugas Kelompok 4</td>
-                      <td class="py-2.5 px-4 text-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600">
-                          Belum dibuka
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50">
-                      <td class="py-2.5 px-3.5 border-r border-slate-200 text-center font-medium">7</td>
-                      <td class="py-2.5 px-4 border-r border-slate-200 font-semibold text-slate-800">Quiz 1</td>
-                      <td class="py-2.5 px-4 text-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-green-100 text-green-700">
-                          Dinilai
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50">
-                      <td class="py-2.5 px-3.5 border-r border-slate-200 text-center font-medium">8</td>
-                      <td class="py-2.5 px-4 border-r border-slate-200 text-slate-500">Quiz 2</td>
-                      <td class="py-2.5 px-4 text-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600">
-                          Belum dibuka
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-slate-50">
-                      <td class="py-2.5 px-3.5 border-r border-slate-200 text-center font-medium">9</td>
-                      <td class="py-2.5 px-4 border-r border-slate-200 text-slate-500">Final Exam</td>
-                      <td class="py-2.5 px-4 text-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600">
-                          Belum dibuka
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
+                  <tbody id="mhsAssessBody" class="divide-y divide-slate-200 text-slate-700"></tbody>
                 </table>
               </div>
 
-              <div class="text-[11px] text-slate-500 flex items-center justify-between pt-1">
-                <span>Total 5 dari 9 asesmen telah dinilai dosen.</span>
-                <span class="font-semibold text-blue-600">Terakhir disinkronkan: Hari ini 10:45</span>
+              <div class="text-[11px] text-slate-500 flex flex-wrap items-center justify-between gap-1 pt-1">
+                <span id="mhsAssessSummary"></span>
+                <span class="font-semibold text-blue-600">Jadwal sesi sesuai Student Activities</span>
               </div>
             </div>
 
           </div>
+
+          <div class="text-[11px] text-slate-400">Nilai, persentase aktivitas, dan skor LO pada layar ini adalah <strong>data contoh</strong> satu mahasiswa. Jadwal sesi asesmen mengikuti data resmi.</div>
         </section>
 
         <!-- =========================================================
@@ -627,6 +467,7 @@
           <div id="dosenSessionBar" class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs">
             <!-- Rendered via JS -->
           </div>
+          <p id="dosenSessionNote" class="text-[11px] text-slate-400"></p>
 
           <!-- 3 Metric Summary Cards Sesuai Gambar 2 (45 Mahasiswa, 32 Aktif, 13 Perlu Perhatian) -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -1719,8 +1560,8 @@
               <p class="text-xs text-blue-100 mt-1">Spesifikasi Teknis Sistem Early Warning & Evaluasi Capaian LO PJJ BINUS (React/Next.js + Python FastAPI + MySQL)</p>
             </div>
             <div class="flex gap-2 text-xs">
-              <span class="px-3 py-1.5 rounded-lg bg-white/15 font-bold">9 Tabel Relasional</span>
-              <span class="px-3 py-1.5 rounded-lg bg-white/15 font-bold">3 Aktor + 2 Model ML</span>
+              <span class="px-3 py-1.5 rounded-lg bg-white/15 font-bold">22 Tabel (v2.1, draft)</span>
+              <span class="px-3 py-1.5 rounded-lg bg-white/15 font-bold">3 Aktor + 1 Model ML (K-Means 8 fitur)</span>
             </div>
           </div>
 
@@ -1738,9 +1579,9 @@
                 <ul class="space-y-1.5 text-slate-700 list-disc list-inside">
                   <li><strong>UC-01:</strong> Melihat daftar kelas yang diikuti pada semester berjalan.</li>
                   <li><strong>UC-02:</strong> Memilih navigasi <strong>Sesi 1 s/d Sesi 16</strong>.</li>
-                  <li><strong>UC-03:</strong> Menerima <strong>Alert Risiko Tinggi/Sedang</strong> pada sesi aktif.</li>
-                  <li><strong>UC-04:</strong> Melihat grafik <strong>Log Activity</strong> (<code>LN</code>, <code>PPT</code>, <code>VBL</code>, <code>FD</code>).</li>
-                  <li><strong>UC-05:</strong> Melihat tabel <strong>9 Komponen Nilai</strong> (TP 1–2, TK 1–4, Quiz 1–2, Final Exam) & status gembok sesi.</li>
+                  <li><strong>UC-03:</strong> Menerima <strong>alert aktivitas yang konstruktif</strong> pada sesi aktif (tanpa label risiko).</li>
+                  <li><strong>UC-04:</strong> Melihat <strong>Learning Activity Progress</strong> (<code>LN</code>, <code>PPT</code>, <code>VBL</code>, <code>FD</code>) dan <strong>Learning Outcome Progress</strong>.</li>
+                  <li><strong>UC-05:</strong> Melihat tabel <strong>9 Komponen Nilai</strong> (TP 1–2, TK 1–4, Quiz 1–2, Final Exam) & <strong>Assessment Status</strong> (Dinilai / Belum dikumpul / Belum dibuka).</li>
                 </ul>
               </div>
 
@@ -1755,7 +1596,7 @@
                   <li><strong>UC-06:</strong> Menambah & mengelola kelas yang diampu.</li>
                   <li><strong>UC-07:</strong> Memfilter <strong>Capaian LO (LO1 Knowledge, LO2 Skills, LO3 Analysis)</strong> per instrumen tugas.</li>
                   <li><strong>UC-08:</strong> Memantau grafik rata-rata aktivitas kelas per sesi (<code>LN%</code>, <code>PPT%</code>, <code>VBL%</code>, <code>FD%</code>).</li>
-                  <li><strong>UC-09:</strong> Melihat <strong>Daftar Mahasiswa High & Medium Risk</strong> beserta <strong>Probabilitas Risiko (%)</strong>.</li>
+                  <li><strong>UC-09:</strong> Melihat <strong>Students Requiring Attention</strong> beserta penyebabnya (aktivitas, submission, ketepatan, capaian LO).</li>
                   <li><strong>UC-10:</strong> Melihat tabel rekap nilai & status capaian seluruh mahasiswa.</li>
                 </ul>
               </div>
@@ -1770,157 +1611,89 @@
                 <ul class="space-y-1.5 text-slate-700 list-disc list-inside">
                   <li><strong>UC-11:</strong> Melihat overview capaian LO seluruh mata kuliah (Donut Chart & 5 Predikat).</li>
                   <li><strong>UC-12:</strong> Membandingkan capaian <strong>LO1, LO2, LO3 antar-kelas paralel</strong> (<code>IS21F3A–F</code>).</li>
-                  <li><strong>UC-13:</strong> Melihat evaluasi <strong>3 Aspek (LO/Course, Teaching, Engagement)</strong> hasil <em>K-Means Clustering</em>.</li>
+                  <li><strong>UC-13:</strong> Melihat <strong>distribusi Learning Profile C0–C3</strong> hasil <em>K-Means Clustering</em> (8 fitur) per kelas dan mata kuliah.</li>
                   <li><strong>UC-14:</strong> Menerima <strong>Rekomendasi Perbaikan Mata Kuliah</strong> berprioritas.</li>
-                  <li><strong>UC-15:</strong> Membedah 15 sub-indikator detail per kelas & dosen.</li>
+                  <li><strong>UC-15:</strong> Membedah <strong>8 fitur model</strong> (<code>Course_pct</code> … <code>Ketepatan_pct</code>) per kelas.</li>
                 </ul>
               </div>
             </div>
           </div>
 
-          <!-- 2. RANCANGAN SKEMA DATABASE (9 TABEL RELASIONAL) -->
+          <!-- 2. RANCANGAN SKEMA DATABASE v2.1 (22 TABEL, DRAFT) -->
           <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
               <div>
-                <h3 class="text-base font-bold text-slate-900">2. Rancangan Skema Database Relasional (ERD - 9 Tabel Utama)</h3>
-                <p class="text-xs text-slate-500">File SQL siap pakai tersedia di: <code>c:\laragon\www\pjj_binus\database_schema.sql</code></p>
+                <h3 class="text-base font-bold text-slate-900">2. Rancangan Skema Database Relasional v2.1 (22 Tabel, 2 View)</h3>
+                <p class="text-xs text-slate-500">Draft menunggu persetujuan. SQL: <code>database_schema_v2.sql</code>, penjelasan lengkap dan ERD: <code>ANALISIS_FEEDBACK_DAN_RANCANGAN_V2.md</code> (bagian 4).</p>
               </div>
-              <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-mono font-bold">MySQL / PostgreSQL</span>
+              <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">DRAFT</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-              <!-- Table 1 -->
               <div class="border border-slate-200 rounded-xl overflow-hidden">
-                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
-                  <span>1. users</span><span class="text-blue-300">Master Aktor</span>
-                </div>
+                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between"><span>Akses</span><span class="text-blue-300">3 tabel</span></div>
                 <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
-                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
-                  <div>• <strong>nim_nip</strong> (VARCHAR, UNIQUE)</div>
-                  <div>• <strong>name</strong> (VARCHAR)</div>
-                  <div>• <strong>email</strong> (VARCHAR)</div>
-                  <div>• <strong>role</strong> ENUM('mahasiswa','dosen','prodi')</div>
+                  <div>• <strong>roles</strong></div>
+                  <div>• <strong>program_studies</strong></div>
+                  <div>• <strong>users</strong> <em>(NIM / kode dosen)</em></div>
                 </div>
               </div>
-
-              <!-- Table 2 -->
               <div class="border border-slate-200 rounded-xl overflow-hidden">
-                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
-                  <span>2. courses</span><span class="text-blue-300">Master Matkul</span>
-                </div>
+                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between"><span>Akademik</span><span class="text-blue-300">5 tabel</span></div>
                 <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
-                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
-                  <div>• <strong>course_code</strong> (VARCHAR) <em>e.g. IS21F3</em></div>
-                  <div>• <strong>course_name</strong> (VARCHAR)</div>
-                  <div>• <strong>curriculum_year</strong> (INT) <em>e.g. 2021</em></div>
-                  <div>• <strong>avg_lo_score</strong> (DECIMAL)</div>
+                  <div>• <strong>academic_periods</strong></div>
+                  <div>• <strong>courses</strong></div>
+                  <div>• <strong>classes</strong></div>
+                  <div>• <strong>class_lecturers</strong> <em>(kelas bisa 2 dosen)</em></div>
+                  <div>• <strong>enrollments</strong></div>
                 </div>
               </div>
-
-              <!-- Table 3 -->
               <div class="border border-slate-200 rounded-xl overflow-hidden">
-                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
-                  <span>3. classes</span><span class="text-blue-300">Kelas Paralel</span>
-                </div>
+                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between"><span>LO &amp; Asesmen</span><span class="text-blue-300">3 tabel</span></div>
                 <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
-                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
-                  <div>🔗 <strong>course_id</strong> (FK → courses.id)</div>
-                  <div>🔗 <strong>dosen_id</strong> (FK → users.id)</div>
-                  <div>• <strong>class_code</strong> (VARCHAR) <em>01PA / IS21F3A</em></div>
-                  <div>• <strong>period</strong> (VARCHAR) <em>2221</em></div>
-                  <div>• <strong>semester</strong> ENUM('Ganjil','Genap')</div>
+                  <div>• <strong>course_learning_outcomes</strong> <em>(input dosen)</em></div>
+                  <div>• <strong>class_assessments</strong> <em>(9 komponen, deadline per kelas)</em></div>
+                  <div>• <strong>assessment_lo_weights</strong> <em>(nilai maks per LO)</em></div>
                 </div>
               </div>
-
-              <!-- Table 4 -->
               <div class="border border-slate-200 rounded-xl overflow-hidden">
-                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
-                  <span>4. enrollments</span><span class="text-blue-300">KRS Mahasiswa</span>
-                </div>
+                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between"><span>Aktivitas LMS</span><span class="text-blue-300">2 tabel</span></div>
                 <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
-                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
-                  <div>🔗 <strong>class_id</strong> (FK → classes.id)</div>
-                  <div>🔗 <strong>mahasiswa_id</strong> (FK → users.id)</div>
-                  <div>• <strong>capaian_status</strong> ENUM('Berisiko Tinggi','Berisiko Sedang','Aman')</div>
+                  <div>• <strong>activity_catalog</strong> <em>(FD/PPT/LN/VBL ke sesi)</em></div>
+                  <div>• <strong>student_activity_logs</strong> <em>(0/1)</em></div>
                 </div>
               </div>
-
-              <!-- Table 5 -->
-              <div class="border border-rose-300 bg-rose-50/20 rounded-xl overflow-hidden">
-                <div class="bg-rose-700 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
-                  <span>5. session_activity_logs</span><span class="text-rose-200">Behavior + ML</span>
-                </div>
-                <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
-                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
-                  <div>🔗 <strong>enrollment_id</strong> (FK → enrollments.id)</div>
-                  <div>• <strong>session_number</strong> (INT 1..16)</div>
-                  <div>• <strong>download_materi_ln</strong> (DECIMAL 0..10)</div>
-                  <div>• <strong>lihat_handout_ppt</strong> (DECIMAL 0..10)</div>
-                  <div>• <strong>video_learning_vbl</strong> (DECIMAL 0..10)</div>
-                  <div>• <strong>forum_discussion_fd</strong> (DECIMAL 0..10)</div>
-                  <div>🤖 <strong>risk_probability</strong> (DECIMAL) <em>70.7%</em></div>
-                  <div>🤖 <strong>risk_level</strong> ENUM('High','Medium','Safe')</div>
-                </div>
-              </div>
-
-              <!-- Table 6 -->
               <div class="border border-slate-200 rounded-xl overflow-hidden">
-                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
-                  <span>6. assessment_configs</span><span class="text-blue-300">9 Tugas & Lock</span>
-                </div>
+                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between"><span>Nilai &amp; TLE</span><span class="text-blue-300">5 tabel</span></div>
                 <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
-                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
-                  <div>🔗 <strong>course_id</strong> (FK → courses.id)</div>
-                  <div>• <strong>code</strong> ('TP1','TP2','TK1'..'FINAL')</div>
-                  <div>• <strong>unlock_session</strong> (INT 1..16)</div>
-                  <div>• <strong>weight_lo1, weight_lo2, weight_lo3</strong></div>
+                  <div>• <strong>student_assessment_scores</strong></div>
+                  <div>• <strong>student_assessment_lo_scores</strong></div>
+                  <div>• <strong>student_lo_attainments</strong></div>
+                  <div>• <strong>tle_questions</strong></div>
+                  <div>• <strong>class_tle_scores</strong> <em>(per kelas &amp; dosen, skala 1–6)</em></div>
                 </div>
               </div>
-
-              <!-- Table 7 -->
-              <div class="border border-blue-300 bg-blue-50/20 rounded-xl overflow-hidden">
-                <div class="bg-blue-700 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
-                  <span>7. student_assessments</span><span class="text-blue-200">Kognitif LO1-3</span>
-                </div>
-                <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
-                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
-                  <div>🔗 <strong>enrollment_id</strong> (FK → enrollments.id)</div>
-                  <div>🔗 <strong>assessment_config_id</strong> (FK)</div>
-                  <div>• <strong>total_score</strong> (DECIMAL)</div>
-                  <div>• <strong>lo1_knowledge_score</strong> (DECIMAL)</div>
-                  <div>• <strong>lo2_skills_score</strong> (DECIMAL)</div>
-                  <div>• <strong>lo3_analysis_score</strong> (DECIMAL)</div>
-                </div>
-              </div>
-
-              <!-- Table 8 -->
-              <div class="border border-purple-300 bg-purple-50/20 rounded-xl overflow-hidden">
-                <div class="bg-purple-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
-                  <span>8. class_prodi_evaluations</span><span class="text-purple-200">3 Aspek + K-Means</span>
-                </div>
-                <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
-                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
-                  <div>🔗 <strong>class_id</strong> (FK → classes.id)</div>
-                  <div>• <strong>avg_lo1, avg_lo2, avg_lo3, avg_lo_total</strong></div>
-                  <div>• <strong>5 Kolom Indikator Course Design</strong></div>
-                  <div>• <strong>5 Kolom Indikator Teaching Dosen</strong></div>
-                  <div>• <strong>5 Kolom Indikator Engagement LMS</strong></div>
-                  <div>🤖 <strong>kmeans_predikat</strong> ('Tinggi','Sedang','Rendah')</div>
-                </div>
-              </div>
-
-              <!-- Table 9 -->
               <div class="border border-slate-200 rounded-xl overflow-hidden">
-                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between">
-                  <span>9. course_recommendations</span><span class="text-blue-300">Insight Prodi</span>
-                </div>
+                <div class="bg-slate-800 text-white px-3.5 py-2 font-mono font-bold flex justify-between"><span>ML &amp; Import</span><span class="text-blue-300">4 tabel</span></div>
                 <div class="p-3 space-y-1 font-mono text-[11px] text-slate-700">
-                  <div>🔑 <strong>id</strong> (BIGINT, PK)</div>
-                  <div>🔗 <strong>course_id</strong> (FK → courses.id)</div>
-                  <div>• <strong>aspect_category</strong> ('Course Design','Teaching','Engagement')</div>
-                  <div>• <strong>priority</strong> ENUM('Tinggi','Sedang','Rendah')</div>
-                  <div>• <strong>recommendation_text</strong> (TEXT)</div>
+                  <div>🤖 <strong>ml_model_versions</strong></div>
+                  <div>🤖 <strong>student_ml_features</strong> <em>(8 fitur + klaster C0–C3)</em></div>
+                  <div>🤖 <strong>master_cluster_recommendations</strong></div>
+                  <div>• <strong>bulk_import_logs</strong></div>
                 </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-1.5 text-slate-700">
+                <div class="font-bold text-slate-900">8 fitur model (urutan sama dengan <code>scaler.pkl</code>)</div>
+                <div class="font-mono text-[11px] leading-relaxed">Course_pct · Dosen_pct · FD_pct · PPT_pct · LN_pct · VBL_pct · Submit_pct · Ketepatan_pct</div>
+                <div class="text-[11px] text-slate-500">Dihitung oleh view <code>v_student_feature_inputs</code>. Course dan Dosen berasal dari TLE yang baru diisi di Sesi 16, sehingga klaster akhir semester.</div>
+              </div>
+              <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-1.5 text-slate-700">
+                <div class="font-bold text-slate-900">4 Learning Profile (menggantikan label risiko)</div>
+                <div class="text-[11px] leading-relaxed"><strong>C0</strong> High Achievement · <strong>C1</strong> Critical Engagement · <strong>C2</strong> Developing · <strong>C3</strong> Improvement</div>
+                <div class="text-[11px] text-slate-500">Rekomendasi tiap profil disimpan di <code>master_cluster_recommendations</code> (sumber: Rekomendasi Prodi.xlsx).</div>
               </div>
             </div>
           </div>
@@ -1952,7 +1725,7 @@
       <!-- Modal Body (Scrollable) -->
       <div class="p-5 overflow-y-auto space-y-4 text-xs">
         <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 text-blue-900 leading-relaxed">
-          💡 <strong>Petunjuk Dosen:</strong> Tentukan porsi persentase evaluasi untuk masing-masing instrumen dan distribusikan bobot ketercapaian <strong>LO1 (Knowledge)</strong>, <strong>LO2 (Skills)</strong>, dan <strong>LO3 (Analysis)</strong>. Total bobot seluruh instrumen harus tepat bernilai <strong>100%</strong>.
+          💡 <strong>Petunjuk Dosen:</strong> Tentukan bobot tiap instrumen terhadap nilai akhir, lalu isi <strong>nilai maksimal</strong> yang dapat diperoleh dari tiap LO (<strong>LO1 Knowledge</strong>, <strong>LO2 Skills</strong>, <strong>LO3 Analysis</strong>) pada instrumen tersebut; jumlah nilai maksimal per baris adalah <strong>100</strong>. Total bobot seluruh instrumen harus tepat <strong>100%</strong>. Nilai awal mengikuti dokumentasi dataset dan sesi mengikuti jadwal resmi.
         </div>
 
         <div class="overflow-x-auto">
@@ -1961,10 +1734,10 @@
               <tr>
                 <th class="py-2.5 px-3">Instrumen Evaluasi</th>
                 <th class="py-2.5 px-2 text-center w-24">Bobot (%)</th>
-                <th class="py-2.5 px-2 text-center text-emerald-700 w-20">LO1 (K)</th>
-                <th class="py-2.5 px-2 text-center text-blue-700 w-20">LO2 (S)</th>
-                <th class="py-2.5 px-2 text-center text-amber-700 w-20">LO3 (A)</th>
-                <th class="py-2.5 px-2 text-center w-20">Buka Sesi</th>
+                <th class="py-2.5 px-2 text-center text-emerald-700 w-20">Maks LO1 (K)</th>
+                <th class="py-2.5 px-2 text-center text-blue-700 w-20">Maks LO2 (S)</th>
+                <th class="py-2.5 px-2 text-center text-amber-700 w-20">Maks LO3 (A)</th>
+                <th class="py-2.5 px-2 text-center w-20">Sesi</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-200 text-slate-700">
@@ -1977,12 +1750,20 @@
                 <td class="py-2 px-2 text-center font-mono">Sesi 3</td>
               </tr>
               <tr>
+                <td class="py-2.5 px-3 font-semibold">Tugas Personal 2 (TP 2)</td>
+                <td class="py-2 px-2 text-center"><input type="number" value="10" oninput="calcTotalWeight()" class="w-16 text-center border border-slate-200 rounded px-1.5 py-1 font-bold lo-weight-input"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="20" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-emerald-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="80" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="0" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
+                <td class="py-2 px-2 text-center font-mono">Sesi 11</td>
+              </tr>
+              <tr>
                 <td class="py-2.5 px-3 font-semibold">Tugas Kelompok 1 (TK 1)</td>
                 <td class="py-2 px-2 text-center"><input type="number" value="10" oninput="calcTotalWeight()" class="w-16 text-center border border-slate-200 rounded px-1.5 py-1 font-bold lo-weight-input"></td>
                 <td class="py-2 px-2 text-center"><input type="number" value="100" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-emerald-700 font-medium"></td>
                 <td class="py-2 px-2 text-center"><input type="number" value="0" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
                 <td class="py-2 px-2 text-center"><input type="number" value="0" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
-                <td class="py-2 px-2 text-center font-mono">Sesi 5</td>
+                <td class="py-2 px-2 text-center font-mono">Sesi 4</td>
               </tr>
               <tr>
                 <td class="py-2.5 px-3 font-semibold">Tugas Kelompok 2 (TK 2)</td>
@@ -1990,54 +1771,46 @@
                 <td class="py-2 px-2 text-center"><input type="number" value="0" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-emerald-700 font-medium"></td>
                 <td class="py-2 px-2 text-center"><input type="number" value="100" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
                 <td class="py-2 px-2 text-center"><input type="number" value="0" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
-                <td class="py-2 px-2 text-center font-mono">Sesi 7</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 px-3 font-semibold">Tugas Personal 2 (TP 2)</td>
-                <td class="py-2 px-2 text-center"><input type="number" value="10" oninput="calcTotalWeight()" class="w-16 text-center border border-slate-200 rounded px-1.5 py-1 font-bold lo-weight-input"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="0" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-emerald-700 font-medium"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="100" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="0" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
-                <td class="py-2 px-2 text-center font-mono">Sesi 9</td>
+                <td class="py-2 px-2 text-center font-mono">Sesi 5</td>
               </tr>
               <tr>
                 <td class="py-2.5 px-3 font-semibold">Tugas Kelompok 3 (TK 3)</td>
                 <td class="py-2 px-2 text-center"><input type="number" value="10" oninput="calcTotalWeight()" class="w-16 text-center border border-slate-200 rounded px-1.5 py-1 font-bold lo-weight-input"></td>
                 <td class="py-2 px-2 text-center"><input type="number" value="0" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-emerald-700 font-medium"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="50" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="50" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
-                <td class="py-2 px-2 text-center font-mono">Sesi 11</td>
+                <td class="py-2 px-2 text-center"><input type="number" value="60" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="40" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
+                <td class="py-2 px-2 text-center font-mono">Sesi 12</td>
               </tr>
               <tr>
                 <td class="py-2.5 px-3 font-semibold">Tugas Kelompok 4 (TK 4)</td>
                 <td class="py-2 px-2 text-center"><input type="number" value="10" oninput="calcTotalWeight()" class="w-16 text-center border border-slate-200 rounded px-1.5 py-1 font-bold lo-weight-input"></td>
                 <td class="py-2 px-2 text-center"><input type="number" value="0" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-emerald-700 font-medium"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="0" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="100" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="50" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="50" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
                 <td class="py-2 px-2 text-center font-mono">Sesi 13</td>
               </tr>
               <tr>
                 <td class="py-2.5 px-3 font-semibold">Quiz 1</td>
                 <td class="py-2 px-2 text-center"><input type="number" value="10" oninput="calcTotalWeight()" class="w-16 text-center border border-slate-200 rounded px-1.5 py-1 font-bold lo-weight-input"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="70" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-emerald-700 font-medium"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="30" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="80" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-emerald-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="20" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
                 <td class="py-2 px-2 text-center"><input type="number" value="0" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
                 <td class="py-2 px-2 text-center font-mono">Sesi 6</td>
               </tr>
               <tr>
                 <td class="py-2.5 px-3 font-semibold">Quiz 2</td>
                 <td class="py-2 px-2 text-center"><input type="number" value="10" oninput="calcTotalWeight()" class="w-16 text-center border border-slate-200 rounded px-1.5 py-1 font-bold lo-weight-input"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="40" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-emerald-700 font-medium"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="30" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="30" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="0" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-emerald-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="40" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="60" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
                 <td class="py-2 px-2 text-center font-mono">Sesi 14</td>
               </tr>
               <tr class="bg-blue-50/30">
                 <td class="py-2.5 px-3 font-bold text-blue-900">Final Exam</td>
                 <td class="py-2 px-2 text-center"><input type="number" value="20" oninput="calcTotalWeight()" class="w-16 text-center border border-slate-200 rounded px-1.5 py-1 font-bold lo-weight-input"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="30" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-emerald-700 font-medium"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="35" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
-                <td class="py-2 px-2 text-center"><input type="number" value="35" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="20" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-emerald-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="40" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-blue-700 font-medium"></td>
+                <td class="py-2 px-2 text-center"><input type="number" value="40" class="w-14 text-center border border-slate-200 rounded px-1 py-1 text-amber-700 font-medium"></td>
                 <td class="py-2 px-2 text-center font-mono font-bold text-rose-600">Sesi 16</td>
               </tr>
             </tbody>
@@ -2179,7 +1952,7 @@
         </div>
 
         <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-amber-900 text-[11px] leading-relaxed">
-          ⚡ <strong>Automasi Machine Learning:</strong> Setelah file diimport, sistem akan otomatis melakukan normalisasi fitur via <code>scaler.pkl</code> dan mengklasifikasikan mahasiswa ke dalam cluster risiko (High/Medium/Safe) serta memetakan ke profil pembelajaran Prodi.
+          ⚡ <strong>Automasi Machine Learning:</strong> Setelah file diimport, sistem akan otomatis melakukan normalisasi fitur via <code>scaler.pkl</code> dan mengelompokkan mahasiswa ke salah satu <strong>Learning Profile C0–C3</strong> (K-Means, 8 fitur) serta memetakannya ke rekomendasi Prodi.
         </div>
       </div>
 
@@ -2213,19 +1986,63 @@
     let activeMhsSession = 7;
     let activeDosenSession = 2;
 
+    // Jadwal asesmen mengikuti Student Activities.xlsx (struktur resmi: Sesi 1-16).
+    // 'max' = nilai maksimal per LO (Dataset Documentation); 'got' = skor contoh satu mahasiswa.
+    const ASSESSMENTS = [
+      { code: 'TP1',   name: 'Tugas Personal 1', session: 3,  max: [100, 0, 0],  got: [100, 0, 0] },
+      { code: 'TP2',   name: 'Tugas Personal 2', session: 11, max: [20, 80, 0],  got: [17, 68, 0] },
+      { code: 'TK1',   name: 'Tugas Kelompok 1', session: 4,  max: [100, 0, 0],  got: [95, 0, 0] },
+      { code: 'TK2',   name: 'Tugas Kelompok 2', session: 5,  max: [0, 100, 0],  got: [0, 100, 0] },
+      { code: 'TK3',   name: 'Tugas Kelompok 3', session: 12, max: [0, 60, 40],  got: [0, 60, 40] },
+      { code: 'TK4',   name: 'Tugas Kelompok 4', session: 13, max: [0, 50, 50],  got: [0, 50, 50] },
+      { code: 'QUIZ1', name: 'Quiz 1',           session: 6,  max: [80, 20, 0],  got: [26, 4, 0] },
+      { code: 'QUIZ2', name: 'Quiz 2',           session: 14, max: [0, 40, 60],  got: [0, 28, 42] },
+      { code: 'FINAL', name: 'Final Exam',       session: 16, max: [20, 40, 40], got: [17, 30, 37] }
+    ];
+    const LO_META = [
+      { code: 'LO 1', title: 'Knowledge' },
+      { code: 'LO 2', title: 'Skills' },
+      { code: 'LO 3', title: 'Analysis' }
+    ];
+    // Ambang tampilan pada desain UI. Catatan: skema SQL v2 memakai 65 untuk LO; angkanya perlu disamakan.
+    const ACTIVITY_ALERT_BELOW = 60;
+    const LO_ALERT_BELOW = 60;
+    const ACTIVITY_NAMES = ['Download Materi', 'PPT', 'Video Learning', 'Forum Discussion'];
+    // Contoh progres kumulatif satu mahasiswa per sesi: [LN, PPT, VBL, FD] dalam %.
+    // Sesi 16 tidak punya aktivitas LMS (hanya Final Exam dan kuesioner TLE).
+    const MHS_ACTIVITY_SAMPLE = {
+      1: [100, 100, 100, 100], 2: [100, 50, 100, 100], 3: [67, 67, 100, 100], 4: [75, 50, 75, 75],
+      5: [80, 40, 80, 80], 6: [67, 50, 67, 67], 7: [60, 40, 60, 60], 8: [63, 50, 63, 60],
+      9: [56, 44, 56, 56], 10: [60, 50, 60, 50], 11: [64, 55, 64, 55], 12: [58, 50, 58, 50],
+      13: [62, 54, 62, 54], 14: [64, 57, 64, 57], 15: [60, 53, 60, 53], 16: null
+    };
+
+    function assessmentState(a, sesi) {
+      if (sesi < a.session) return 'belum_dibuka';
+      if (sesi === a.session) return 'belum_kumpul';
+      return 'dinilai';
+    }
+
+    function sessionTooltip(i) {
+      const items = ASSESSMENTS.filter(a => a.session === i).map(a => a.name);
+      if (i === 16) items.push('Kuesioner TLE');
+      const extra = i === 8 ? ' (tanpa Forum Diskusi)' : '';
+      return `Sesi ${i}` + (items.length ? `: ${items.join(', ')}` : '') + extra;
+    }
+
     function renderMhsSessions() {
       const container = document.getElementById('mhsSessionBar');
       container.innerHTML = '';
       for (let i = 1; i <= 16; i++) {
         const btn = document.createElement('button');
         btn.textContent = `Sesi ${i}`;
+        btn.title = sessionTooltip(i);
         btn.onclick = () => selectMhsSession(i);
+        const hasEvent = ASSESSMENTS.some(a => a.session === i);
         if (i === activeMhsSession) {
           btn.className = "px-3.5 py-1.5 rounded-lg bg-[#0059d6] text-white font-bold shadow-xs";
-        } else if (i === 1) {
-          btn.className = "px-3.5 py-1.5 rounded-lg bg-[#16a34a] text-white font-bold";
         } else {
-          btn.className = "px-3.5 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold";
+          btn.className = "px-3.5 py-1.5 rounded-lg bg-white border " + (hasEvent ? "border-amber-300 ring-1 ring-amber-200" : "border-slate-200") + " text-slate-700 hover:bg-slate-50 font-semibold";
         }
         container.appendChild(btn);
       }
@@ -2234,36 +2051,137 @@
     function selectMhsSession(sesi) {
       activeMhsSession = sesi;
       renderMhsSessions();
+      renderMhsAlert(sesi);
+      renderMhsActivity(sesi);
+      renderMhsLo(sesi);
+      renderMhsAssessments(sesi);
+    }
+
+    function renderMhsAlert(sesi) {
       const box = document.getElementById('mhsAlertBox');
+      const icon = document.getElementById('mhsAlertIcon');
       const title = document.getElementById('mhsAlertTitle');
       const desc = document.getElementById('mhsAlertDesc');
-
-      if (sesi === 1) {
-        box.className = "bg-green-50 border border-green-200 rounded-xl p-5 flex items-center gap-4";
-        title.className = "text-lg font-extrabold text-green-700";
-        title.textContent = `Status Aman di Sesi ${sesi}`;
-        desc.textContent = "Partisipasi Anda pada sesi ini telah memenuhi target aktivitas LMS.";
-        setMhsBars(9, 8, 9, 8);
+      const tone = {
+        amber: ["bg-[#fffbeb] border border-[#fef3c7]", "text-amber-500", "text-amber-900"],
+        green: ["bg-green-50 border border-green-200", "text-green-600", "text-green-800"],
+        blue:  ["bg-blue-50 border border-blue-200", "text-blue-600", "text-blue-900"]
+      };
+      const set = (t) => {
+        box.className = `${tone[t][0]} rounded-xl p-4 sm:p-5 flex items-start gap-3.5 sm:gap-4 shadow-2xs`;
+        icon.className = `${tone[t][1]} shrink-0 mt-0.5`;
+        title.className = `text-sm sm:text-base font-bold ${tone[t][2]}`;
+      };
+      const row = MHS_ACTIVITY_SAMPLE[sesi];
+      const dueNow = ASSESSMENTS.filter(a => a.session === sesi && sesi < 16).map(a => a.name);
+      if (!row) {
+        set('blue');
+        title.textContent = 'Sesi 16: Final Exam dan Kuesioner TLE';
+        desc.textContent = 'Tidak ada aktivitas LMS pada sesi ini. Selesaikan Final Exam dan isi kuesioner TLE untuk menutup semester.';
+        return;
+      }
+      const lows = row.map((v, i) => v < ACTIVITY_ALERT_BELOW ? ACTIVITY_NAMES[i] : null).filter(Boolean);
+      const dueText = dueNow.length ? ` Jangan lupa mengumpulkan ${dueNow.join(', ')} pada sesi ini.` : '';
+      if (lows.length) {
+        set('amber');
+        title.textContent = 'Perhatian: Tingkatkan Aktivitas Pembelajaran Anda';
+        desc.textContent = `Aktivitas ${lows.join(' dan ')} Anda masih perlu ditingkatkan. Luangkan waktu untuk mempelajarinya agar capaian pembelajaran Anda tetap optimal.${dueText}`;
       } else {
-        box.className = "bg-[#fff1f2] border border-rose-200 rounded-xl p-5 flex items-center gap-4";
-        title.className = "text-lg font-extrabold text-rose-600";
-        title.textContent = `Alert: Anda Berisiko Tinggi di Sesi ${sesi}`;
-        desc.textContent = "Aktivitas engagement Anda pada beberapa aspek masih rendah. Segera tingkatkan partisipasi agar capaian LO tidak terdampak.";
-        setMhsBars(6, 4, 6, 6);
+        set('green');
+        title.textContent = `Aktivitas belajar Anda baik di Sesi ${sesi}`;
+        desc.textContent = `Seluruh aktivitas LMS Anda sudah memenuhi target. Pertahankan.${dueText}`;
       }
     }
 
-    function setMhsBars(v1, v2, v3, v4) {
-      const vals = [v1, v2, v3, v4];
-      vals.forEach((v, idx) => {
-        const n = idx + 1;
-        document.getElementById(`mhsBarLabel${n}`).textContent = `${v}/10`;
-        const bar = document.getElementById(`mhsBar${n}`);
-        bar.style.height = `${v * 21.5}px`;
-        if (v <= 4) bar.className = "w-7 sm:w-9 bg-[#dc2626] rounded-t transition-all duration-300";
-        else if (v <= 7) bar.className = "w-7 sm:w-9 bg-[#f5b800] rounded-t transition-all duration-300";
-        else bar.className = "w-7 sm:w-9 bg-[#0066ff] rounded-t transition-all duration-300";
-      });
+    function renderMhsActivity(sesi) {
+      document.getElementById('mhsActiveSessionLabel').textContent = `Sesi ${sesi}`;
+      const wrap = document.getElementById('mhsActivityBars');
+      const note = document.getElementById('mhsActivityNote');
+      const row = MHS_ACTIVITY_SAMPLE[sesi];
+      if (!row) {
+        wrap.innerHTML = '';
+        note.classList.remove('hidden');
+        note.textContent = 'Sesi 16 tidak memiliki aktivitas LMS. Pada sesi ini Anda mengerjakan Final Exam dan mengisi kuesioner TLE.';
+        return;
+      }
+      wrap.innerHTML = row.map((v, i) => {
+        const low = v < ACTIVITY_ALERT_BELOW;
+        return `<div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="font-medium text-slate-700">${ACTIVITY_NAMES[i]}</span>
+            <span class="font-bold ${low ? 'text-amber-600' : 'text-slate-800'}">${v}%</span>
+          </div>
+          <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+            <div class="${low ? 'bg-amber-500' : 'bg-blue-600'} h-2.5 rounded-full transition-all duration-500" style="width: ${v}%"></div>
+          </div>
+        </div>`;
+      }).join('');
+      if (sesi === 8) {
+        note.classList.remove('hidden');
+        note.textContent = 'Sesi 8 tidak memiliki Forum Diskusi, sehingga nilai Forum Discussion tidak berubah dari sesi sebelumnya.';
+      } else {
+        note.classList.add('hidden');
+      }
+    }
+
+    function renderMhsLo(sesi) {
+      const wrap = document.getElementById('mhsLoBars');
+      const note = document.getElementById('mhsLoNote');
+      const missing = [];
+      wrap.innerHTML = LO_META.map((lo, k) => {
+        const graded = ASSESSMENTS.filter(a => a.session < sesi && a.max[k] > 0);
+        const maxSum = graded.reduce((t, a) => t + a.max[k], 0);
+        if (!maxSum) {
+          const src = ASSESSMENTS.filter(a => a.max[k] > 0).sort((a, b) => a.session - b.session)
+            .map(a => `${a.name} (sesi ${a.session})`).join(', ');
+          missing.push(`${lo.code} belum memiliki cukup bukti asesmen. Dinilai pada: ${src}.`);
+          return `<div>
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="font-medium text-slate-700">${lo.code}: ${lo.title}</span>
+              <span class="font-bold text-slate-400">—</span>
+            </div>
+            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden"><div class="bg-slate-300 h-2.5 rounded-full" style="width: 0%"></div></div>
+          </div>`;
+        }
+        const pct = Math.round(graded.reduce((t, a) => t + a.got[k], 0) / maxSum * 100);
+        const low = pct < LO_ALERT_BELOW;
+        return `<div>
+          <div class="flex justify-between items-center mb-1.5">
+            <span class="font-medium text-slate-700">${lo.code}: ${lo.title}</span>
+            <span class="font-bold ${low ? 'text-amber-600' : 'text-blue-700'}">${pct}%</span>
+          </div>
+          <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+            <div class="${low ? 'bg-amber-500' : 'bg-blue-600'} h-2.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+          </div>
+        </div>`;
+      }).join('');
+      if (missing.length) {
+        note.classList.remove('hidden');
+        note.innerHTML = '💡 <strong>Catatan:</strong> ' + missing.join(' ');
+      } else {
+        note.classList.add('hidden');
+      }
+    }
+
+    function renderMhsAssessments(sesi) {
+      const badge = {
+        dinilai:      ['bg-green-100 text-green-700 font-bold', 'Dinilai'],
+        belum_kumpul: ['bg-amber-100 text-amber-700 font-bold', 'Belum dikumpul'],
+        belum_dibuka: ['bg-slate-100 text-slate-600 font-medium', 'Belum dibuka']
+      };
+      let graded = 0;
+      document.getElementById('mhsAssessBody').innerHTML = ASSESSMENTS.map((a, i) => {
+        const st = assessmentState(a, sesi);
+        if (st === 'dinilai') graded++;
+        const dim = st === 'belum_dibuka';
+        return `<tr class="hover:bg-slate-50">
+          <td class="py-2.5 px-3.5 border-r border-slate-200 text-center font-medium">${i + 1}</td>
+          <td class="py-2.5 px-4 border-r border-slate-200 ${dim ? 'text-slate-500' : 'font-semibold text-slate-800'}">${a.name}</td>
+          <td class="py-2.5 px-3 border-r border-slate-200 text-center font-mono text-slate-500">${a.session}</td>
+          <td class="py-2.5 px-4 text-center"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] ${badge[st][0]}">${badge[st][1]}</span></td>
+        </tr>`;
+      }).join('');
+      document.getElementById('mhsAssessSummary').textContent = `Total ${graded} dari 9 asesmen telah dinilai dosen.`;
     }
 
     function renderDosenSessions() {
@@ -2272,11 +2190,10 @@
       for (let i = 1; i <= 16; i++) {
         const btn = document.createElement('button');
         btn.textContent = `✓ Sesi ${i}`;
+        btn.title = sessionTooltip(i);
         btn.onclick = () => {
           activeDosenSession = i;
           renderDosenSessions();
-          document.getElementById('dosenActTitle').textContent = `📊 Aktivitas Mahasiswa (Sesi ${i})`;
-          document.getElementById('dosenRiskHeader').textContent = `👤 Daftar Mahasiswa Berisiko — Session ${i}`;
         };
         if (i === activeDosenSession) {
           btn.className = "px-3 py-1.5 rounded-full bg-[#0059d6] text-white font-bold shadow-xs";
@@ -2285,6 +2202,8 @@
         }
         container.appendChild(btn);
       }
+      const note = document.getElementById('dosenSessionNote');
+      if (note) note.textContent = `${sessionTooltip(activeDosenSession)}. Angka pada kartu di bawah adalah contoh kelas dan belum berubah per sesi.`;
     }
 
     function updateDosenLoCard(val) {
@@ -2590,7 +2509,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      renderMhsSessions();
+      selectMhsSession(activeMhsSession);
       renderDosenSessions();
       switchRole('mhs-detail');
     });
