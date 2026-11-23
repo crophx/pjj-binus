@@ -1,47 +1,53 @@
-# 📊 Analisis Komprehensif Data Pendukung Tambahan (Dataset Mentah, Dokumentasi Kamus Data, & Fitur Clustering V3)
+# 📊 Analisis Data Pendukung Tambahan (Dataset Mentah, Kamus Data, dan Fitur Clustering V3)
 
-Dokumen ini membedah secara mendalam 3 file data pendukung baru yang Anda berikan:
-1. **[Dataset Documentation - Copy.docx](file:///c:/laragon/www/pjj_binus/assets/Dataset%20Documentation%20-%20Copy.docx)** — Kamus data resmi (103 kolom) & aturan evaluasi TLE.
-2. **[Completed_Students_Dataset_All_Cleaned.xlsx](file:///c:/laragon/www/pjj_binus/assets/Completed_Students_Dataset_All_Cleaned.xlsx)** — Dataset mentah 5.725 baris $\times$ 103 kolom dari sistem PJJ BINUS.
-3. **[Dataset_Student_Clustering_V3.xlsx](file:///c:/laragon/www/pjj_binus/assets/Dataset_Student_Clustering_V3.xlsx)** — Dataset hasil agregasi & rekayasa fitur (*Feature Engineering*) 5.725 baris $\times$ 18 kolom yang langsung menjadi data latih model Machine Learning (`scaler.pkl` & `clustering_model.pkl`).
+> [!NOTE]
+> **Direvisi 20 November 2026.** Versi sebelumnya memuat rumus TLE, definisi Ketepatan, dan klaim yang tidak sesuai dengan dokumen tim ML maupun data. Koreksinya dirangkum di bagian 5.
+> Untuk status keputusan, pertanyaan terbuka, dan hasil verifikasi terbaru, rujukan utamanya adalah **bagian 0 [ANALISIS_FEEDBACK_DAN_RANCANGAN_V2.md](ANALISIS_FEEDBACK_DAN_RANCANGAN_V2.md)**. Jika ada perbedaan, dokumen itu yang berlaku.
+
+Dokumen ini membahas tiga file data dan satu dokumen rumus:
+
+1. **`Dataset Documentation - Copy.docx`**: kamus data (103 kolom) dan aturan evaluasi TLE.
+2. **`Completed_Students_Dataset_All_Cleaned.xlsx`**: data mentah 5.725 baris × 103 kolom. Satu baris adalah satu mahasiswa di satu kelas. Isinya **583 NIM unik**, 79 kode kelas, 42 dosen, dan 270 kombinasi (periode, kelas, mata kuliah).
+3. **`Dataset_Student_Clustering_V3.xlsx`**: data hasil rekayasa fitur, 5.725 baris × 18 kolom, dengan urutan baris yang sama dengan data mentah. Ini data latih model (`scaler.pkl` dan `clustering_model.pkl`).
+4. **`Feature Engineering Formulas.docx`**: rumus resmi dari tim ML.
+
+File-file tersebut ada di folder `assets/` dan belum di-commit.
 
 ---
 
-## 1. Benang Merah Arsitektur Data: Dari Data Mentah (103 Kolom) Menjadi 8 Fitur Model ML
-
-Analisis komputasi membuktikan secara presisi bagaimana data mentah LMS/akademik mahasiswa (103 kolom) diolah oleh tim Machine Learning menjadi **8 Fitur Input Utama** dan **4 Fitur Evaluasi LO**:
+## 1. Dari 103 Kolom Mentah ke 8 Fitur Model
 
 ```mermaid
 flowchart TD
-    subgraph RawData["Data Mentah LMS & Akademik (103 Kolom di Completed_Students_Dataset_All_Cleaned.xlsx)"]
-        R1["Survey Kepuasan TLE (Skala 0-6)\n• TLE_P1..P4 (Course Management)\n• TLE_P5..P9 (Lecturer Performance)"]
-        R2["Log Aktivitas Sesi (Binary 0 / 1 per Sesi 1-10)\n• Forum: FD1..FD10\n• Handout: PPT1..PPT10\n• Materi: LN1..LN10\n• Video: VBL1..VBL10"]
-        R3["Tracking Pengumpulan Tugas (6 Instrumen)\n• Timestamp: TP1, TP2, TK1, TK2, TK3, TK4\n• Deadline: TP1, TP2, TK1, TK2, TK3, TK4"]
-        R4["Nilai Kognitif per LO (9 Komponen)\n• TP1_LO1..LO3, TP2_LO1..LO3\n• TK1..TK4_LO1..LO3\n• Quiz1..2_LO1..LO3\n• Final_Exam_LO1..LO3"]
+    subgraph RawData["Data mentah (103 kolom)"]
+        R1["Survei TLE (skala 1-6), per (kelas, dosen)\n• TLE_P1..P3 → Course\n• TLE_P4..P9 → Dosen"]
+        R2["Log aktivitas LMS (biner 0/1)\n• FD1..FD10 (forum)\n• PPT1..PPT10 (handout)\n• LN1..LN10 (lecture notes)\n• VBL1..VBL10 (video)"]
+        R3["Pengumpulan tugas (6 tugas)\n• Timestamp: TP1, TP2, TK1, TK2, TK3, TK4\n• Deadline: TP1, TP2, TK1, TK2, TK3, TK4"]
+        R4["Skor per LO (9 komponen)\n• TP1, TP2, TK1..TK4, Quiz1, Quiz2, Final Exam\n• masing-masing LO1..LO3"]
     end
 
-    subgraph FeatureEngineering["Proses Feature Engineering & Transformasi"]
-        FE1["Rata-rata TLE per Kelas (Dikonversi ke Skala 0-100)"]
-        FE2["Persentase Aktivitas: (Total Centang 1 / 10 Sesi) * 100%"]
-        FE3["Penyelesaian: (Jumlah Dikumpulkan / 6 Tugas) * 100%\nKetepatan: (Jumlah Tepat Waktu / 6 Tugas) * 100%"]
-        FE4["Rata-rata LO: (Total Nilai LO per Asesmen) / 9 Komponen"]
+    subgraph FeatureEngineering["Rekayasa fitur (rumus dokumen tim ML)"]
+        FE1["Course = (rata-rata P1-P3 - 1) / 5 × 100\nDosen = (rata-rata P4-P9 - 1) / 5 × 100"]
+        FE2["Jumlah dari 10 kolom biner × 10"]
+        FE3["Submit = tugas ber-Timestamp / 6 × 100\nKetepatan = tugas terkumpul ≥ 2 hari sebelum deadline / 6 × 100"]
+        FE4["avg_LO = jumlah skor LO dari 9 komponen / 9"]
     end
 
-    subgraph MLDataset["Dataset Siap Latih (18 Kolom di Dataset_Student_Clustering_V3.xlsx)"]
-        F1["1. Course_pct (Pengalaman Course)"]
-        F2["2. Dosen_pct (Pengalaman Teaching Dosen)"]
-        F3["3. FD_pct (Aktivitas Forum Diskusi %)"]
-        F4["4. PPT_pct (Akses Handout PPT %)"]
-        F5["5. LN_pct (Akses Lecture Notes %)"]
-        F6["6. VBL_pct (Akses Video Learning %)"]
-        F7["7. Submit_pct (Penyelesaian Tugas %)"]
-        F8["8. Ketepatan_pct (Ketepatan Waktu %)"]
-        FLO["Metrik Kognitif Tambahan:\n• avg_LO1 (Knowledge)\n• avg_LO2 (Skills)\n• avg_LO3 (Analysis)\n• Total_LO (Rata-rata LO1+LO2+LO3)"]
+    subgraph MLDataset["Kolom V3"]
+        F1["Course_pct"]
+        F2["Dosen_pct"]
+        F3["FD_pct"]
+        F4["PPT_pct"]
+        F5["LN_pct"]
+        F6["VBL_pct"]
+        F7["Submit_pct"]
+        F8["Ketepatan_pct"]
+        FLO["avg_LO1, avg_LO2, avg_LO3, Total_LO\n(tidak masuk model)"]
     end
 
-    subgraph MLModel["Eksekusi Model Machine Learning (c:/laragon/www/pjj_binus/)"]
-        M1["scaler.pkl (RobustScaler)\nMedian: [77.14, 78.10, 70.0, 70.0, 70.0, 70.0, 100.0, 100.0]\nIQR: [6.80, 6.29, 30.0, 20.0, 20.0, 20.0, 1.0, 16.67]"]
-        M2["clustering_model.pkl (K-Means, k=4)\nCentroid 4 Klaster: C0, C1, C2, C3"]
+    subgraph MLModel["Model"]
+        M1["scaler.pkl (RobustScaler)\ncenter: 77.14, 78.10, 70, 70, 70, 70, 100, 100\nscale: 6.80, 6.29, 30, 20, 20, 20, 1.0, 16.67"]
+        M2["clustering_model.pkl (K-Means, K=4)"]
     end
 
     R1 --> FE1 --> F1 & F2
@@ -52,84 +58,129 @@ flowchart TD
     F1 & F2 & F3 & F4 & F5 & F6 & F7 & F8 --> M1 --> M2
 ```
 
----
-
-## 2. Bedah Detail Rumus & Kamus Data Berdasarkan `Dataset Documentation - Copy.docx`
-
-### A. Parameter Aktivitas Pembelajaran Mahasiswa (LMS Log Behavior)
-Dalam dataset mentah, aktivitas per sesi dicatat secara biner (`1 = melakukan`, `0 = tidak melakukan`) untuk **10 sesi aktivitas LMS**:
-1. **Forum Discussion (`FD1` s/d `FD10`)**: 
-   $$\text{FD\_pct} = \left(\frac{\sum_{i=1}^{10} \text{FD}_i}{10}\right) \times 100\%$$
-2. **Lihat Handout (`PPT1` s/d `PPT10`)**: 
-   $$\text{PPT\_pct} = \left(\frac{\sum_{i=1}^{10} \text{PPT}_i}{10}\right) \times 100\%$$
-3. **Download Materi (`LN1` s/d `LN10` — Lecture Notes)**: 
-   $$\text{LN\_pct} = \left(\frac{\sum_{i=1}^{10} \text{LN}_i}{10}\right) \times 100\%$$
-4. **Video Learning (`VBL1` s/d `VBL10`)**: 
-   $$\text{VBL\_pct} = \left(\frac{\sum_{i=1}^{10} \text{VBL}_i}{10}\right) \times 100\%$$
-
-### B. Parameter Pengumpulan Asesmen Mahasiswa (Submission & On-Time)
-Terdapat 6 instrumen tugas yang memiliki tanggal pengumpulan (*Timestamp*) dan batas akhir (*Deadline*): `TP1`, `TP2`, `TK1`, `TK2`, `TK3`, `TK4`.
-1. **Penyelesaian Tugas (`Submit_pct`)**:
-   $$\text{Submit\_pct} = \left(\frac{\text{Jumlah tugas dengan Timestamp tidak kosong}}{6}\right) \times 100\%$$
-2. **Ketepatan Waktu (`Ketepatan_pct`)**:
-   $$\text{Ketepatan\_pct} = \left(\frac{\text{Jumlah tugas dengan Timestamp} \le \text{Deadline}}{6}\right) \times 100\%$$
-
-### C. Parameter Evaluasi Pengajaran (TLE — Teaching & Learning Evaluation)
-Mahasiswa mengisi kuesioner evaluasi berskala $0 - 6$ (0 terburuk, 6 terbaik):
-- **Course Management (`TLE_P1` s/d `TLE_P4`)**: Pertanyaan seputar kualitas materi, kesesuaian modul, dan manajemen perkuliahan $\rightarrow$ dihitung rata-rata per kelas menjadi **`Course_pct`**.
-- **Lecturer Performance (`TLE_P5` s/d `TLE_P9`)**: Pertanyaan seputar interaksi dosen, kejelasan penyampaian materi, dan umpan balik $\rightarrow$ dihitung rata-rata per kelas menjadi **`Dosen_pct`**.
-
-### D. Parameter Asesmen Kognitif & Pemetaan ke Learning Outcome (LO)
-Pada kamus data tertera aturan maksimal nilai per komponen tugas:
-- `TP1`: Max LO1 = 100, LO2 = 0, LO3 = 0 (Total 100)
-- `TP2`: Max LO1 = 20, LO2 = 80, LO3 = 0 (Total 100)
-- `TK1`: Max LO1 = 100, LO2 = 0, LO3 = 0 (Total 100)
-- `TK2`: Max LO1 = 0, LO2 = 100, LO3 = 0 (Total 100)
-- `TK3`: Max LO1 = 0, LO2 = 60, LO3 = 40 (Total 100)
-- `TK4`: Max LO1 = 0, LO2 = 50, LO3 = 50 (Total 100)
-- `Quiz 1`: Max LO1 = 80, LO2 = 20, LO3 = 0 (Total 100)
-- `Quiz 2`: Max LO1 = 0, LO2 = 40, LO3 = 60 (Total 100)
-- `Final Exam`: Max LO1 = 20, LO2 = 40, LO3 = 40 (Total 100)
-
-Rata-rata capaian LO dihitung dengan menjumlahkan perolehan tiap mahasiswa dibagi 9 komponen:
-$$\text{avg\_LO1} = \frac{\sum \text{Nilai LO1}}{9}, \quad \text{avg\_LO2} = \frac{\sum \text{Nilai LO2}}{9}, \quad \text{avg\_LO3} = \frac{\sum \text{Nilai LO3}}{9}$$
-$$\text{Total\_LO} = \text{avg\_LO1} + \text{avg\_LO2} + \text{avg\_LO3}$$
+Urutan 8 fitur di atas sama dengan urutan yang dipakai `scaler.pkl` dan `clustering_model.pkl`. Hanya 8 fitur ini yang masuk model; kolom `avg_LO` dan `Total_LO` tidak.
 
 ---
 
-## 3. Penyesuaian ke Rancangan Sistem Aplikasi yang Akan Kita Buat
+## 2. Rumus dan Kamus Data
 
-Dengan adanya dataset mentah dan dataset agregasi ini, ada **4 penyesuaian strategis** yang membuat sistem kita menjadi **sangat solid dan realistis**:
+Sumber: `Feature Engineering Formulas.docx` dan `Dataset Documentation - Copy.docx`.
 
-### 1. Template Bulk Import Excel Menjadi Nyata & Akurat
-- Format file **`Dataset_Student_Clustering_V3.xlsx`** atau varian sederhananya bisa langsung dijadikan **Template Resmi Bulk Import Excel** untuk Dosen dan Admin Prodi.
-- Dosen cukup mengunggah file Excel berisi kolom:
-  `[NIM, Nama, FD_pct, PPT_pct, LN_pct, VBL_pct, TP1..FinalExam, Course_pct, Dosen_pct]`.
-- Sistem backend kita (FastAPI) langsung menjalankan rumus konversi di atas dan memasukkannya ke pipeline `scaler.pkl` + `clustering_model.pkl`.
+### A. Aktivitas LMS
 
-### 2. Seeding Database Menggunakan Data Riil (Bukan Data Palsu)
-- Kita memiliki **5.725 data riil mahasiswa BINUS** (`Completed_Students_Dataset_All_Cleaned.xlsx`) dengan kode mata kuliah asli seperti:
-  - `ISYS6299` — *Information Systems Concept*
-  - `ISYS6289` — *Enterprise Systems*
-  - `ISYS6442` — *IS Strategy, Management and Acquisition*
-  - Dan kode kelas nyata seperti `JFBA`, `JEBA`, `JGBA`, `JIBA`, `01PA`.
-- Data ini bisa kita pakai sebagai **Seed Data Database** sehingga saat aplikasi didemokan, angka-angka yang muncul di grafik, tabel, dan rekomendasi prodi adalah data riil yang diakui oleh dosen!
+Aktivitas dicatat biner (`1` = dilakukan, `0` = tidak). Ada empat jenis, masing-masing 10 kolom. Angka 1..10 adalah **urutan aktivitas** (forum ke-1 sampai ke-10, dan seterusnya), **bukan nomor sesi**.
 
-### 3. Otomatisasi Penentuan Mahasiswa Berisiko (*Students Requiring Attention*)
-Dari rumus di atas, logika backend untuk memfilter tabel **`Students Requiring Attention`** di Dashboard Dosen menjadi sangat jelas dan matematis:
-- Mahasiswa diberi status 🚨 **`Perlu Perhatian`** jika:
-  - $\text{Submit\_pct} < 80\%$ (sering tidak mengumpulkan tugas), ATAU
-  - $\text{Ketepatan\_pct} < 60\%$ (sering terlambat), ATAU
-  - Rata-rata aktivitas LMS ($\text{FD} + \text{PPT} + \text{LN} + \text{VBL}) / 4 < 60\%$.
-- Mahasiswa diberi status ⚠️ **`Monitoring`** jika:
-  - Salah satu capaian LO ($\text{avg\_LO1}, \text{avg\_LO2}, \text{avg\_LO3}$) berada di bawah batas ketuntasan ($< 65$).
+$$\text{FD\_pct} = \left(\sum_{i=1}^{10} \text{FD}_i\right) \times 10$$
 
-### 4. Sinkronisasi Penuh dengan `Rekomendasi Prodi.xlsx`
-Ketika model K-Means memprediksi 5.725 data ini, hasil proporsi klaster pada dataset adalah:
-- **`Cluster 0` (84.19%)** $\rightarrow$ *High Achievement & Consistent Engagement*
-- **`Cluster 2` (9.76%)** $\rightarrow$ *Developing Learning Engagement & LO Attainment*
-- **`Cluster 3` (5.00%)** $\rightarrow$ *Learning Engagement & Achievement Improvement*
-- **`Cluster 1` (1.05%)** $\rightarrow$ *Critical Engagement & Assessment Support*
+Rumus yang sama berlaku untuk `PPT_pct`, `LN_pct`, dan `VBL_pct`.
 
-Angka ini selaras dengan grafik Donut di Dashboard Prodi (Gambar 4 & Gambar 5 pada `UI Dashboard nm.docx`), sehingga tidak ada lagi data yang bertolak belakang!
+> ⚠️ **Belum terjawab:** pemetaan 10 aktivitas ini ke 16 sesi. `Student Activities.xlsx` menyebut aktivitas pada beberapa sesi, tetapi penomoran FD/PPT/LN/VBL ke sesi belum konsisten dan belum dikonfirmasi.
 
+### B. Pengumpulan tugas
+
+Ada 6 tugas dengan Timestamp dan Deadline: `TP1`, `TP2`, `TK1`, `TK2`, `TK3`, `TK4`.
+
+$$\text{Submit\_pct} = \frac{\text{jumlah tugas dengan Timestamp tidak kosong}}{6} \times 100$$
+
+$$\text{Ketepatan\_pct} = \frac{\text{jumlah tugas dikumpulkan minimal 2 hari sebelum deadline}}{6} \times 100$$
+
+Hasil pemeriksaan data: deadline konstan dalam satu kelas, dan **tidak ada satu pun pengumpulan yang melewati deadline**.
+
+> ⚠️ **Tidak cocok dengan V3:** V3 tampaknya menganggap Timestamp kosong pada TK2 dan TK4 sebagai "sudah dikumpulkan" dan "tepat waktu". Rumus dokumen secara harfiah memindahkan 72,7% mahasiswa ke klaster lain. Lihat bagian 4.
+
+### C. TLE (evaluasi pengajaran)
+
+Skala **1–6**. Nilai TLE melekat pada **(kelas, dosen)**, bukan per mahasiswa. Tiga kelas diajar dua dosen dan memiliki vektor TLE berbeda per dosen.
+
+$$\text{Course\_pct} = \frac{\overline{\text{TLE}_{P1..P3}} - 1}{5} \times 100$$
+
+$$\text{Dosen\_pct} = \frac{\overline{\text{TLE}_{P4..P9}} - 1}{5} \times 100$$
+
+TLE diisi di Sesi 16, sehingga dua fitur ini belum ada sebelum akhir semester.
+
+### D. Skor LO dan nilai maksimal
+
+| Asesmen | Sesi | LO1 | LO2 | LO3 |
+| :--- | :-: | :-: | :-: | :-: |
+| TP1 | 3 | 100 | 0 | 0 |
+| TK1 | 4 | 100 | 0 | 0 |
+| TK2 | 5 | 0 | 100 | 0 |
+| Quiz 1 | 6 | 80 | 20 | 0 |
+| TP2 | 11 | 20 | 80 | 0 |
+| TK3 | 12 | 0 | 60 | 40 |
+| TK4 | 13 | 0 | 50 | 50 |
+| Quiz 2 | 14 | 0 | 40 | 60 |
+| Final Exam | 16 | 20 | 40 | 40 |
+
+Sesi dari `Student Activities.xlsx`; nilai maksimal dari kamus data. Angka-angka ini berlaku untuk skema LO1–LO3 standar.
+
+$$\text{avg\_LO}_k = \frac{\sum_{9\ \text{komponen}} \text{skor LO}_k}{9}, \qquad \text{Total\_LO} = \text{avg\_LO}_1 + \text{avg\_LO}_2 + \text{avg\_LO}_3$$
+
+Kolom `avg_LO1..3` dan `Total_LO`, ditambah `Course_pct`, `Dosen_pct`, `PPT_pct`, dan `LN_pct`, **sama persis** dengan V3 pada seluruh 5.725 baris.
+
+---
+
+## 3. Dampak pada Rancangan Sistem
+
+### 1. Template bulk import
+
+Template sebaiknya mengikuti **data mentah** (Timestamp, Deadline, FD1..VBL10, skor per LO, TLE), bukan kolom persentase V3. Dengan begitu backend menghitung fitur sendiri dari satu aturan yang jelas, dan hasilnya bisa dilacak. V3 sudah mengandung penyimpangan yang belum dijelaskan, sehingga tidak layak dijadikan format masukan.
+
+### 2. Data riil sebagai data awal
+
+Dataset ini dapat dipakai sebagai data awal pengujian dan demo. Per 20 November 2026 pemilik proyek menyatakan izin pemakaian sudah ada. Dataset tetap berada di `assets/` dan **belum di-commit ke repositori**. Perlu diingat:
+
+- 5.725 baris berarti 5.725 **keanggotaan kelas**, bukan 5.725 mahasiswa. Mahasiswa unik ada 583, dan 473 di antaranya muncul di lebih dari satu kelas.
+- Klaster dihitung per (mahasiswa, kelas), bukan per mahasiswa.
+- Kode mata kuliah muncul dalam dua varian (mis. `ISYS6300` dan `ISYS6300035`). Keputusan penyimpanannya ada di bagian 0-D dokumen V2.
+
+### 3. Aturan status mahasiswa (masih usulan)
+
+Pada versi sebelumnya dokumen ini menulis ambang berikut seolah sudah pasti. **Tidak ada dokumen atau konfirmasi dosen yang menetapkannya.** Anggap ini bahan diskusi:
+
+| Status usulan | Kondisi usulan |
+| :--- | :--- |
+| Perlu Perhatian | `Submit_pct` < 80, atau `Ketepatan_pct` < 60, atau rata-rata aktivitas LMS < 60 |
+| Monitoring | salah satu capaian LO di bawah batas ketuntasan |
+
+Batas ketuntasan LO pun belum pasti: prototipe UI memakai 60, draf SQL memakai 65. Selain itu, karena `Submit_pct` dan `Ketepatan_pct` di V3 memberi kredit pada TK2/TK4 yang kosong, ambang ini harus dihitung ulang setelah aturan pastinya diketahui.
+
+### 4. Hubungan dengan `Rekomendasi Prodi.xlsx`
+
+Distribusi klaster K=4 berdasarkan centroid terdekat pada data V3:
+
+| Klaster | Profil | Jumlah baris | Persentase |
+| :-: | :--- | :-: | :-: |
+| C0 | High Achievement & Consistent Engagement | 4.820 | 84,19% |
+| C2 | Developing Learning Engagement & LO Attainment | 559 | 9,76% |
+| C3 | Learning Engagement & Achievement Improvement | 286 | 5,00% |
+| C1 | Critical Engagement & Assessment Support | 60 | 1,05% |
+
+Catatan: angka ini dihitung dari centroid, belum dengan memuat `clustering_model.pkl` secara langsung. Gambar distribusi pada `UI Dashboard nm.docx` hanyalah contoh tampilan dan tidak dipakai sebagai acuan.
+
+---
+
+## 4. Temuan yang Belum Terjelaskan
+
+Semua temuan ini ditanyakan ke tim ML dan dosen (bagian 0-E dokumen V2).
+
+1. **`FD_pct` dan `VBL_pct` di V3 menyimpang dari rumus** pada 684 dan 666 baris (±12%). Contoh: FD1..FD10 berisi sembilan angka 1 dan satu angka 0, rumus memberi 90, V3 menulis 40.
+2. **`Submit_pct` dan `Ketepatan_pct` di V3 menyimpang** pada 4.263 dan 4.112 baris. Dugaan yang belum dikonfirmasi: Timestamp TK2/TK4 yang kosong dihitung "sudah dikumpulkan" dan "tepat waktu". Dugaan itu cocok pada sekitar 96% (Submit) dan 90% (Ketepatan) baris, sisanya belum terjelaskan.
+3. **Semua 40 kolom aktivitas berpartisipasi sekitar 70%** (rentang 68,6–71,3%), termasuk kolom untuk sesi yang tidak punya forum, dan tidak turun di sesi akhir seperti pola log LMS pada umumnya. Perlu dipastikan apakah ini log asli.
+4. **Alasan memilih K-Means.** Pada konfigurasi yang sama, DBSCAN punya Silhouette dan DBI lebih baik (0,862 dan 0,179 dibanding 0,842 dan 0,341 untuk K-Means K=4), tetapi 9,2% mahasiswa menjadi noise.
+
+---
+
+## 5. Koreksi atas Versi Sebelumnya
+
+| Pernyataan di versi lama | Yang benar |
+| :--- | :--- |
+| TLE `P1..P4` untuk Course dan `P5..P9` untuk Dosen | `P1..P3` untuk Course, `P4..P9` untuk Dosen |
+| Skala TLE 0–6 | Skala 1–6, rumus `(rata-rata − 1) / 5 × 100` |
+| Aktivitas LMS dicatat pada "10 sesi" | FD/PPT/LN/VBL adalah 10 aktivitas per jenis. Pemetaannya ke 16 sesi belum pasti |
+| `Ketepatan_pct` = Timestamp ≤ Deadline | Dikumpulkan minimal 2 hari sebelum deadline |
+| Seluruh V3 mengikuti rumus dokumen | Kolom LO, `Course_pct`, `Dosen_pct`, `PPT_pct`, dan `LN_pct` cocok persis; empat kolom (`FD_pct`, `VBL_pct`, `Submit_pct`, `Ketepatan_pct`) menyimpang |
+| V3 layak dijadikan template import | Template memakai data mentah; V3 menyimpang dari rumus |
+| 5.725 "data riil mahasiswa" | 5.725 baris keanggotaan kelas dari 583 mahasiswa unik |
+| Ambang status Perlu Perhatian dan Monitoring (tertulis sebagai aturan) | Usulan saja, belum dikonfirmasi |
+| "Tidak ada lagi data yang bertolak belakang" dengan dokumen UI | Dokumen UI hanya contoh tampilan; distribusi dihitung dari centroid |
